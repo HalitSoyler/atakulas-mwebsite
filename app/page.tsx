@@ -126,40 +126,32 @@ export default function HomePage() {
     <main className="min-h-screen relative">
       <Header />
 
-      {/* Hero — background beams + fluid layout (dark, kurumsal mavi) */}
+      {/* Hero — light theme, matches rest of site; bus animation visible */}
       <section
         data-section="hero"
-        data-header-theme="dark"
-        className="section-fluid pt-32 pb-20 sm:pt-36 sm:pb-24 bg-slate-950 text-slate-50 rounded-b-3xl relative overflow-hidden"
+        data-header-theme="light"
+        className="section-fluid pt-28 pb-20 sm:pt-32 sm:pb-24 bg-gradient-to-b from-primary/5 via-background to-background rounded-b-3xl relative overflow-hidden border-b border-border/50"
       >
-        <div className="pointer-events-none absolute inset-0 -z-10 hero-beams">
-          <div className="absolute inset-0 bg-slate-950" />
-          <div className="absolute inset-0 opacity-80 mix-blend-screen">
-            <div className="absolute -left-32 -top-24 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle_at_center,#38bdf8_0,#0f172a_55%,transparent_75%)] blur-3xl" />
-            <div className="absolute right-[-120px] top-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle_at_center,#1e5a9e_0,#020617_55%,transparent_75%)] blur-3xl" />
-            <div className="absolute inset-x-0 bottom-[-260px] h-[520px] bg-[radial-gradient(circle_at_center,#0ea5e9_0,#020617_55%,transparent_80%)] opacity-60 blur-3xl" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#38bdf8_0,transparent_55%)] opacity-20" />
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,oklch(0.55_0.14_240/0.08),transparent_60%)]" />
 
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <ScrollReveal staggerIndex={0}>
-                <p className="text-sm font-medium text-sky-400 mb-2">{t.hero.slide1.subtitle}</p>
+                <p className="text-sm font-medium text-primary mb-2">{t.hero.slide1.subtitle}</p>
               </ScrollReveal>
               <ScrollReveal staggerIndex={1}>
-                <h1 className="text-3xl font-semibold text-slate-50 sm:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
                   {t.hero.slide1.title}
                 </h1>
               </ScrollReveal>
               <ScrollReveal staggerIndex={2}>
-                <p className="mt-4 text-slate-200 leading-relaxed">{t.hero.slide1.description}</p>
+                <p className="mt-4 text-muted-foreground leading-relaxed">{t.hero.slide1.description}</p>
               </ScrollReveal>
               <ScrollReveal staggerIndex={3} className="mt-6 flex flex-wrap gap-3">
                 <InteractiveHoverButton
                   asChild
-                  className="bg-white text-slate-900 hover:bg-slate-100 rounded-full px-6 shadow-none hover:shadow-lg hover:shadow-sky-500/20"
+                  className="rounded-full px-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg"
                 >
                   <Link href="/projelerimiz">
                     {t.nav.projects}
@@ -170,16 +162,16 @@ export default function HomePage() {
             </div>
 
             <ScrollReveal staggerIndex={2} className="relative">
-              <div className="bg-slate-900/60 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl shadow-sky-500/20">
-                <div className="relative aspect-video bg-slate-900 rounded-xl mb-6 overflow-hidden flex items-center justify-center border border-slate-700/80">
+              <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
+                <div className="relative aspect-video bg-muted/50 rounded-xl mb-6 overflow-hidden flex items-center justify-center border border-border">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-sky-500/10 rounded-full flex items-center justify-center mx-auto">
-                      <Play className="h-5 w-5 text-sky-400 ml-0.5" />
+                    <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                      <Play className="h-7 w-7 text-primary ml-0.5" />
                     </div>
-                    <p className="text-slate-300 mt-2 text-sm">{t.hero.stats.videoLabel}</p>
+                    <p className="text-muted-foreground mt-3 text-sm">{t.hero.stats.videoLabel}</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   {[
                     { value: "25+", label: t.hero.stats.experience },
                     { value: "TUBiTAK", label: t.hero.stats.certified },
@@ -187,9 +179,9 @@ export default function HomePage() {
                     { value: "%100", label: t.hero.stats.domestic },
                   ].map((stat, i) => (
                     <ScrollReveal key={stat.label} staggerIndex={i}>
-                      <div className="text-center p-4 bg-slate-900/80 rounded-xl border border-slate-700/70">
-                        <div className="text-2xl font-semibold text-sky-400">{stat.value}</div>
-                        <div className="text-xs text-slate-300 mt-1">{stat.label}</div>
+                      <div className="text-center p-4 rounded-xl border border-border bg-muted/30">
+                        <div className="text-xl font-semibold text-primary">{stat.value}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
                       </div>
                     </ScrollReveal>
                   ))}
@@ -200,28 +192,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Sticky Scroll — Atak Ulaşım Dönüşüm Standartları */}
+      {/* Atak Ulaşım Dönüşüm Standartları */}
       <section
         data-section="standards"
-        data-header-theme="dark"
-        className="section-fluid py-20 bg-slate-950 text-slate-50"
+        data-header-theme="muted"
+        className="section-fluid py-20 bg-muted/40"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8 grid lg:grid-cols-2 gap-12">
           <div className="lg:sticky lg:top-28 self-start space-y-4">
             <ScrollReveal staggerIndex={0}>
-              <p className="text-sm font-semibold tracking-widest text-sky-400 uppercase">
+              <p className="text-sm font-semibold tracking-widest text-primary uppercase">
                 {language === "tr" ? "STANDARTLAR" : "STANDARDS"}
               </p>
             </ScrollReveal>
             <ScrollReveal staggerIndex={1}>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-50">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-foreground">
                 {language === "tr"
                   ? "Atak Ulaşım Dönüşüm Standartları"
                   : "Atak Ulaşım Transformation Standards"}
               </h2>
             </ScrollReveal>
             <ScrollReveal staggerIndex={2}>
-              <p className="text-sm text-slate-300 max-w-lg">
+              <p className="text-sm text-muted-foreground max-w-lg">
                 {language === "tr"
                   ? "Projeler; fizibilite, üretim ve sertifikasyon adımlarının tamamının izlendiği şeffaf bir dönüşüm süreci ile yönetilir."
                   : "Projects are managed through a transparent transformation process covering feasibility, production and certification steps end to end."}
@@ -229,21 +221,17 @@ export default function HomePage() {
             </ScrollReveal>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {transformSteps.map((step, index) => (
               <ScrollReveal key={step.key} staggerIndex={index}>
-                <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-950/90 p-6">
-                  <div className="absolute inset-0 opacity-60 pointer-events-none">
-                    <div className="absolute -right-24 top-10 h-48 w-48 rounded-full bg-[radial-gradient(circle_at_center,#38bdf8_0,transparent_65%)] blur-2xl" />
-                    <div className="absolute -left-20 bottom-0 h-40 w-40 rounded-full bg-[radial-gradient(circle_at_center,#1e293b_0,transparent_70%)] blur-2xl" />
-                  </div>
-                  <div className="relative space-y-3">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3 py-1 text-[11px] font-medium text-sky-200">
-                      <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+                <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm">
+                  <div className="space-y-3">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-medium text-primary">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                       {step.badge}
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-50">{step.title}</h3>
-                    <p className="text-sm text-slate-200 leading-relaxed">{step.description}</p>
+                    <h3 className="text-lg font-semibold text-foreground">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               </ScrollReveal>
@@ -442,15 +430,24 @@ export default function HomePage() {
                 <MagicCard className="h-full p-0 overflow-visible">
                   <Link
                     href="/urunlerimiz"
-                    className="block h-full rounded-2xl bg-card p-5 hover:opacity-100 transition-opacity"
+                    className="block h-full rounded-2xl bg-card overflow-hidden hover:opacity-100 transition-opacity group"
                   >
-                    <div className="aspect-square bg-muted rounded-xl mb-4 flex items-center justify-center border border-border">
-                      <p className="text-xs text-muted-foreground">
-                        {language === "tr" ? "Urun gorseli" : "Product image"}
-                      </p>
+                    <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 via-primary/5 to-slate-100 flex items-center justify-center border-b border-border/50">
+                      <div className="text-center p-4">
+                        <div className="w-12 h-12 rounded-xl bg-white/70 border border-white/90 flex items-center justify-center mx-auto shadow-sm">
+                          <svg className="h-6 w-6 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                          </svg>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground mt-2 font-medium">
+                          {language === "tr" ? "Görsel yakında" : "Image coming soon"}
+                        </p>
+                      </div>
                     </div>
-                    <h3 className="text-sm font-semibold text-foreground">{product.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{product.description}</p>
+                    <div className="p-5">
+                      <h3 className="text-sm font-semibold text-foreground">{product.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{product.description}</p>
+                    </div>
                   </Link>
                 </MagicCard>
               </ScrollReveal>

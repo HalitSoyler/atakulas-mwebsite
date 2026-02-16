@@ -74,8 +74,8 @@ export default function HakkimizdaPage() {
       <Header />
 
       {/* Hero */}
-      <section className="pt-28 pb-12 bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section className="pt-28 pb-12 bg-muted/30 relative overflow-hidden">
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-sm font-medium text-primary mb-2">
             {t.about.pageTitle}
           </p>

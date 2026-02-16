@@ -169,7 +169,7 @@ export default function ElektrikliOtobusPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 relative">
+      <section className="pt-32 pb-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-accent/20 to-background" />
         <div className="absolute inset-0 bg-grid opacity-20" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">

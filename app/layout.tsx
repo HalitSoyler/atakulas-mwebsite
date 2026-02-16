@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LanguageProvider } from "@/lib/language-context"
 import { ScrollBackground } from "@/components/scroll-background"
+import { GlobalBusAnimation } from "@/components/global-bus-animation"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -58,7 +59,8 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <LanguageProvider>
           <ScrollBackground />
-          {children}
+          <GlobalBusAnimation />
+          <div className="relative z-10">{children}</div>
         </LanguageProvider>
         <Analytics />
       </body>
