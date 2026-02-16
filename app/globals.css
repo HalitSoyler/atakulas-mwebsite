@@ -1,0 +1,388 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Atak Ulasim - Clean Bright Theme (similar to old website) */
+/* Brand Colors: Blue #1e5a9e, Cyan #00b4d8, White #ffffff, Light Gray #f8fafc */
+:root {
+  --background: oklch(0.995 0 0);
+  --foreground: oklch(0.20 0.02 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.20 0.02 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.20 0.02 250);
+  --primary: oklch(0.45 0.14 240);
+  --primary-foreground: oklch(0.995 0 0);
+  --secondary: oklch(0.97 0.005 250);
+  --secondary-foreground: oklch(0.20 0.02 250);
+  --muted: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.50 0.02 250);
+  --accent: oklch(0.65 0.15 200);
+  --accent-foreground: oklch(0.20 0.02 250);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.995 0 0);
+  --border: oklch(0.92 0.005 250);
+  --input: oklch(0.95 0.005 250);
+  --ring: oklch(0.45 0.14 240);
+  --chart-1: oklch(0.45 0.14 240);
+  --chart-2: oklch(0.65 0.15 200);
+  --chart-3: oklch(0.55 0.12 250);
+  --chart-4: oklch(0.70 0.15 160);
+  --chart-5: oklch(0.60 0.18 280);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.98 0.005 250);
+  --sidebar-foreground: oklch(0.20 0.02 250);
+  --sidebar-primary: oklch(0.45 0.14 240);
+  --sidebar-primary-foreground: oklch(0.995 0 0);
+  --sidebar-accent: oklch(0.95 0.005 250);
+  --sidebar-accent-foreground: oklch(0.20 0.02 250);
+  --sidebar-border: oklch(0.92 0.005 250);
+  --sidebar-ring: oklch(0.45 0.14 240);
+}
+
+@theme inline {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(30, 90, 158, 0.15);
+}
+
+/* ---- Scroll-driven reveal (staggered fade-in-up) ---- */
+.reveal-element {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-element[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll reveal from sides (for intertwined layer sections) */
+.reveal-from-left.reveal-element {
+  transform: translateX(-80px);
+}
+.reveal-from-left.reveal-element[data-revealed="true"] {
+  transform: translateX(0);
+}
+.reveal-from-right.reveal-element {
+  transform: translateX(80px);
+}
+.reveal-from-right.reveal-element[data-revealed="true"] {
+  transform: translateX(0);
+}
+
+/* ---- Fluid section overlap (negative margins + z-index) ---- */
+.section-fluid {
+  position: relative;
+  z-index: 1;
+}
+
+.section-fluid-overlap-up {
+  margin-top: -4rem;
+  z-index: 2;
+}
+
+.section-fluid-overlap-up-lg {
+  margin-top: -6rem;
+  z-index: 2;
+}
+
+.section-fluid-overlap-down {
+  margin-bottom: -4rem;
+  padding-bottom: 4rem;
+  z-index: 0;
+}
+
+.section-fluid-overlap-down-lg {
+  margin-bottom: -6rem;
+  padding-bottom: 6rem;
+  z-index: 0;
+}
+
+/* ---- Bento grid ---- */
+.bento-grid {
+  display: grid;
+  gap: 1rem;
+  grid-auto-rows: minmax(120px, auto);
+}
+
+.bento-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.bento-grid-4 .bento-span-2 {
+  grid-column: span 2;
+}
+
+.bento-grid-4 .bento-span-full {
+  grid-column: 1 / -1;
+}
+
+.bento-grid-4 .bento-row-2 {
+  grid-row: span 2;
+}
+
+@media (max-width: 1023px) {
+  .bento-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-grid-4 .bento-span-2 {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 639px) {
+  .bento-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Scroll-driven background (CSS variables set by JS) ---- */
+.scroll-bg {
+  --scroll-bg-x: 50%;
+  --scroll-bg-y: 30%;
+  --scroll-bg-scale: 1;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scroll-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at var(--scroll-bg-x) var(--scroll-bg-y),
+      oklch(0.75 0.08 240 / 0.12) 0%,
+      oklch(0.70 0.12 200 / 0.06) 40%,
+      transparent 70%
+    );
+  transform: scale(var(--scroll-bg-scale));
+  transition: transform 0.15s ease-out;
+}
+
+.scroll-bg::after {
+  content: "";
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  left: -20%;
+  top: -20%;
+  background:
+    radial-gradient(
+      circle at 30% 70%,
+      oklch(0.65 0.15 200 / 0.08) 0%,
+      transparent 45%
+    );
+  animation: scroll-bg-drift 25s ease-in-out infinite;
+}
+
+@keyframes scroll-bg-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(2%, -1%) scale(1.02); }
+  66% { transform: translate(-1%, 2%) scale(0.98); }
+}
+
+/* Organic blob (SVG or div) for extra life */
+.scroll-bg-blob {
+  position: absolute;
+  width: min(80vw, 600px);
+  height: min(80vw, 600px);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  background: radial-gradient(circle, oklch(0.55 0.14 240 / 0.08) 0%, transparent 70%);
+  left: 60%;
+  top: 20%;
+  animation: blob-morph 20s ease-in-out infinite;
+}
+
+@keyframes blob-morph {
+  0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: translate(0, 0) rotate(0deg); }
+  25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(2%, -3%) rotate(5deg); }
+  50% { border-radius: 30% 70% 50% 50% / 50% 60% 40% 60%; transform: translate(-3%, 2%) rotate(-3deg); }
+  75% { border-radius: 70% 30% 60% 40% / 30% 60% 50% 70%; transform: translate(1%, 1%) rotate(2deg); }
+}
+
+/* Simple animations (legacy / utility) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* BorderBeam: kenar boyunca dönen ışık */
+@keyframes border-beam-rotate {
+  to { transform: rotate(360deg); }
+}
+
+.border-beam-rotate {
+  animation: border-beam-rotate linear infinite;
+}
+
+.border-beam-rotate-reverse {
+  animation: border-beam-rotate linear infinite reverse;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hero background beams: soft fade-in on load */
+.hero-beams {
+  animation: hero-beams-in 1.2s ease-out forwards;
+}
+
+@keyframes hero-beams-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Canvas reveal benzeri yumuşak arka plan hareketi */
+.canvas-reveal-blob {
+  animation: canvas-reveal-drift var(--canvas-speed, 8s) ease-in-out infinite alternate;
+}
+
+@keyframes canvas-reveal-drift {
+  0% {
+    transform: translate3d(-8%, -8%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 10%, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-10%, 4%, 0) scale(1);
+  }
+}
+
+/* Marquee: sonsuz kayan şerit */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee linear infinite reverse;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+
+/* Simple card hover */
+.card-hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 20px rgba(30, 90, 158, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, #1e5a9e 0%, #00b4d8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Simple grid background */
+.bg-grid {
+  background-image: linear-gradient(rgba(30, 90, 158, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 90, 158, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Video placeholder */
+.video-placeholder {
+  @apply relative overflow-hidden rounded-lg bg-muted;
+  aspect-ratio: 16/9;
+}
