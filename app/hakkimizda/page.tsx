@@ -190,22 +190,44 @@ export default function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* Services */}
-      <section className="py-12">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Services — Şirketimiz Bünyesinde: glassy, modern, compact */}
+      <section className="py-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-primary/5" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center mb-8">
+            <p className="text-xs font-semibold tracking-[0.2em] text-primary/80 uppercase mb-2">
+              {language === "tr" ? "KURUMSAL" : "CORPORATE"}
+            </p>
             <h2 className="text-2xl font-semibold text-foreground">{t.about.ourServices}</h2>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((service) => (
-              <div key={service.title} className="border border-border rounded-lg p-4 flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
-                  <service.icon className="h-4 w-4 text-primary" />
-                </div>
-                <span className="text-sm text-foreground">{service.title}</span>
+          <div className="relative rounded-3xl border border-white/60 bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(30,90,158,0.06)] overflow-hidden max-w-4xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/70 to-transparent" />
+            <div className="relative p-6 sm:p-8">
+              <p className="text-[10px] font-medium tracking-widest text-muted-foreground/80 uppercase mb-4 text-center">
+                {language === "tr"
+                  ? "Tasarım · Üretim · Entegrasyon · Destek"
+                  : "Design · Manufacturing · Integration · Support"}
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                {services.map((service) => (
+                  <div
+                    key={service.title}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/80 border border-white/90 backdrop-blur-sm"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <service.icon className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-xs font-medium text-foreground/90">{service.title}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+              <p className="mt-4 text-[10px] text-muted-foreground/70 text-center font-light tracking-wide">
+                {language === "tr"
+                  ? "Uçtan uca çözüm ortağınız"
+                  : "Your end-to-end solution partner"}
+              </p>
+            </div>
           </div>
         </div>
       </section>

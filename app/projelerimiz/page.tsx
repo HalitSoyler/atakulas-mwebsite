@@ -74,7 +74,7 @@ export default function ProjelerimizPage() {
             {language === "tr" ? "PROJELERIMIZ" : "OUR PROJECTS"}
           </p>
           <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
-            {language === "tr" ? "Tamamlanan ve Devam Eden Projeler" : "Completed and Ongoing Projects"}
+            {language === "tr" ? "Tamamlanan Projelerimiz" : "Our Completed Projects"}
           </h1>
         </div>
       </section>

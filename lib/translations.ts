@@ -124,7 +124,7 @@ export const translations = {
     },
     projects: {
       pageTitle: "Projelerimiz",
-      pageSubtitle: "Başarıyla tamamladığımız ve devam eden projeler",
+      pageSubtitle: "Başarıyla tamamladığımız projeler",
       viewDetails: "Detayları Görüntüle",
     },
     contact: {
@@ -280,7 +280,7 @@ export const translations = {
     },
     projects: {
       pageTitle: "Our Projects",
-      pageSubtitle: "Successfully completed and ongoing projects",
+      pageSubtitle: "Successfully completed projects",
       viewDetails: "View Details",
     },
     contact: {

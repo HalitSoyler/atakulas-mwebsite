@@ -164,42 +164,7 @@ export default function ElektrikliOtobusPage() {
           "Charging infrastructure consulting",
         ]
 
-  const currentProjects =
-    language === "tr"
-      ? [
-          {
-            title: "Ankara EGO Pilot Projesi",
-            vehicles: "5 araç",
-            status: "Aktif",
-            description:
-              "Başkent'in toplu taşıma filosunda dizel-elektrik dönüşüm pilot uygulaması.",
-          },
-          {
-            title: "Kayseri Belediyesi",
-            vehicles: "10 araç (planlanan)",
-            status: "Planlama",
-            description:
-              "Kayseri şehir içi otobüslerinin elektrikli dönüşümü için fizibilite çalışması.",
-          },
-        ]
-      : [
-          {
-            title: "Ankara EGO Pilot Project",
-            vehicles: "5 vehicles",
-            status: "Active",
-            description:
-              "Diesel-electric conversion pilot implementation in the capital's public transport fleet.",
-          },
-          {
-            title: "Kayseri Municipality",
-            vehicles: "10 vehicles (planned)",
-            status: "Planning",
-            description:
-              "Feasibility study for electric conversion of Kayseri urban buses.",
-          },
-        ]
-
-return (
+  return (
     <main className="relative overflow-hidden">
       <Header />
 
@@ -381,41 +346,6 @@ return (
                 ))}
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Current Projects */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background" />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
-              {language === "tr" ? "Devam Eden Çalışmalar" : "Ongoing Work"}
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              {t.electricBus.projectsTitle}
-            </h2>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-            {currentProjects.map((project) => (
-              <div key={project.title} className="glass rounded-2xl p-8 card-hover">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    {project.title}
-                  </h3>
-                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-accent/20 text-accent">
-                    {project.status}
-                  </span>
-                </div>
-                <p className="text-muted-foreground mb-4">{project.description}</p>
-                <div className="flex items-center gap-2 text-sm text-primary font-medium">
-                  <Zap className="h-4 w-4" />
-                  {project.vehicles}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

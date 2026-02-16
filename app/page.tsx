@@ -83,18 +83,6 @@ export default function HomePage() {
     language === "tr" ? "Teknik Destek" : "Technical Support",
   ]
 
-  const layerColors = [
-    "bg-[#1e5a9e]",   // primary blue
-    "bg-sky-600",
-    "bg-teal-600",
-    "bg-indigo-500",
-    "bg-slate-600",
-    "bg-cyan-600",
-    "bg-blue-600",
-    "bg-sky-500",
-    "bg-violet-500",
-  ]
-
   const transformSteps = [
     {
       key: "projelendirme",
@@ -320,41 +308,48 @@ export default function HomePage() {
             </ScrollReveal>
 
             <ScrollReveal staggerIndex={1} className="bento-span-2">
-              <div className="bg-muted/50 rounded-2xl p-6 h-full border border-border/50">
-                <h3 className="text-lg font-semibold text-foreground mb-4">
-                  {language === "tr" ? "Uygulama Alanlari" : "Application Areas"}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  {language === "tr"
-                    ? "Elektronik urunlerin tasarimi, Uretimi, testi, bakimi, montaji Banliyo, Hizli Tren, EMU, DMU, Tramvay, Metro, Hafif Rayli sistem araclari, Otobus, Metrobus vb. ulasim araclari"
-                    : "Electronic product design, Production, testing, maintenance, installation for Suburban, High Speed Train, EMU, DMU, Tram, Metro, Light Rail vehicles, Bus, Metrobus etc. transportation vehicles"}
-                </p>
-                <h4 className="text-sm font-semibold text-foreground mb-3">
-                  {language === "tr" ? "Sirketimiz Bunyesinde:" : "Within Our Company:"}
-                </h4>
-                <ul className="space-y-2">
-                  {services.map((s) => (
-                    <li key={s} className="text-sm text-muted-foreground flex items-center gap-2">
-                      <span className="text-primary">-</span>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
+              <div className="rounded-2xl p-6 h-full border border-white/60 bg-white/40 backdrop-blur-xl shadow-[0_4px_24px_rgba(30,90,158,0.04)] overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-transparent" />
+                <div className="relative">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">
+                    {language === "tr" ? "Uygulama Alanlari" : "Application Areas"}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {language === "tr"
+                      ? "Elektronik urunlerin tasarimi, Uretimi, testi, bakimi, montaji Banliyo, Hizli Tren, EMU, DMU, Tramvay, Metro, Hafif Rayli sistem araclari, Otobus, Metrobus vb. ulasim araclari"
+                      : "Electronic product design, Production, testing, maintenance, installation for Suburban, High Speed Train, EMU, DMU, Tram, Metro, Light Rail vehicles, Bus, Metrobus etc. transportation vehicles"}
+                  </p>
+                  <p className="text-[10px] font-medium tracking-widest text-primary/70 uppercase mb-2">
+                    {language === "tr" ? "Sirketimiz Bunyesinde" : "Within Our Company"}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {services.map((s) => (
+                      <span
+                        key={s}
+                        className="text-[11px] px-2.5 py-1 rounded-lg bg-white/70 border border-white/80 text-muted-foreground font-light"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* Şirketimiz Bünyesinde — intertwined 60/40 layers, scroll-in from sides */}
+      {/* Şirketimiz Bünyesinde — glassy, modern, compact info */}
       <section
         data-section="company-layers"
         data-header-theme="muted"
-        className="section-fluid py-16 bg-white"
+        className="section-fluid py-16 relative overflow-hidden"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-primary/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,oklch(0.55_0.14_240/0.06),transparent)]" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <ScrollReveal staggerIndex={0} className="text-center mb-12">
-            <p className="text-sm font-medium text-primary mb-2">
+            <p className="text-xs font-semibold tracking-[0.2em] text-primary/80 uppercase mb-2">
               {language === "tr" ? "KURUMSAL" : "CORPORATE"}
             </p>
             <h2 className="text-2xl font-semibold text-foreground">
@@ -362,41 +357,33 @@ export default function HomePage() {
             </h2>
           </ScrollReveal>
 
-          <div className="space-y-3">
-            {companyLayers.map((label, index) => {
-              const isLeft = index % 2 === 0
-              const colorClass = layerColors[index % layerColors.length]
-              return (
-                <ScrollReveal
-                  key={label}
-                  staggerIndex={index + 1}
-                  className={isLeft ? "reveal-from-left" : "reveal-from-right"}
-                >
-                  <div className="flex w-full">
-                    {isLeft ? (
-                      <>
-                        <div
-                          className={`w-[60%] min-h-[56px] rounded-r-xl flex items-center pl-6 pr-4 ${colorClass} text-white font-medium text-sm sm:text-base shadow-sm`}
-                        >
-                          {label}
-                        </div>
-                        <div className="w-[40%] bg-white" aria-hidden />
-                      </>
-                    ) : (
-                      <>
-                        <div className="w-[40%] bg-white" aria-hidden />
-                        <div
-                          className={`w-[60%] min-h-[56px] rounded-l-xl flex items-center justify-end pr-6 pl-4 ${colorClass} text-white font-medium text-sm sm:text-base shadow-sm`}
-                        >
-                          {label}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </ScrollReveal>
-              )
-            })}
-          </div>
+          <ScrollReveal staggerIndex={1}>
+            <div className="relative rounded-3xl border border-white/60 bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(30,90,158,0.06)] overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/70 to-transparent" />
+              <div className="relative p-6 sm:p-8">
+                <p className="text-[11px] font-medium tracking-widest text-muted-foreground/80 uppercase mb-4">
+                  {language === "tr"
+                    ? "Tasarım · Üretim · Entegrasyon · Destek"
+                    : "Design · Manufacturing · Integration · Support"}
+                </p>
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                  {companyLayers.map((label, index) => (
+                    <span
+                      key={label}
+                      className="inline-flex items-center px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium bg-white/80 border border-white/90 text-foreground/90 shadow-sm backdrop-blur-sm"
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-4 text-[10px] text-muted-foreground/70 text-center font-light tracking-wide">
+                  {language === "tr"
+                    ? "Uçtan uca çözüm ortağınız"
+                    : "Your end-to-end solution partner"}
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
