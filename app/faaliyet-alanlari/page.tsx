@@ -1,9 +1,8 @@
 "use client"
 
-import React from "react"
-import { useState } from "react"
-import { Header } from "@/components/header"
+import React, { use, useState } from "react"
 import { Footer } from "@/components/footer"
+import { PageHeroIndustrial } from "@/components/page-hero-industrial"
 import Image from "next/image"
 import { 
   MapPin,
@@ -16,6 +15,8 @@ import { MagicCard } from "@/components/ui/magic-card"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Badge } from "@/components/ui/badge"
 import { useLanguage } from "@/lib/language-context"
+import { IndustrialEditorialFlow } from "@/components/industrial-editorial-flow"
+import { IndustrialCapabilitiesPanel } from "@/components/industrial-capabilities-panel"
 
 // Service data - 10 items
 const services = [
@@ -400,7 +401,10 @@ function ProjectModal({
   )
 }
 
-export default function FaaliyetAlanlariPage() {
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function FaaliyetAlanlariPage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const { language } = useLanguage()
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -418,26 +422,16 @@ export default function FaaliyetAlanlariPage() {
   }
 
   return (
-    <main className="bg-background min-h-screen">
-      <Header />
-      
-      {/* Hero Section */}
-      <section className="pt-28 pb-12 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <p className="text-sm font-medium text-primary mb-2">
-            {isEn ? "ACTIVITY AREAS" : "FAALIYET ALANLARI"}
-          </p>
-          <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
-            {isEn ? "Our Activity Areas" : "Faaliyet Alanlarimiz"}
-          </h1>
-          <p className="mt-4 text-muted-foreground max-w-3xl">
-            {isEn 
-              ? "Electronic product design, production, testing, maintenance, installation for Suburban, High Speed Train, EMU, DMU, Tram, Metro, Light Rail vehicles, Bus, Metrobus and other transportation vehicles"
-              : "Elektronik urunlerin tasarimi, Uretimi, testi, bakimi, montaji Banliyo, Hizli Tren, EMU, DMU, Tramvay, Metro, Hafif Rayli sistem araclari, Otobus, Metrobus vb. ulasim araclari"
-            }
-          </p>
-        </div>
-      </section>
+    <main className="min-h-screen">
+      <PageHeroIndustrial
+        label={isEn ? "ACTIVITY AREAS" : "FAALIYET ALANLARI"}
+        title={isEn ? "Our Activity Areas" : "Faaliyet Alanlarimiz"}
+        description={
+          isEn 
+            ? "Electronic product design, production, testing, maintenance, installation for Suburban, High Speed Train, EMU, DMU, Tram, Metro, Light Rail vehicles, Bus, Metrobus and other transportation vehicles"
+            : "Elektronik urunlerin tasarimi, Uretimi, testi, bakimi, montaji Banliyo, Hizli Tren, EMU, DMU, Tramvay, Metro, Hafif Rayli sistem araclari, Otobus, Metrobus vb. ulasim araclari"
+        }
+      />
       
       {/* Service Cards Section */}
       <section className="py-12">
@@ -450,7 +444,7 @@ export default function FaaliyetAlanlariPage() {
             {services.map((service) => (
               <Card 
                 key={service.id} 
-                className="border border-border hover:border-primary/30 transition-all bg-white"
+                className="border border-border dark:border-white/10 hover:border-primary/30 dark:hover:border-primary/40 transition-all bg-white dark:bg-[#1e293b]"
               >
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-foreground mb-1">
@@ -521,6 +515,12 @@ export default function FaaliyetAlanlariPage() {
           </div>
         </div>
       </section>
+
+      {/* Atak Ulaşım Dönüşüm Standartları — Industrial Editorial Flow */}
+      <IndustrialEditorialFlow language={language} />
+
+      {/* Teknik Yetkinlikler — Industrial UI panel */}
+      <IndustrialCapabilitiesPanel language={language} />
       
       {/* Project Modal */}
       <ProjectModal 

@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { use, useState } from "react"
 import Image from "next/image"
-import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { PageHeroIndustrial } from "@/components/page-hero-industrial"
 import { X, ChevronLeft, ChevronRight, Play, ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -319,44 +319,20 @@ function ProductModal({ product, isOpen, onClose }: { product: Product | null; i
   )
 }
 
-export default function UrunlerimizPage() {
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function UrunlerimizPage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   
   return (
-    <main className="min-h-screen bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,oklch(0.55_0.14_240/0.06),transparent)]">
-      <Header />
-      
-      {/* Hero */}
-      <section className="pt-32 pb-20 sm:pt-36 sm:pb-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-primary/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_70%_20%,oklch(0.55_0.14_240/0.25),transparent_50%)]" />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="max-w-xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400/90 mb-4">
-                Ürün Kataloğu
-              </p>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                Ürünlerimiz
-              </h1>
-              <p className="mt-6 text-lg text-slate-300 leading-relaxed">
-                Metro ve tramvay araçları için EN50155, EN50121 standartlarına uygun yerli tasarım ve üretim ürünlerimiz.
-              </p>
-            </div>
-            <div className="hidden lg:block">
-              <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center">
-                    <Play className="h-10 w-10 text-white/70 ml-1" />
-                  </div>
-                  <p className="absolute bottom-4 left-0 right-0 text-center text-white/60 text-sm">Ürün Tanıtım Videosu</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <main className="min-h-screen">
+      <PageHeroIndustrial
+        label="Ürün Kataloğu"
+        title="Ürünlerimiz"
+        description="Metro ve tramvay araçları için EN50155, EN50121 standartlarına uygun yerli tasarım ve üretim ürünlerimiz."
+      />
       
       {/* Product Categories */}
       {productCategories.map((category, categoryIndex) => (

@@ -1,15 +1,22 @@
 "use client"
 
-import { Header } from "@/components/header"
+import { use } from "react"
+import { HeroSlideshow } from "@/components/hero-slideshow"
 import { Footer } from "@/components/footer"
-import { ScrollReveal } from "@/components/scroll-reveal"
+import { FadeInUp } from "@/components/fade-in-up"
 import Link from "next/link"
 import Image from "next/image"
-import { MagicCard } from "@/components/ui/magic-card"
 import { Marquee } from "@/components/ui/marquee"
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
-import { ArrowRight, Play } from "lucide-react"
+import { motion } from "framer-motion"
+import { ArrowRight, ImageIcon } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 /** public/images/Referances klasöründeki referans logoları (SEO uyumlu alt) */
 const referenceLogos = [
@@ -23,461 +30,231 @@ const referenceLogos = [
   { src: "/images/Referances/TURASAS.jpeg", name: "TURASAS" },
 ]
 
-export default function HomePage() {
+/** 5 ana birim — Faaliyet sayfasına linkler */
+const ACTIVITY_UNITS = [
+  { key: "elektronik", labelTr: "Atak Ulaşım ve Elektronik", labelEn: "Atak Transportation & Electronics", href: "/faaliyet-alanlari" },
+  { key: "turizm", labelTr: "Turizm", labelEn: "Tourism", href: "/faaliyet-alanlari" },
+  { key: "lojistik", labelTr: "Lojistik & AtakTrans", labelEn: "Logistics & AtakTrans", href: "/faaliyet-alanlari" },
+  { key: "filo", labelTr: "Filo", labelEn: "Fleet", href: "/faaliyet-alanlari" },
+  { key: "arge", labelTr: "Ar-Ge", labelEn: "R&D", href: "/faaliyet-alanlari" },
+]
+
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function HomePage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const { t, language } = useLanguage()
 
-  const products = [
-    {
-      id: 1,
-      title: language === "tr" ? "Surucu Kontrol Unitesi" : "Driver Control Unit",
-      description:
-        language === "tr"
-          ? "EN50155 sertifikali rayli sistem araci icin entegre dokunmatik ekranli endustriyel bilgisayar."
-          : "EN50155 certified industrial computer with integrated touch screen for rail vehicles.",
-    },
-    {
-      id: 2,
-      title: language === "tr" ? "LED Guzergah Panelleri" : "LED Route Panels",
-      description:
-        language === "tr"
-          ? "RGB ve tek renkli LED modulleri, dahili kontrol karti ve RS-485 haberlesme ozellikli guzergah paneli."
-          : "RGB and single color LED modules, built-in control card and RS-485 communication route panel.",
-    },
-    {
-      id: 3,
-      title: language === "tr" ? "CCTV Sistemleri" : "CCTV Systems",
-      description:
-        language === "tr"
-          ? "Arac ici guvenlik kamera sistemleri icin merkezi kontrol unitesi ve NVR kayit sistemi."
-          : "Central control unit and NVR recording system for in-vehicle security camera systems.",
-    },
-    {
-      id: 4,
-      title: language === "tr" ? "Interkom Sistemi" : "Intercom System",
-      description:
-        language === "tr"
-          ? "TUBITAK destekli yerli tasarim ve uretim, RS-485 haberlesme protokolu."
-          : "TUBITAK supported domestic design and production, RS-485 communication protocol.",
-    },
-  ]
-
-  const services = [
-    language === "tr" ? "Otomatik Anons Sistemleri" : "Automatic Announcement Systems",
-    language === "tr" ? "Yolcu ve Surucu Bilgilendirme" : "Passenger & Driver Information",
-    language === "tr" ? "Guvenlik Kamera Sistemleri" : "Security Camera Systems",
-    language === "tr" ? "Elektronik Kart Tasarimi" : "Electronic Board Design",
-    language === "tr" ? "Ar-Ge Calismalari" : "R&D Activities",
-    language === "tr" ? "Bakim ve Onarim" : "Maintenance & Repair",
-  ]
-
-  /** Şirketimiz Bünyesinde: 9 items, each with distinct bar color (non-white) */
-  const companyLayers = [
-    language === "tr" ? "Otomatik Anons Sistemleri" : "Automatic Announcement Systems",
-    language === "tr" ? "Yolcu ve Surucu Bilgilendirme" : "Passenger & Driver Information",
-    language === "tr" ? "Guvenlik Kamera Sistemleri" : "Security Camera Systems",
-    language === "tr" ? "Elektronik Kart Tasarimi" : "Electronic Board Design",
-    language === "tr" ? "Ar-Ge Calismalari" : "R&D Activities",
-    language === "tr" ? "Bakim ve Onarim" : "Maintenance & Repair",
-    language === "tr" ? "Yazilim Gelistirme" : "Software Development",
-    language === "tr" ? "Sistem Entegrasyonu" : "System Integration",
-    language === "tr" ? "Teknik Destek" : "Technical Support",
-  ]
-
-  const transformSteps = [
-    {
-      key: "projelendirme",
-      title: language === "tr" ? "Projelendirme" : "Project Planning",
-      description:
-        language === "tr"
-          ? "Raylı sistem, otobüs ve özel araç projeleri için EN standartlarına uygun mimari ve elektronik tasarım."
-          : "Architectural and electronic design compliant with EN standards for rail systems, buses and special vehicles.",
-      badge: language === "tr" ? "Mühendislik Analizi" : "Engineering Analysis",
-    },
-    {
-      key: "uretim",
-      title: language === "tr" ? "Üretim" : "Manufacturing",
-      description:
-        language === "tr"
-          ? "Yüksek dayanımlı kart tasarımları, kablolama ve kabin montajı dahil uçtan uca üretim süreçleri."
-          : "End-to-end production including rugged board design, cabling and cabinet assembly.",
-      badge: language === "tr" ? "Yerli Üretim" : "Domestic Production",
-    },
-    {
-      key: "test",
-      title: language === "tr" ? "Test ve Onay" : "Testing & Approval",
-      description:
-        language === "tr"
-          ? "EN50155, EN50121 ve ilgili standartlara göre laboratuvar testleri, saha devreye alma ve kabul süreçleri."
-          : "Laboratory tests, on-site commissioning and acceptance procedures according to EN50155, EN50121 and related standards.",
-      badge: language === "tr" ? "Uluslararası Standartlar" : "International Standards",
-    },
-  ]
-
-  const capabilities = [
-    language === "tr" ? "Gelişmiş EMC/EMI İzolasyonu" : "Advanced EMC/EMI Isolation",
-    language === "tr" ? "Akıllı Kontrol ve İzleme Sistemleri" : "Intelligent Control & Monitoring",
-    language === "tr" ? "Endüstriyel Sıcaklık Aralıkları" : "Industrial Temperature Ranges",
-    language === "tr" ? "Yüksek Erişilebilirlikli Yazılım Mimarisi" : "High-Availability Software Architecture",
-    language === "tr" ? "Modüler Kart ve Kablolama Yapısı" : "Modular Board & Cabling",
-    language === "tr" ? "Uzaktan Güncelleme ve Teşhis" : "Remote Update & Diagnostics",
-  ]
-
   return (
-    <main className="min-h-screen relative">
-      <Header />
+    <main className="min-h-screen relative overflow-x-hidden">
+      <HeroSlideshow />
 
-      {/* Hero — light theme, matches rest of site; bus animation visible */}
-      <section
-        data-section="hero"
-        data-header-theme="light"
-        className="section-fluid pt-28 pb-20 sm:pt-32 sm:pb-24 bg-gradient-to-b from-primary/5 via-background to-background rounded-b-3xl relative overflow-hidden border-b border-border/50"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,oklch(0.55_0.14_240/0.08),transparent_60%)]" />
-
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <ScrollReveal staggerIndex={0}>
-                <p className="text-sm font-medium text-primary mb-2">{t.hero.slide1.subtitle}</p>
-              </ScrollReveal>
-              <ScrollReveal staggerIndex={1}>
-                <h1 className="text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
-                  {t.hero.slide1.title}
-                </h1>
-              </ScrollReveal>
-              <ScrollReveal staggerIndex={2}>
-                <p className="mt-4 text-muted-foreground leading-relaxed">{t.hero.slide1.description}</p>
-              </ScrollReveal>
-              <ScrollReveal staggerIndex={3} className="mt-6 flex flex-wrap gap-3">
-                <InteractiveHoverButton
-                  asChild
-                  className="rounded-full px-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg"
-                >
-                  <Link href="/projelerimiz">
-                    {t.nav.projects}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </InteractiveHoverButton>
-              </ScrollReveal>
-            </div>
-
-            <ScrollReveal staggerIndex={2} className="relative">
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
-                <div className="relative aspect-video bg-muted/50 rounded-xl mb-6 overflow-hidden flex items-center justify-center border border-border">
-                  <div className="text-center">
-                    <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                      <Play className="h-7 w-7 text-primary ml-0.5" />
-                    </div>
-                    <p className="text-muted-foreground mt-3 text-sm">{t.hero.stats.videoLabel}</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { value: "25+", label: t.hero.stats.experience },
-                    { value: "TUBiTAK", label: t.hero.stats.certified },
-                    { value: "ISO", label: "9001:2015" },
-                    { value: "%100", label: t.hero.stats.domestic },
-                  ].map((stat, i) => (
-                    <ScrollReveal key={stat.label} staggerIndex={i}>
-                      <div className="text-center p-4 rounded-xl border border-border bg-muted/30">
-                        <div className="text-xl font-semibold text-primary">{stat.value}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Atak Ulaşım Dönüşüm Standartları */}
-      <section
-        data-section="standards"
-        data-header-theme="muted"
-        className="section-fluid py-20 bg-muted/40"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 grid lg:grid-cols-2 gap-12">
-          <div className="lg:sticky lg:top-28 self-start space-y-4">
-            <ScrollReveal staggerIndex={0}>
-              <p className="text-sm font-semibold tracking-widest text-primary uppercase">
-                {language === "tr" ? "STANDARTLAR" : "STANDARDS"}
-              </p>
-            </ScrollReveal>
-            <ScrollReveal staggerIndex={1}>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-foreground">
-                {language === "tr"
-                  ? "Atak Ulaşım Dönüşüm Standartları"
-                  : "Atak Ulaşım Transformation Standards"}
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal staggerIndex={2}>
-              <p className="text-sm text-muted-foreground max-w-lg">
-                {language === "tr"
-                  ? "Projeler; fizibilite, üretim ve sertifikasyon adımlarının tamamının izlendiği şeffaf bir dönüşüm süreci ile yönetilir."
-                  : "Projects are managed through a transparent transformation process covering feasibility, production and certification steps end to end."}
-              </p>
-            </ScrollReveal>
-          </div>
-
-          <div className="space-y-6">
-            {transformSteps.map((step, index) => (
-              <ScrollReveal key={step.key} staggerIndex={index}>
-                <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm">
-                  <div className="space-y-3">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-medium text-primary">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      {step.badge}
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Showcase — overlaps hero (pulls up), light theme */}
-      <section
-        data-section="showcase"
-        data-header-theme="light"
-        className="section-fluid section-fluid-overlap-up py-8"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <ScrollReveal staggerIndex={0}>
-            <div className="relative aspect-[21/9] bg-muted rounded-2xl overflow-hidden border border-border shadow-lg">
-              <Image
-                src="/images/tramway-showcase.jpg"
-                alt="Malatya Tramvay"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                <p className="text-white text-sm font-medium">
-                  {language === "tr"
-                    ? "Malatya Buyuksehir Belediyesi Tramvay Sistemi"
-                    : "Malatya Metropolitan Municipality Tramway System"}
-                </p>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* About — bento-style grid, overlaps down into next, muted theme */}
-      <section
-        data-section="about"
-        data-header-theme="muted"
-        className="section-fluid section-fluid-overlap-down-lg py-16 bg-white rounded-t-3xl shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.08)]"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="bento-grid bento-grid-4 gap-6">
-            <ScrollReveal staggerIndex={0} className="bento-span-2">
-              <p className="text-sm font-medium text-primary mb-2">
-                {language === "tr" ? "KURUMSAL" : "CORPORATE"}
-              </p>
-              <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">
-                {language === "tr" ? "Atak Ulasim ve Elektronik" : "Atak Transportation and Electronics"}
-              </h2>
-              <p className="mt-4 text-muted-foreground text-sm leading-relaxed">
-                {language === "tr"
-                  ? "Atak Ulasim ve Elektronik ulkemizde yerlilik ve teknolojik arge-uretim yapan ulasim, askeri ve teknolojik alanlarda cesitli tasarimlar yapan ve bunlari urune donusturen bir sirkettir. Sirketimiz urun tasarlamis ve uretmis oldugu urunlerin tum uluslararasi testlerini yapmis ve belgelerini almis, Metro, Tramvay, Hafif Rayli sistem araclari, Otobusler, Metrobusler icin otomatik anons, yolcu ve surucu bilgilendirme, guvenlik kamerasi sistemleri konusunda donanim, tasarim ve yazilim gelistirme asamalarinin, bakim ve uretimini yapan bir sirkettir."
-                  : "Atak Transportation and Electronics is a company that makes various designs in transportation, military and technological fields with domestic and technological R&D production in our country and transforms them into products. Our company has completed all international tests and obtained certificates for the products it has designed and manufactured, developing hardware, design and software for automatic announcement, passenger and driver information, and security camera systems for Metro, Tram, Light Rail vehicles, Buses, and Metrobuses."}
-              </p>
-              <InteractiveHoverButton asChild className="mt-6 bg-transparent border border-border text-foreground hover:bg-muted/50 hover:shadow-none">
-                <Link href="/hakkimizda">
-                  {language === "tr" ? "Devami" : "Read More"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </InteractiveHoverButton>
-            </ScrollReveal>
-
-            <ScrollReveal staggerIndex={1} className="bento-span-2">
-              <div className="rounded-2xl p-6 h-full border border-white/60 bg-white/40 backdrop-blur-xl shadow-[0_4px_24px_rgba(30,90,158,0.04)] overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-transparent" />
-                <div className="relative">
-                  <h3 className="text-lg font-semibold text-foreground mb-4">
-                    {language === "tr" ? "Uygulama Alanlari" : "Application Areas"}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {language === "tr"
-                      ? "Elektronik urunlerin tasarimi, Uretimi, testi, bakimi, montaji Banliyo, Hizli Tren, EMU, DMU, Tramvay, Metro, Hafif Rayli sistem araclari, Otobus, Metrobus vb. ulasim araclari"
-                      : "Electronic product design, Production, testing, maintenance, installation for Suburban, High Speed Train, EMU, DMU, Tram, Metro, Light Rail vehicles, Bus, Metrobus etc. transportation vehicles"}
-                  </p>
-                  <p className="text-[10px] font-medium tracking-widest text-primary/70 uppercase mb-2">
-                    {language === "tr" ? "Sirketimiz Bunyesinde" : "Within Our Company"}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {services.map((s) => (
-                      <span
-                        key={s}
-                        className="text-[11px] px-2.5 py-1 rounded-lg bg-white/70 border border-white/80 text-muted-foreground font-light"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Şirketimiz Bünyesinde — glassy, modern, compact info */}
-      <section
-        data-section="company-layers"
-        data-header-theme="muted"
-        className="section-fluid py-16 relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-primary/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,oklch(0.55_0.14_240/0.06),transparent)]" />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <ScrollReveal staggerIndex={0} className="text-center mb-12">
-            <p className="text-xs font-semibold tracking-[0.2em] text-primary/80 uppercase mb-2">
-              {language === "tr" ? "KURUMSAL" : "CORPORATE"}
-            </p>
-            <h2 className="text-2xl font-semibold text-foreground">
-              {language === "tr" ? "Şirketimiz Bünyesinde" : "Within Our Company"}
-            </h2>
-          </ScrollReveal>
-
-          <ScrollReveal staggerIndex={1}>
-            <div className="relative rounded-3xl border border-white/60 bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(30,90,158,0.06)] overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/70 to-transparent" />
-              <div className="relative p-6 sm:p-8">
-                <p className="text-[11px] font-medium tracking-widest text-muted-foreground/80 uppercase mb-4">
-                  {language === "tr"
-                    ? "Tasarım · Üretim · Entegrasyon · Destek"
-                    : "Design · Manufacturing · Integration · Support"}
-                </p>
-                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                  {companyLayers.map((label, index) => (
-                    <span
-                      key={label}
-                      className="inline-flex items-center px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium bg-white/80 border border-white/90 text-foreground/90 shadow-sm backdrop-blur-sm"
-                    >
-                      {label}
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-4 text-[10px] text-muted-foreground/70 text-center font-light tracking-wide">
-                  {language === "tr"
-                    ? "Uçtan uca çözüm ortağınız"
-                    : "Your end-to-end solution partner"}
-                </p>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Teknik Yetkinlikler — bento grid, MagicCard */}
-      <section
-        data-section="capabilities"
-        data-header-theme="muted"
-        className="section-fluid py-16 bg-slate-50"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <ScrollReveal staggerIndex={0} className="text-center mb-10">
-            <p className="text-sm font-medium text-primary mb-2">
-              {language === "tr" ? "TEKNİK YETKİNLİKLER" : "TECHNICAL CAPABILITIES"}
-            </p>
-            <h2 className="text-2xl font-semibold text-foreground">
-              {language === "tr"
-                ? "Raylı Sistemler İçin Mühendislik Altyapısı"
-                : "Engineering Foundation for Rail Systems"}
-            </h2>
-          </ScrollReveal>
-
-          <div className="bento-grid bento-grid-4 gap-4">
-            {capabilities.map((capability, index) => (
-              <ScrollReveal key={capability} staggerIndex={index + 1}>
-                <MagicCard className="h-full p-0 overflow-visible">
-                  <div className="h-full rounded-2xl bg-card p-5 flex flex-col justify-between">
-                    <p className="text-sm font-medium text-foreground">{capability}</p>
-                    <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
-                      {language === "tr"
-                        ? "Saha koşullarına uygun, uzun ömürlü ve bakım dostu sistem tasarımı yaklaşımı."
-                        : "Design approach focused on long-life, field-ready and maintenance-friendly systems."}
-                    </p>
-                  </div>
-                </MagicCard>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Products — bento grid, overlaps up over about, muted theme */}
+      {/* —— 1. Ürünlerimiz — left: text card, right: product photo slider —— */}
       <section
         data-section="products"
-        data-header-theme="muted"
-        className="section-fluid section-fluid-overlap-up-lg py-16 bg-muted/50 rounded-3xl"
+        data-header-theme="dark"
+        className="min-h-screen flex flex-col justify-center py-20 sm:py-28 bg-stone-100 dark:bg-[#0a0a0a]"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <ScrollReveal staggerIndex={0} className="text-center mb-10">
-            <p className="text-sm font-medium text-primary mb-2">{t.products.pageTitle}</p>
-            <h2 className="text-2xl font-semibold text-foreground">{t.products.pageSubtitle}</h2>
-          </ScrollReveal>
-
-          <div className="bento-grid bento-grid-4 gap-4">
-            {products.map((product, i) => (
-              <ScrollReveal key={product.id} staggerIndex={i + 1}>
-                <MagicCard className="h-full p-0 overflow-visible">
-                  <Link
-                    href="/urunlerimiz"
-                    className="block h-full rounded-2xl bg-card overflow-hidden hover:opacity-100 transition-opacity group"
-                  >
-                    <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 via-primary/5 to-slate-100 flex items-center justify-center border-b border-border/50">
-                      <div className="text-center p-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/70 border border-white/90 flex items-center justify-center mx-auto shadow-sm">
-                          <svg className="h-6 w-6 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                          </svg>
+        <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <FadeInUp amount={0.2} staggerDelay={0} className="order-2 lg:order-1">
+              <div className="rounded-2xl border border-stone-200/80 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-sm p-8 sm:p-10 shadow-xl">
+                <p className="text-xs font-medium uppercase tracking-[0.32em] text-stone-500 dark:text-white/60 mb-4">
+                  {language === "tr" ? "Teknolojinin Somut Hali" : "Technology in Form"}
+                </p>
+                <h2 className="text-3xl sm:text-4xl font-light text-[#0f172a] dark:text-white tracking-tight leading-tight mb-6">
+                  {language === "tr" ? "Ürünlerimiz" : "Our Products"}
+                </h2>
+                <p className="text-stone-600 dark:text-white/75 text-sm sm:text-base leading-[1.85] mb-8">
+                  {language === "tr"
+                    ? "PIS/PAS sistemleri, YBS Panel PC ve CCTV çözümlerimiz EN50155 ve EN50121 standartlarına uygun, raylı sistem ve toplu taşıma için güvenilir mühendislik çıktılarıdır. Yerli tasarım ve Kağıthane üretim hattıyla donanımdan yazılıma uçtan uca kontrol altında."
+                    : "Our PIS/PAS systems, YBS Panel PC and CCTV solutions are reliable engineering outputs compliant with EN50155 and EN50121 for rail and public transport. End-to-end control from hardware to software through domestic design and our Kağıthane production line."}
+                </p>
+                <Link
+                  href="/urunlerimiz"
+                  className="inline-flex items-center gap-2 text-sm font-medium tracking-[0.18em] uppercase text-[#0f172a] hover:text-stone-700 dark:text-white/90 dark:hover:text-white transition-colors"
+                >
+                  {language === "tr" ? "Ürünleri Keşfet" : "Explore Products"}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </FadeInUp>
+            <FadeInUp amount={0.2} staggerDelay={0.08} className="order-1 lg:order-2">
+              <div className="relative w-full max-w-md mx-auto">
+                <Carousel opts={{ align: "start", loop: true }} className="w-full">
+                  <CarouselContent className="-ml-2 sm:-ml-4">
+                    {[
+                      { src: "/images/tramway-showcase.jpg", alt: "PIS/PAS sistemleri" },
+                      { src: "/images/tramway-showcase.jpg", alt: "YBS Panel PC" },
+                      { src: "/images/tramway-showcase.jpg", alt: "CCTV çözümleri" },
+                      { src: "/images/tramway-showcase.jpg", alt: "Raylı sistem ekipmanları" },
+                    ].map((slide, i) => (
+                      <CarouselItem key={i} className="pl-2 sm:pl-4 basis-full">
+                        <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-stone-200/80 dark:border-white/10 bg-stone-200 dark:bg-white/5 shadow-lg">
+                          <Image
+                            src={slide.src}
+                            alt={slide.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
                         </div>
-                        <p className="text-[10px] text-muted-foreground mt-2 font-medium">
-                          {language === "tr" ? "Görsel yakında" : "Image coming soon"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="text-sm font-semibold text-foreground">{product.title}</h3>
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{product.description}</p>
-                    </div>
-                  </Link>
-                </MagicCard>
-              </ScrollReveal>
-            ))}
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0 sm:-left-10 top-1/2 -translate-y-1/2 border-stone-200 dark:border-white/20 bg-white/90 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20" />
+                  <CarouselNext className="right-0 sm:-right-10 top-1/2 -translate-y-1/2 border-stone-200 dark:border-white/20 bg-white/90 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20" />
+                </Carousel>
+              </div>
+            </FadeInUp>
           </div>
-
-          <ScrollReveal staggerIndex={5} className="text-center mt-8">
-            <InteractiveHoverButton asChild className="rounded-full px-6 bg-transparent border border-border text-foreground hover:bg-muted/50 hover:shadow-none">
-              <Link href="/urunlerimiz">
-                {language === "tr" ? "Tum Urunler" : "All Products"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </InteractiveHoverButton>
-          </ScrollReveal>
         </div>
       </section>
 
-      {/* Referanslar / Çözüm Ortaklarımız — Marquee ile kayan logo şeridi */}
+      {/* —— 2. Projelerimiz — full-width bg, hero copy, fade-in-up —— */}
+      <section
+        data-section="projects"
+        data-header-theme="dark"
+        className="relative min-h-screen flex flex-col justify-center py-32 sm:py-40"
+      >
+        <div className="absolute inset-0">
+          <Image
+            src="/images/tramway-showcase.jpg"
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        <div className="relative mx-auto max-w-3xl px-8 lg:px-12 text-center">
+          <FadeInUp amount={0.12} staggerDelay={0.1}>
+            <p className="text-xs font-medium uppercase tracking-[0.32em] text-white/60 mb-8" >
+              {language === "tr" ? "Hayata Geçen Vizyonlar" : "Visions Realized"}
+            </p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white tracking-tight leading-tight mb-10" >
+              {language === "tr" ? "Projelerimiz" : "Our Projects"}
+            </h2>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/50 mb-12" >
+              {language === "tr" ? "Çalışma Felsefemiz" : "Our Working Philosophy"}
+            </p>
+            <p className="text-lg sm:text-xl text-white/85 leading-[1.9] max-w-2xl mx-auto mb-16" >
+              {language === "tr"
+                ? "Projelerimizi, fizibiliteden teslimata kadar titiz bir mühendislik disipliniyle yürütüyoruz. EN50155, EN50121 ve ilgili Avrupa standartlarına tam uyum, tasarım kararlarından saha devreye almaya kadar her aşamada önceliğimizdir. Müşteri kabul kriterleri proje başında netleştirilir; laboratuvar ve saha testleriyle doğrulanan çözümler, raylı sistem ve toplu taşıma operatörlerinin güvenilir altyapısına dönüşür. Bu vizyon, sadece cihaz teslimi değil, uzun ömürlü ve bakım dostu sistemlerle sürdürülebilir bir ortaklık kurmaktır."
+                : "We run our projects with rigorous engineering discipline from feasibility to delivery. Full compliance with EN50155, EN50121 and related European standards is our priority at every stage from design decisions to site commissioning. Customer acceptance criteria are defined at project start; solutions validated through laboratory and field tests become the reliable infrastructure of rail and public transport operators. This vision is not merely equipment delivery but building a sustainable partnership through long-life, maintenance-friendly systems."}
+            </p>
+            <Link
+              href="/projelerimiz"
+              className="inline-flex items-center gap-3 text-sm font-medium tracking-[0.2em] uppercase text-white hover:text-white/90 transition-colors"
+            >
+              {language === "tr" ? "Projeleri İncele" : "Explore Projects"}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </FadeInUp>
+        </div>
+      </section>
+
+      {/* —— 3. Faaliyet Alanlarımız — text on the right in glassy box, image placeholder below —— */}
+      <section
+        data-section="activity"
+        data-header-theme="dark"
+        className="min-h-screen flex flex-col justify-center py-20 sm:py-28 bg-stone-100 dark:bg-[#0a0a0a]"
+      >
+        <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-stretch">
+            <FadeInUp amount={0.2} staggerDelay={0} className="flex justify-end">
+              <div className="w-full max-w-xl ml-0 lg:ml-auto rounded-2xl border border-white/20 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-md shadow-2xl p-8 sm:p-10 lg:p-12">
+                <p className="text-xs font-medium uppercase tracking-[0.32em] text-stone-500 dark:text-white/60 mb-4">
+                  {language === "tr" ? "Eko-Sistem Özeti" : "Ecosystem Overview"}
+                </p>
+                <h2 className="text-3xl sm:text-4xl font-light text-[#0f172a] dark:text-white tracking-tight leading-tight mb-6">
+                  {language === "tr" ? "Faaliyet Alanlarımız" : "Our Activity Areas"}
+                </h2>
+                <p className="text-stone-600 dark:text-white/75 text-sm sm:text-base leading-[1.85] mb-8">
+                  {language === "tr"
+                    ? "Atak Ulaşım grubu, ulaşımın her noktasında operasyonel gücünü hissettiren entegre bir yapı sunar. Atak Ulaşım ve Elektronik birimi raylı sistem ve toplu taşıma için yerli donanım ve yazılımdan üretime, testten sahaya teslimata tüm süreçleri yönetir. Turizm, Lojistik ve AtakTrans, filo ve Ar-Ge yatırımlarıyla tek çatı altında uçtan uca çözüm ortağı taahhüdünü somutlaştırır."
+                    : "The Atak Ulaşım group offers an integrated structure that conveys its operational strength at every point of transport. The Atak Transportation and Electronics unit manages all processes from domestic hardware and software for rail and public transport through production, testing and field delivery. Tourism, Logistics and AtakTrans, fleet and R&D investments embody the commitment to being an end-to-end solution partner under one roof."}
+                </p>
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  {ACTIVITY_UNITS.map((u) => (
+                    <Link
+                      key={u.key}
+                      href={u.href}
+                      className="text-sm font-medium tracking-[0.12em] uppercase text-stone-600 hover:text-[#0f172a] dark:text-white/70 dark:hover:text-white transition-colors"
+                    >
+                      {language === "tr" ? u.labelTr : u.labelEn}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </FadeInUp>
+            <FadeInUp amount={0.15} staggerDelay={0.1} className="mt-10 lg:mt-12 w-full">
+              <div className="relative w-full aspect-[21/9] sm:aspect-[3/1] max-h-[280px] rounded-xl overflow-hidden border border-stone-200/80 dark:border-white/10 bg-slate-200 dark:bg-slate-800/80 flex items-center justify-center">
+                <ImageIcon className="w-14 h-14 sm:w-16 sm:h-16 text-stone-400 dark:text-slate-500" />
+                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs font-medium tracking-widest uppercase text-stone-500 dark:text-slate-400">
+                  {language === "tr" ? "Görsel alanı" : "Image placeholder"}
+                </span>
+              </div>
+            </FadeInUp>
+          </div>
+        </div>
+      </section>
+
+      {/* —— 4. Elektrikli Otobüs (light option — light by default, dark variants) —— */}
+      <section
+        data-section="electric-bus"
+        data-header-theme="light"
+        className="relative min-h-screen flex flex-col justify-center py-32 sm:py-40 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-stone-50/95 to-white dark:from-[#0f172a] dark:via-slate-900 dark:to-[#0f172a]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_30%,rgba(16,185,129,0.04),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_70%_30%,rgba(16,185,129,0.06),transparent)]" />
+        <LeafFloat />
+
+        <div className="relative mx-auto max-w-6xl w-full px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <FadeInUp amount={0.15} staggerDelay={0.08} className="order-2 lg:order-1">
+            <p className="text-xs font-medium uppercase tracking-[0.28em] text-stone-500 dark:text-stone-400 mb-8" >
+              {language === "tr" ? "Yenilikçi & Doğa Dostu" : "Innovative & Eco-Friendly"}
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#0a0a0a] dark:text-white tracking-tight leading-tight mb-10" >
+              {language === "tr" ? "Elektrikli Otobüs Dönüşümü" : "Electric Bus Conversion"}
+            </h2>
+            <p className="text-stone-600 dark:text-stone-300 text-base sm:text-lg leading-[1.9] mb-12" >
+              {language === "tr"
+                ? "Dizel otobüslerin elektrikli tahrik sistemine dönüştürülmesi, Atak Ulaşım'ın sürdürülebilir ulaşım vizyonunun somut adımıdır. Karbon ayak izini azaltan, yerel hava kalitesine katkı sunan ve operatör maliyetlerini uzun vadede düşüren bu proje, sadece teknolojik bir yükseltme değil; geleceğe yatırımdır. Batarya yönetimi, güç elektroniği ve araç üstü entegrasyonu konusundaki mühendislik birikimimiz, dönüşümün güvenilir ve ölçeklenebilir olmasını sağlar."
+                : "Converting diesel buses to electric propulsion is a concrete step in Atak Ulaşım's sustainable transport vision. This project reduces carbon footprint, improves local air quality and lowers operator costs in the long term—it is not only a technological upgrade but an investment in the future. Our engineering expertise in battery management, power electronics and on-vehicle integration ensures the conversion is reliable and scalable."}
+            </p>
+            <Link
+              href="/hizmetler/elektrikli-otobus"
+              className="inline-flex items-center gap-3 text-sm font-medium tracking-[0.2em] uppercase text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white transition-colors"
+            >
+              {language === "tr" ? "Projeyi İncele" : "Explore Project"}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </FadeInUp>
+          <FadeInUp amount={0.12} staggerDelay={0.15} className="relative aspect-[4/3] rounded-sm overflow-hidden border border-stone-200/80 dark:border-white/10 bg-stone-100/50 dark:bg-white/5 order-1 lg:order-2">
+            <div className="absolute inset-0 flex items-center justify-center text-stone-400 dark:text-stone-500 text-sm font-medium tracking-wider" >
+              {language === "tr" ? "Elektrikli otobüs görseli" : "Electric bus image"}
+            </div>
+          </FadeInUp>
+        </div>
+      </section>
+
+      {/* Referanslar — premium whitespace, fade-in-up */}
       <section
         data-section="references"
         data-header-theme="light"
-        className="section-fluid py-16 bg-white rounded-t-3xl shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.06)]"
+        className="py-24 sm:py-32 bg-white dark:bg-[#0f172a]"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <ScrollReveal staggerIndex={0} className="text-center mb-10">
-            <p className="text-sm font-medium text-primary mb-2">{t.clients.title}</p>
-            <h2 className="text-xl font-semibold text-foreground">
+        <div className="mx-auto max-w-6xl px-8 lg:px-12">
+          <FadeInUp amount={0.2} className="text-center mb-16">
+            <p className="text-xs font-medium tracking-[0.28em] text-stone-500 dark:text-stone-400 mb-4" >
+              {t.clients.title}
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-light text-[#0a0a0a] dark:text-white tracking-tight" >
               {language === "tr" ? "Çözüm Ortaklarımız" : "Our Solution Partners"}
             </h2>
-          </ScrollReveal>
+          </FadeInUp>
           <div className="relative">
             <Marquee duration={40} pauseOnHover className="py-4">
               {referenceLogos.map((ref) => (
@@ -499,10 +276,57 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer — muted theme */}
+      {/* Footer — DOKUNMA */}
       <div data-section="footer" data-header-theme="muted">
         <Footer />
       </div>
     </main>
+  )
+}
+
+/** Soft sallanan yaprak / doğa efekti — yeşil enerji hissi */
+function LeafFloat() {
+  return (
+    <>
+      <motion.div
+        className="absolute w-32 h-32 sm:w-48 sm:h-48 opacity-[0.07] dark:opacity-[0.08] pointer-events-none"
+        style={{ top: "15%", right: "10%" }}
+        animate={{
+          rotate: [0, 5, -3, 0],
+          scale: [1, 1.02, 1],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-emerald-600 dark:text-emerald-400">
+          <path d="M50 5 C20 30 10 60 50 95 C80 60 90 30 50 5Z" fill="currentColor" />
+        </svg>
+      </motion.div>
+      <motion.div
+        className="absolute w-24 h-24 sm:w-36 sm:h-36 opacity-[0.06] dark:opacity-[0.07] pointer-events-none"
+        style={{ bottom: "25%", left: "8%" }}
+        animate={{
+          rotate: [0, -4, 6, 0],
+          scale: [1, 1.03, 1],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-teal-600 dark:text-teal-400">
+          <path d="M50 5 C20 30 10 60 50 95 C80 60 90 30 50 5Z" fill="currentColor" />
+        </svg>
+      </motion.div>
+      <motion.div
+        className="absolute w-20 h-20 sm:w-28 sm:h-28 opacity-[0.05] dark:opacity-[0.06] pointer-events-none"
+        style={{ top: "40%", left: "15%" }}
+        animate={{
+          rotate: [0, 3, -2, 0],
+          scale: [1, 1.02, 1],
+        }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-emerald-500 dark:text-emerald-400">
+          <path d="M50 5 C20 30 10 60 50 95 C80 60 90 30 50 5Z" fill="currentColor" />
+        </svg>
+      </motion.div>
+    </>
   )
 }

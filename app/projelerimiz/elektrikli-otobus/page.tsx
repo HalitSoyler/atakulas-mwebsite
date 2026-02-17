@@ -1,12 +1,15 @@
 "use client"
 
-import { Header } from "@/components/header"
+import { use } from "react"
 import { Footer } from "@/components/footer"
 import { ArrowLeft, MapPin, Calendar, Building2 } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
-export default function ElektrikliOtobusPage() {
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function ElektrikliOtobusPage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const { language } = useLanguage()
 
   const projectInfo = {
@@ -48,21 +51,19 @@ export default function ElektrikliOtobusPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <Header />
-
-      <section className="pt-28 pb-16 bg-primary">
+      <section className="pt-28 pb-16 bg-stone-100 dark:bg-[#0f172a]">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <Link
             href="/projelerimiz"
-            className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground text-sm mb-6"
+            className="inline-flex items-center gap-2 text-stone-600 dark:text-white/70 hover:text-[#38bdf8] text-sm mb-6 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             {language === "tr" ? "Tum Projeler" : "All Projects"}
           </Link>
-          <h1 className="text-3xl font-semibold text-primary-foreground sm:text-4xl">
+          <h1 className="text-3xl font-semibold text-[#0f172a] dark:text-white sm:text-4xl">
             {projectInfo.title}
           </h1>
-          <div className="flex flex-wrap gap-6 mt-4 text-primary-foreground/80 text-sm">
+          <div className="flex flex-wrap gap-6 mt-4 text-stone-600 dark:text-white/70 text-sm">
             <span className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
               {projectInfo.client}

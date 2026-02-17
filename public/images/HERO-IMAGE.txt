@@ -1,0 +1,3 @@
+Hero slide 2 (night highway / light trails):
+Place your image file as: hero-highway-night.png
+The main hero slideshow will use it automatically for the second slide.

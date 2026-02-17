@@ -1,7 +1,8 @@
 "use client"
 
-import { Header } from "@/components/header"
+import { use } from "react"
 import { Footer } from "@/components/footer"
+import { PageHeroIndustrial } from "@/components/page-hero-industrial"
 import {
   Zap,
   Leaf,
@@ -17,7 +18,10 @@ import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
-export default function ElektrikliOtobusPage() {
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function ElektrikliOtobusPage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const { t, language } = useLanguage()
 
   const benefits = [
@@ -166,49 +170,15 @@ export default function ElektrikliOtobusPage() {
 
   return (
     <main className="relative overflow-hidden">
-      <Header />
-
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/20 to-background" />
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-                <Zap className="h-4 w-4" />
-                {language === "tr" ? "Elektrikli Donusum" : "Electric Conversion"}
-              </div>
-              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl text-balance">
-                <span className="text-gradient">{t.electricBus.pageTitle}</span>
-              </h1>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-                {language === "tr"
-                  ? "Dizel otobüslerin elektrikli araca dönüştürülmesine yönelik teknik çözümler, güç elektroniği tasarımları ve araç üstü sistem entegrasyonları sunulmaktadır."
-                  : "Technical solutions, power electronics designs and on-vehicle system integrations are provided for converting diesel buses to electric vehicles."}
-              </p>
-            </div>
-
-            {/* Video Placeholder */}
-            <div className="hidden lg:block">
-              <div className="relative aspect-video glass rounded-2xl overflow-hidden group cursor-pointer">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-20 h-20 glass rounded-full flex items-center justify-center mx-auto group-hover:neon-green transition-all duration-300">
-                      <Play className="h-10 w-10 text-accent ml-1" />
-                    </div>
-                    <p className="text-muted-foreground mt-4 text-sm">
-                      {language === "tr"
-                        ? "Dönüşüm Sürecini İzleyin"
-                        : "Watch the Conversion Process"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHeroIndustrial
+        label={language === "tr" ? "Elektrikli Donusum" : "Electric Conversion"}
+        title={t.electricBus.pageTitle}
+        description={
+          language === "tr"
+            ? "Dizel otobüslerin elektrikli araca dönüştürülmesine yönelik teknik çözümler, güç elektroniği tasarımları ve araç üstü sistem entegrasyonları sunulmaktadır."
+            : "Technical solutions, power electronics designs and on-vehicle system integrations are provided for converting diesel buses to electric vehicles."
+        }
+      />
 
       {/* Benefits Section */}
       <section className="py-20 relative">

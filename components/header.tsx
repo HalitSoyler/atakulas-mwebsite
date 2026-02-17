@@ -3,16 +3,10 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Globe, ChevronDown } from "lucide-react"
+import { Menu, X, Globe } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/language-context"
 import { useHeaderContext } from "@/hooks/use-header-context"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -32,13 +26,9 @@ export function Header() {
     { name: t.nav.about, href: "/hakkimizda" },
     { name: t.nav.products, href: "/urunlerimiz" },
     { name: t.nav.projects, href: "/projelerimiz" },
-    { name: t.nav.contact, href: "/iletisim" },
-  ]
-
-  const servicesDropdown = [
-    { name: language === "tr" ? "Faaliyet Alanlarımız" : "Activity Areas", href: "/faaliyet-alanlari" },
-    { name: t.nav.railEquipment, href: "/urunlerimiz" },
+    { name: t.nav.activityAreas, href: "/faaliyet-alanlari" },
     { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+    { name: t.nav.contact, href: "/iletisim" },
   ]
 
   const theme = sectionContext.theme
@@ -74,11 +64,12 @@ export function Header() {
         >
           <picture className="block h-12 sm:h-14 md:h-16">
             <source
-              srcSet="/images/Logos/svg_files/icon_256x256.svg"
+              srcSet="/images/no%20background.png"
               media="(max-width: 767px)"
+              type="image/png"
             />
             <img
-              src="/images/Logos/svg_files/header_250x100.svg"
+              src="/images/no%20background.png"
               alt="Atak Ulaşım"
               width={250}
               height={100}
@@ -99,30 +90,14 @@ export function Header() {
           <Link href="/urunlerimiz" className={cn(linkClass(pathname === "/urunlerimiz"), "pl-4")}>
             {t.nav.products}
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(
-                "flex items-center gap-1 py-2 pl-4 text-sm font-medium transition-colors",
-                pathname.startsWith("/hizmetler") || pathname === "/faaliyet-alanlari"
-                  ? isDark ? "text-white" : "text-primary"
-                  : isDark ? "text-white/70 hover:text-white" : "text-foreground/70 hover:text-primary"
-              )}
-            >
-              {t.nav.services}
-              <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" className="w-56 bg-card border border-border shadow-xl">
-              {servicesDropdown.map((service) => (
-                <DropdownMenuItem key={service.name} asChild>
-                  <Link href={service.href} className="cursor-pointer">
-                    {service.name}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
           <Link href="/projelerimiz" className={cn(linkClass(pathname === "/projelerimiz"), "pl-2")}>
             {t.nav.projects}
+          </Link>
+          <Link href="/faaliyet-alanlari" className={cn(linkClass(pathname === "/faaliyet-alanlari"), "pl-4")}>
+            {t.nav.activityAreas}
+          </Link>
+          <Link href="/hizmetler/elektrikli-otobus" className={cn(linkClass(pathname === "/hizmetler/elektrikli-otobus"), "pl-4")}>
+            {t.nav.electricBus}
           </Link>
           <span className="w-px h-4 bg-current opacity-20 ml-1" aria-hidden />
           <Link href="/iletisim" className={cn(linkClass(pathname === "/iletisim"), "pl-3")}>
@@ -186,7 +161,7 @@ export function Header() {
             <div className="flex items-center justify-between p-5 pl-6">
               <Link href="/" onClick={() => setMobileMenuOpen(false)}>
                 <img
-                  src="/images/Logos/svg_files/icon_256x256.svg"
+                  src="/images/no%20background.png"
                   alt="Atak Ulaşım"
                   width={256}
                   height={256}
@@ -204,38 +179,8 @@ export function Header() {
             </div>
             <nav className="flex-1 overflow-auto px-6 pb-8 pt-4">
               <ul className="space-y-0.5">
-                {navItems.slice(0, 3).map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "block py-3.5 text-base font-medium rounded-lg px-3 -mx-3 transition-colors",
-                        pathname === item.href ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-                <li className="pt-2 pb-1">
-                  <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    {t.nav.services}
-                  </p>
-                </li>
-                {servicesDropdown.map((service) => (
-                  <li key={service.name}>
-                    <Link
-                      href={service.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block py-3.5 text-base font-medium text-foreground hover:bg-muted rounded-lg px-3 -mx-3 transition-colors"
-                    >
-                      {service.name}
-                    </Link>
-                  </li>
-                ))}
-                {navItems.slice(3).map((item) => (
-                  <li key={item.name}>
+                {navItems.map((item) => (
+                  <li key={item.href}>
                     <Link
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}

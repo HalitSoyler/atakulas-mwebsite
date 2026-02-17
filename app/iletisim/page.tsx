@@ -1,9 +1,8 @@
 "use client"
 
-import React from "react"
-import { useState } from "react"
-import { Header } from "@/components/header"
+import React, { use, useState } from "react"
 import { Footer } from "@/components/footer"
+import { PageHeroIndustrial } from "@/components/page-hero-industrial"
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Input } from "@/components/ui/input"
@@ -18,7 +17,10 @@ import {
 } from "@/components/ui/select"
 import { useLanguage } from "@/lib/language-context"
 
-export default function IletisimPage() {
+type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+export default function IletisimPage(props: PageProps) {
+  use(props.params ?? Promise.resolve({}))
+  use(props.searchParams ?? Promise.resolve({}))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { t, language } = useLanguage()
 
@@ -78,30 +80,14 @@ export default function IletisimPage() {
   }
 
   return (
-    <main className="relative overflow-hidden">
-      <Header />
-
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-background" />
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
-              {t.contact.pageTitle}
-            </p>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl text-balance">
-              <span className="text-gradient">
-                {t.contact.pageSubtitle.split(" ").slice(0, 2).join(" ")}
-              </span>{" "}
-              {t.contact.pageSubtitle.split(" ").slice(2).join(" ")}
-            </h1>
-          </div>
-        </div>
-      </section>
+    <main className="relative overflow-hidden bg-white dark:bg-[#0f172a]">
+      <PageHeroIndustrial
+        label={t.contact.pageTitle}
+        title={t.contact.pageSubtitle}
+      />
 
       {/* Contact Section */}
-      <section className="py-20 relative">
+      <section className="py-20 relative bg-white dark:bg-[#0f172a]">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Info */}
@@ -112,7 +98,7 @@ export default function IletisimPage() {
                 </h2>
                 <div className="space-y-4">
                   {contactInfo.map((item) => (
-                    <div key={item.label} className="flex gap-4 glass rounded-xl p-4">
+                    <div key={item.label} className="flex gap-4 rounded-xl p-4 border border-[#0f172a]/10 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm shadow-sm">
                       <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                         <item.icon className="h-5 w-5 text-primary" />
                       </div>
@@ -142,7 +128,7 @@ export default function IletisimPage() {
                 </h3>
                 <div className="space-y-4">
                   {offices.map((office) => (
-                    <div key={office.name} className="glass rounded-xl p-4 card-hover">
+                    <div key={office.name} className="rounded-xl p-4 border border-[#0f172a]/10 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex gap-3">
                         <MapPin className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <div>
@@ -163,7 +149,7 @@ export default function IletisimPage() {
               </div>
 
               {/* Map Placeholder */}
-              <div className="aspect-video glass rounded-xl overflow-hidden relative">
+              <div className="aspect-video rounded-xl overflow-hidden relative border border-[#0f172a]/10 dark:border-white/10 bg-white/50 dark:bg-white/5">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
@@ -177,7 +163,7 @@ export default function IletisimPage() {
 
             {/* Contact Form */}
             <div className="lg:col-span-3">
-              <div className="glass rounded-2xl p-8">
+              <div className="rounded-2xl p-8 border border-[#0f172a]/10 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm shadow-sm">
                 <h2 className="text-2xl font-bold text-foreground mb-6">
                   {t.contact.formTitle}
                 </h2>

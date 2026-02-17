@@ -1,14 +1,19 @@
 import React from "react"
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Syne } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LanguageProvider } from "@/lib/language-context"
 import { ScrollBackground } from "@/components/scroll-background"
 import { GlobalBusAnimation } from "@/components/global-bus-animation"
+import { AppShell } from "@/components/app-shell"
+import { LenisSmoothScroll } from "@/components/lenis-smooth-scroll"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
+import "lenis/dist/lenis.css"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" })
 
 export const metadata: Metadata = {
   title: "Atak Ulaşım | Raylı Sistem Ekipmanları ve Elektronik Çözümler",
@@ -17,18 +22,10 @@ export const metadata: Metadata = {
   generator: "v0.app",
   icons: {
     icon: [
-      {
-        url: "/images/Logos/png_files/favicon_32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-      {
-        url: "/images/Logos/png_files/favicon_64x64.png",
-        sizes: "64x64",
-        type: "image/png",
-      },
+      { url: "/images/hubele/icon.svg", type: "image/svg+xml" },
+      { url: "/images/hubele/icon.svg", sizes: "any", type: "image/svg+xml" },
     ],
-    apple: "/images/Logos/png_files/favicon_64x64.png",
+    apple: "/images/hubele/icon.svg",
   },
   openGraph: {
     title: "Atak Ulaşım | Raylı Sistem Ekipmanları ve Elektronik Çözümler",
@@ -55,13 +52,19 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="tr">
-      <body className="font-sans antialiased">
-        <LanguageProvider>
-          <ScrollBackground />
-          <GlobalBusAnimation />
-          <div className="relative z-10">{children}</div>
-        </LanguageProvider>
+    <html lang="tr" className={syne.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-white text-[#0a0a0a] dark:bg-[#0f172a] dark:text-white">
+        <ThemeProvider>
+          <LanguageProvider>
+            <LenisSmoothScroll>
+              <ScrollBackground />
+              <GlobalBusAnimation />
+              <AppShell>
+                <div className="relative z-10">{children}</div>
+              </AppShell>
+            </LenisSmoothScroll>
+          </LanguageProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

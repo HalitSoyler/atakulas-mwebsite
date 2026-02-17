@@ -1,12 +1,11 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { BusPathAnimation } from "@/components/bus-path-animation"
 
-function getAccentForRoute(pathname: string): string {
-  if (pathname.startsWith("/hizmetler/elektrikli-otobus")) return "#00b4d8"
-  return "#1e5a9e"
+function getAccentForRoute(_pathname: string): string {
+  return "#38bdf8" /* Industrial electric blue - consistent across site */
 }
 
 export function GlobalBusAnimation() {
@@ -14,22 +13,43 @@ export function GlobalBusAnimation() {
   const accentColor = getAccentForRoute(pathname ?? "")
   const [docHeight, setDocHeight] = useState(0)
   const [scrollY, setScrollY] = useState(0)
+  const rafRef = useRef<number | null>(null)
+  const lastRef = useRef({ docHeight: 0, scrollY: 0 })
 
   useEffect(() => {
     if (typeof window === "undefined") return
+
     function update() {
-      setDocHeight(document.documentElement.scrollHeight)
-      setScrollY(window.scrollY)
+      const newDocHeight = document.documentElement.scrollHeight
+      const newScrollY = window.scrollY
+      if (
+        newDocHeight !== lastRef.current.docHeight ||
+        newScrollY !== lastRef.current.scrollY
+      ) {
+        lastRef.current = { docHeight: newDocHeight, scrollY: newScrollY }
+        setDocHeight(newDocHeight)
+        setScrollY(newScrollY)
+      }
     }
+
+    function scheduleUpdate() {
+      if (rafRef.current != null) return
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null
+        update()
+      })
+    }
+
     update()
-    window.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
-    const ro = new ResizeObserver(update)
+    window.addEventListener("scroll", scheduleUpdate, { passive: true })
+    window.addEventListener("resize", scheduleUpdate)
+    const ro = new ResizeObserver(scheduleUpdate)
     ro.observe(document.documentElement)
     return () => {
-      window.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
+      window.removeEventListener("scroll", scheduleUpdate)
+      window.removeEventListener("resize", scheduleUpdate)
       ro.disconnect()
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current)
     }
   }, [])
 

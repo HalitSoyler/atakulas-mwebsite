@@ -4,12 +4,14 @@ import { useEffect, useRef } from "react"
 
 export function ScrollBackground() {
   const ref = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number | null>(null)
+  const tickingRef = useRef(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
 
-    const handleScroll = () => {
+    const update = () => {
       const scrollY = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       const progress = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0
@@ -19,11 +21,21 @@ export function ScrollBackground() {
       el.style.setProperty("--scroll-bg-x", `${x}%`)
       el.style.setProperty("--scroll-bg-y", `${y}%`)
       el.style.setProperty("--scroll-bg-scale", String(scale))
+      tickingRef.current = false
     }
 
-    handleScroll()
+    const handleScroll = () => {
+      if (tickingRef.current) return
+      tickingRef.current = true
+      rafRef.current = requestAnimationFrame(update)
+    }
+
+    update()
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [])
 
   return (

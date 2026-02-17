@@ -9,20 +9,24 @@ const BOTTOM_MARGIN = 120
 
 /** Seeded RNG (mulberry32) so path shape varies per load but is deterministic. */
 function createRng(seed: number) {
+  let s = seed
   return function rng() {
-    let t = (seed += 0x6d2b79f5)
+    let t = (s += 0x6d2b79f5)
     t = Math.imul(t ^ (t >>> 15), t | 1)
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 }
 
+function clampNum(v: number, min: number, max: number): number {
+  if (Number.isNaN(v) || !Number.isFinite(v)) return min
+  return Math.max(min, Math.min(max, v))
+}
+
 /**
- * Procedural path over full document height (header to footer).
- * Path runs upward, weaves left–right; uses C and S for smooth chains.
- * Seed makes each load/navigation get a different path.
+ * Path 1: Weaving left–right with smooth Bézier (C/S) chains.
  */
-function generateIntertwinedPath(docHeight: number, seed: number): string {
+function generatePathWeave(docHeight: number, seed: number): string {
   const rnd = createRng(seed)
   const w = PATH_WIDTH
   const startX = w * 0.5
@@ -44,15 +48,17 @@ function generateIntertwinedPath(docHeight: number, seed: number): string {
   for (let i = 0; i < segments; i++) {
     const nextY = startY - (i + 1) * stepY + (rnd() - 0.5) * 50
     const drift = (rnd() - 0.5) * 2 * maxDrift
-    const nextX = Math.max(140, Math.min(w - 140, x + drift))
-    const dist = Math.hypot(nextX - x, nextY - y)
-    const safeX = dist < minDist ? x + (nextX - x) * (minDist / dist) : nextX
-    const safeY = dist < minDist ? y + (nextY - y) * (minDist / dist) : nextY
+    const nextX = clampNum(x + drift, 140, w - 140)
+    const dx = nextX - x
+    const dy = nextY - y
+    const dist = Math.hypot(dx, dy) || 1
+    const safeX = dist < minDist ? x + (dx / dist) * minDist : nextX
+    const safeY = dist < minDist ? y + (dy / dist) * minDist : nextY
 
-    const c1x = x + (x - prevCp2X) * 0.4 + (rnd() - 0.5) * 70
-    const c1y = y - 40 + (rnd() - 0.5) * 24
-    const c2x = safeX + (rnd() - 0.5) * 90
-    const c2y = safeY + 40 + (rnd() - 0.5) * 24
+    const c1x = clampNum(x + (x - prevCp2X) * 0.4 + (rnd() - 0.5) * 70, 100, w - 100)
+    const c1y = clampNum(y - 40 + (rnd() - 0.5) * 24, endY - 50, startY + 50)
+    const c2x = clampNum(safeX + (rnd() - 0.5) * 90, 100, w - 100)
+    const c2y = clampNum(safeY + 40 + (rnd() - 0.5) * 24, endY - 50, startY + 50)
 
     if (i === 0) {
       parts.push(`C ${c1x},${c1y} ${c2x},${c2y} ${safeX},${safeY}`)
@@ -65,9 +71,107 @@ function generateIntertwinedPath(docHeight: number, seed: number): string {
     y = safeY
   }
 
-  parts.push(`L ${x},${endY}`)
+  parts.push(`L ${clampNum(x, 100, w - 100)},${endY}`)
   return parts.join(" ")
 }
+
+/**
+ * Path 2: Gentle serpentine – wider, smoother S-curves.
+ */
+function generatePathSerpentine(docHeight: number, seed: number): string {
+  const rnd = createRng(seed)
+  const w = PATH_WIDTH
+  const startX = w * 0.5
+  const startY = docHeight + BOTTOM_MARGIN
+  const endY = -TOP_MARGIN
+  const totalY = startY - endY
+  const segments = Math.max(10, Math.min(22, Math.floor(totalY / 280)))
+  const stepY = totalY / segments
+  const radius = Math.min(400, w * 0.35)
+
+  let x = startX
+  let y = startY
+  let prevCp2X = startX
+  let prevCp2Y = startY - 60
+
+  const parts: string[] = [`M ${x},${y}`]
+
+  for (let i = 0; i < segments; i++) {
+    const nextY = startY - (i + 1) * stepY + (rnd() - 0.5) * 30
+    const side = i % 2 === 0 ? 1 : -1
+    const nextX = clampNum(startX + side * (radius + (rnd() - 0.5) * 120), 160, w - 160)
+    const safeX = nextX
+    const safeY = nextY
+
+    const c1x = clampNum(x + (x - prevCp2X) * 0.3 + side * 80, 120, w - 120)
+    const c1y = clampNum(y - 50, endY - 80, startY + 80)
+    const c2x = clampNum(safeX - side * 60, 120, w - 120)
+    const c2y = clampNum(safeY + 50, endY - 80, startY + 80)
+
+    if (i === 0) {
+      parts.push(`C ${c1x},${c1y} ${c2x},${c2y} ${safeX},${safeY}`)
+    } else {
+      parts.push(`S ${c2x},${c2y} ${safeX},${safeY}`)
+    }
+    prevCp2X = c2x
+    prevCp2Y = c2y
+    x = safeX
+    y = safeY
+  }
+
+  parts.push(`L ${clampNum(x, 100, w - 100)},${endY}`)
+  return parts.join(" ")
+}
+
+/**
+ * Path 3: Zigzag – more directional, alternating diagonal steps.
+ */
+function generatePathZigzag(docHeight: number, seed: number): string {
+  const rnd = createRng(seed)
+  const w = PATH_WIDTH
+  const startX = w * 0.5
+  const startY = docHeight + BOTTOM_MARGIN
+  const endY = -TOP_MARGIN
+  const totalY = startY - endY
+  const segments = Math.max(16, Math.min(36, Math.floor(totalY / 180)))
+  const stepY = totalY / segments
+  const maxSide = 340
+
+  let x = startX
+  let y = startY
+  let prevCp2X = startX
+  let prevCp2Y = startY - 45
+
+  const parts: string[] = [`M ${x},${y}`]
+
+  for (let i = 0; i < segments; i++) {
+    const nextY = startY - (i + 1) * stepY + (rnd() - 0.5) * 35
+    const side = (rnd() > 0.5 ? 1 : -1) * (maxSide * (0.6 + rnd() * 0.4))
+    const nextX = clampNum(x + side, 150, w - 150)
+    const safeX = nextX
+    const safeY = nextY
+
+    const c1x = clampNum(x + (x - prevCp2X) * 0.5, 130, w - 130)
+    const c1y = clampNum(y - 35 + (rnd() - 0.5) * 20, endY - 60, startY + 60)
+    const c2x = clampNum(safeX + (rnd() - 0.5) * 60, 130, w - 130)
+    const c2y = clampNum(safeY + 35, endY - 60, startY + 60)
+
+    if (i === 0) {
+      parts.push(`C ${c1x},${c1y} ${c2x},${c2y} ${safeX},${safeY}`)
+    } else {
+      parts.push(`S ${c2x},${c2y} ${safeX},${safeY}`)
+    }
+    prevCp2X = c2x
+    prevCp2Y = c2y
+    x = safeX
+    y = safeY
+  }
+
+  parts.push(`L ${clampNum(x, 100, w - 100)},${endY}`)
+  return parts.join(" ")
+}
+
+const PATH_GENERATORS = [generatePathWeave, generatePathSerpentine, generatePathZigzag]
 
 /** Fallback path for SSR / first paint (fixed height to avoid hydration mismatch). */
 function getFallbackPath(docHeight: number): string {
@@ -85,7 +189,7 @@ function getFallbackPath(docHeight: number): string {
 
 const TRAIL_POINTS = 72
 const TRAIL_LENGTH_FRAC = 0.065
-const BUS_SCALE = 1.5
+const BUS_SCALE = 1.2
 const SPEED = 0.0012
 
 interface BusPathAnimationProps {
@@ -122,7 +226,8 @@ export function BusPathAnimation({
   useEffect(() => {
     if (typeof window === "undefined" || height <= 0) return
     if (seedRef.current == null) seedRef.current = (Date.now() >>> 0) + Math.floor(Math.random() * 0xffff)
-    setPathD(generateIntertwinedPath(height, seedRef.current))
+    const pathIndex = Math.floor(Math.random() * PATH_GENERATORS.length)
+    setPathD(PATH_GENERATORS[pathIndex](height, seedRef.current))
   }, [height])
 
   useEffect(() => {
@@ -145,6 +250,9 @@ export function BusPathAnimation({
         progressRef.current = 0
         trailEl.setAttribute("d", "")
         trailBlurEl.setAttribute("d", "")
+        seedRef.current = (seedRef.current ?? 0) + 1
+        const nextIndex = Math.floor(Math.random() * PATH_GENERATORS.length)
+        setPathD(PATH_GENERATORS[nextIndex](height, seedRef.current))
         rafRef.current = requestAnimationFrame(animate)
         return
       }
@@ -202,7 +310,7 @@ export function BusPathAnimation({
 
     rafRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [pathD, reducedMotion])
+  }, [pathD, reducedMotion, height])
 
   if (reducedMotion) return null
 
@@ -276,21 +384,22 @@ export function BusPathAnimation({
         />
         <g ref={busRef} style={{ willChange: "transform" }}>
           <g filter="url(#busShadow)">
+            {/* Body: side-view bus, front on the right (direction of travel) */}
             <path
-              d="M -44,-14 L 32,-14 L 42,-10 L 44,0 L 42,10 L 32,14 L -44,14 L -44,-14 Z"
+              d="M -52,-10 L 38,-10 L 48,-6 L 50,0 L 48,6 L 38,10 L -52,10 L -52,-10 Z"
               fill="url(#busBody)"
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="0.8"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="0.6"
             />
-            <path
-              d="M -36,-6 L 28,-6 L 28,6 L -36,6 Z"
-              fill="rgba(15,23,42,0.85)"
-              stroke="rgba(255,255,255,0.06)"
-              strokeWidth="0.5"
-            />
-            <line x1="42" y1="-4" x2="44" y2="0" stroke={accentColor} strokeWidth="1.2" strokeLinecap="round" opacity="0.9" />
-            <line x1="44" y1="0" x2="42" y2="4" stroke={accentColor} strokeWidth="1.2" strokeLinecap="round" opacity="0.9" />
-            <circle cx="43" cy="0" r="1.2" fill="#fff" opacity="0.9" />
+            {/* Side windows (3 separate panels) */}
+            <path d="M -44,-5 L -26,-5 L -26,5 L -44,5 Z" fill="rgba(30,58,95,0.72)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
+            <path d="M -22,-5 L -4,-5 L -4,5 L -22,5 Z" fill="rgba(30,58,95,0.72)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
+            <path d="M 2,-5 L 20,-5 L 20,5 L 2,5 Z" fill="rgba(30,58,95,0.72)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
+            {/* Front cab window */}
+            <path d="M 26,-4 L 44,-2 L 44,2 L 26,4 Z" fill="rgba(30,58,95,0.82)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
+            {/* Headlights */}
+            <ellipse cx="48" cy="-3" rx="1.5" ry="1.2" fill={accentColor} opacity="0.85" />
+            <ellipse cx="48" cy="3" rx="1.5" ry="1.2" fill={accentColor} opacity="0.85" />
           </g>
         </g>
       </svg>

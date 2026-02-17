@@ -69,7 +69,7 @@ export function About() {
                 <div className="text-center p-8">
                   <div className="mb-6">
                     <Image 
-                      src="/images/Logos/svg_files/header_250x100.svg" 
+                      src="/images/no%20background.png" 
                       alt="Atak Ulaşım" 
                       width={250} 
                       height={100} 

@@ -3,9 +3,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Atak Ulasim - Clean Bright Theme (similar to old website) */
-/* Brand Colors: Blue #1e5a9e, Cyan #00b4d8, White #ffffff, Light Gray #f8fafc */
+/* Atak Ulaşım - Industrial high-tech theme */
+/* Koyu lacivert #0f172a, metalik gri, elektrik mavisi vurgu */
 :root {
+  --navy: #0f172a;
+  --navy-light: #1e293b;
+  --metallic: #64748b;
+  --metallic-light: #94a3b8;
+  --electric: #38bdf8;
+  --electric-dim: #0ea5e9;
   --background: oklch(0.995 0 0);
   --foreground: oklch(0.20 0.02 250);
   --card: oklch(1 0 0);
@@ -41,9 +47,56 @@
   --sidebar-ring: oklch(0.45 0.14 240);
 }
 
+/* Dark mode: light text on dark backgrounds */
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: rgba(30, 41, 59, 0.8);
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --primary: #38bdf8;
+  --primary-foreground: #0f172a;
+  --secondary: rgba(51, 65, 85, 0.8);
+  --secondary-foreground: #e2e8f0;
+  --muted: rgba(51, 65, 85, 0.5);
+  --muted-foreground: #94a3b8;
+  --accent: #38bdf8;
+  --accent-foreground: #0f172a;
+  --border: rgba(148, 163, 184, 0.2);
+  --input: rgba(51, 65, 85, 0.8);
+  --ring: #38bdf8;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #38bdf8;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: rgba(56, 189, 248, 0.15);
+  --sidebar-accent-foreground: #f1f5f9;
+  --sidebar-border: rgba(148, 163, 184, 0.15);
+  --sidebar-ring: #38bdf8;
+}
+
+/* Industrial home hero uses dark theme */
+.atak-industrial {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: rgba(30, 41, 59, 0.6);
+  --card-foreground: #f1f5f9;
+  --primary: #38bdf8;
+  --primary-foreground: #0f172a;
+  --muted: rgba(100, 116, 139, 0.2);
+  --muted-foreground: #94a3b8;
+  --border: rgba(148, 163, 184, 0.15);
+  --accent: #38bdf8;
+}
+
 @theme inline {
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'Geist Mono', monospace;
+  --color-navy: var(--navy);
+  --color-navy-light: var(--navy-light);
+  --color-metallic: var(--metallic);
+  --color-electric: var(--electric);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -93,19 +146,51 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 ::selection {
   background: rgba(30, 90, 158, 0.15);
 }
 
+/* ---- Editorial / Dergi Mizanpajı ---- */
+.editorial-heading {
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.editorial-body {
+  letter-spacing: 0.01em;
+  line-height: 1.85;
+}
+
+.editorial-lead {
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  font-size: 1.125rem;
+}
+
+.editorial-label {
+  letter-spacing: 0.25em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Parallax-ready image container */
+.editorial-image-sticky {
+  position: sticky;
+  top: 6rem;
+}
+
 /* ---- Scroll-driven reveal (staggered fade-in-up) ---- */
+/* will-change only when animating to avoid compositor overhead */
 .reveal-element {
   opacity: 0;
   transform: translateY(28px);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
@@ -292,10 +377,6 @@ html {
   animation: border-beam-rotate linear infinite reverse;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 /* Hero background beams: soft fade-in on load */
 .hero-beams {
   animation: hero-beams-in 1.2s ease-out forwards;
@@ -341,6 +422,20 @@ html {
 
 .animate-marquee-reverse {
   animation: marquee linear infinite reverse;
+}
+
+/* Industrial capabilities panel — scan-line & blueprint */
+@keyframes industrial-scanline {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+@keyframes industrial-blueprint-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 24px 24px; }
+}
+
+.industrial-blueprint-drift {
+  animation: industrial-blueprint-drift 30s linear infinite;
 }
 
 .animate-fade-in-up {
@@ -393,4 +488,9 @@ html {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid oklch(1 0 0 / 0.2);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(148, 163, 184, 0.2);
 }
