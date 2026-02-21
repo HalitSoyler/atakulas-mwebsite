@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -8,10 +6,9 @@ import { cn } from "@/lib/utils"
 
 const FALLBACK_SLIDE = { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım" }
 
-// Slide 2: Add your night-highway image as public/images/hero-highway-night.png for the light-trails hero slide.
 const SLIDES = [
   { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım — Raylı sistem" },
-  { src: "/images/hero-highway-night.png", alt: "Atak Ulaşım — Gece yolu ve ulaşım" },
+  { src: "/images/Gemini_Generated_Image_4olg7s4olg7s4olg.png", alt: "Atak Ulaşım — Gece yolu ve ulaşım" },
   { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım — Elektronik çözümler" },
 ]
 
@@ -45,7 +42,7 @@ export function HeroSlideshow() {
       )}
     >
       {/* Slideshow — full-bleed, text is independent (not aligned to slide content) */}
-      <div className="relative aspect-[21/9] w-full min-h-[60vh] sm:min-h-[70vh]">
+      <div className="relative aspect-[21/9] w-full min-h-[60vh] sm:min-h-[70vh] overflow-hidden">
         {SLIDES.map((_, i) => {
           const slide = getSlide(i)
           return (

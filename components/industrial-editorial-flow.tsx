@@ -1,20 +1,23 @@
 "use client"
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import Image from "next/image"
 import React, { useRef } from "react"
 import { cn } from "@/lib/utils"
 
-/** Wraps technical terms in electric blue spans */
+/** Matches EN 50155, EN 50121 (with space), EN50155, EN50121, 3D, EMC, etc. Longer phrases first. */
+const TECHNICAL_TERMS_REGEX = /(EN 50155|EN 50121|EN50155|EN50121|EMC\/EMI|EMC|EMI|IEC|3D|PCB|SCADA|OTA)/gi
+
+/** Wraps technical terms in bold electric blue spans for stronger technical emphasis */
 function highlightTerms(text: string): React.ReactNode {
-  const terms = /\b(EN50155|EN50121|EMC\/EMI|EMC|EMI|IEC|3D|PCB|SCADA|OTA)\b/gi
-  const parts = text.split(terms)
-  const matches = text.match(terms) || []
+  const parts = text.split(TECHNICAL_TERMS_REGEX)
+  const matches = text.match(TECHNICAL_TERMS_REGEX) || []
   const result: React.ReactNode[] = []
   parts.forEach((part, i) => {
     if (part) result.push(part)
     if (matches[i]) {
       result.push(
-        <span key={`term-${i}`} className="text-[#38bdf8]/90 font-medium">
+        <span key={`term-${i}`} className="text-[#38bdf8]/90 font-bold">
           {matches[i]}
         </span>
       )
@@ -30,6 +33,8 @@ type Step = {
   body: { tr: string; en: string }
   imageTheme: "industrial" | "pcb" | "laboratory"
   layout: "image-left" | "image-right"
+  /** When set, use this image instead of placeholder (e.g. for Mimari Tasarım card) */
+  image?: { src: string; alt: string }
 }
 
 const STEPS: Step[] = [
@@ -38,11 +43,12 @@ const STEPS: Step[] = [
     badge: { tr: "Mühendislik Analizi", en: "Engineering Analysis" },
     title: { tr: "Mimari Tasarım ve Simülasyon", en: "Architectural Design & Simulation" },
     body: {
-      tr: "Raylı sistemler ve otobüs dönüşüm projelerinde EN50155, EN50121 ve ilgili Avrupa standartlarına tam uyumlu mimari tasarım süreçlerimizi yürütüyoruz. Fizibilite aşamasından itibaren 3D modelleme, termal simülasyon ve elektromanyetik uyumluluk (EMC) analizleri ile kritik kararlar alınıyor. Sistem entegrasyonu öncesinde sanal ortamda doğrulama yapılarak maliyet ve risk minimize edilir.",
-      en: "We conduct architectural design processes fully compliant with EN50155, EN50121 and related European standards for rail systems and bus conversion projects. From the feasibility stage, critical decisions are made through 3D modeling, thermal simulation and electromagnetic compatibility (EMC) analyses. Virtual validation before system integration minimizes cost and risk.",
+      tr: "Raylı sistemler ve otobüs dönüşüm projelerinde EN 50155, EN 50121 ve ilgili Avrupa standartlarına tam uyumlu mimari tasarım süreçlerimizi yürütüyoruz. Fizibilite aşamasından itibaren 3D modelleme, termal simülasyon ve elektromanyetik uyumluluk (EMC) analizleri ile kritik kararlar alınıyor. Sistem entegrasyonu öncesinde sanal ortamda doğrulama yapılarak maliyet ve risk minimize edilir.",
+      en: "We conduct architectural design processes fully compliant with EN 50155, EN 50121 and related European standards for rail systems and bus conversion projects. From the feasibility stage, critical decisions are made through 3D modeling, thermal simulation and electromagnetic compatibility (EMC) analyses. Virtual validation before system integration minimizes cost and risk.",
     },
     imageTheme: "industrial",
     layout: "image-left",
+    image: { src: "/images/Faaliyet/1.foto.jpeg", alt: "Atak Ulaşım - İleri Seviye Mühendislik ve Simülasyon Süreçleri" },
   },
   {
     id: "production",
@@ -241,8 +247,18 @@ function StepBlock({
 
   const isImageLeft = step.layout === "image-left"
   const imageEl = (
-    <div className="relative">
-      <PlaceholderImageWithLang theme={step.imageTheme} language={language} />
+    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-stone-200 dark:bg-stone-800">
+      {step.image ? (
+        <Image
+          src={step.image.src}
+          alt={step.image.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
+      ) : (
+        <PlaceholderImageWithLang theme={step.imageTheme} language={language} />
+      )}
     </div>
   )
   const contentEl = (
@@ -265,7 +281,10 @@ function StepBlock({
         {title}
       </motion.h3>
       <motion.p
-        className="text-sm sm:text-base text-stone-600 dark:text-white/75 leading-relaxed"
+        className={cn(
+          "text-sm sm:text-base text-stone-600 dark:text-white/75",
+          step.id === "engineering" ? "leading-loose" : "leading-relaxed"
+        )}
         initial={{ opacity: 0, y: 16 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.4, delay: 0.3 }}

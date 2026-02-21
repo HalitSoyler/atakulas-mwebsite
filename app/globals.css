@@ -494,3 +494,107 @@ html {
   background: rgba(15, 23, 42, 0.75);
   border-color: rgba(148, 163, 184, 0.2);
 }
+
+/* Hero slideshow — tram/metro pass-by (industrial theme, electric accents) */
+.hero-train-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Industrial rail track — metallic with electric blue glow */
+.hero-train-track {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: 16%;
+  height: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 41, 59, 0.98) 0%,
+    rgba(15, 23, 42, 0.95) 35%,
+    rgba(20, 30, 48, 0.98) 100%
+  );
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-train-track::before,
+.hero-train-track::after {
+  content: "";
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(148, 163, 184, 0.5) 5%,
+    rgba(56, 189, 248, 0.4) 50%,
+    rgba(148, 163, 184, 0.5) 95%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+  border-radius: 1px;
+}
+
+.hero-train-track::before {
+  top: 3px;
+}
+
+.hero-train-track::after {
+  bottom: 3px;
+}
+
+/* Realistic tram sprite — uses 3D-rendered side-view PNG */
+.hero-train {
+  position: absolute;
+  left: -40%;
+  bottom: calc(16% + 18px);
+  width: 520px;
+  height: 120px;
+  animation: hero-train-pass 4s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  animation-delay: 0.5s;
+}
+
+/* Train image as background sprite (place /public/images/train-3d.png) */
+.hero-train::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/train-3d.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(0 6px 22px rgba(0, 0, 0, 0.7));
+}
+
+@keyframes hero-train-pass {
+  0% {
+    left: -35%;
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  4% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  96% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-train {
+    animation: none;
+    left: 110%;
+    opacity: 0;
+  }
+}

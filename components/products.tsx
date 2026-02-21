@@ -14,9 +14,15 @@ const products = [
   },
   {
     icon: Speaker,
-    title: "Anons/Amfi Ünitesi",
-    description: "Ses giriş/çıkış arayüzleri, iç ve dış hoparlör kontrolü ve zincirleme bağlantı özellikli amfi sistemi.",
-    specs: ["RS-485 Port", "Daisy-chain", "İç/Dış Hoparlör", "Ses Kontrolü"]
+    title: "IP Amfi Cihazı (IP Anons Sistemi)",
+    description: "Raylı sistem araçları için yüksek performanslı IP tabanlı ses yönetim birimi. 4×30W kanal, −40°C / +70°C, IPv4.",
+    specs: ["4×30W Çıkış", "−40°C / +70°C", "IPv4", "M12 / RJ45"]
+  },
+  {
+    icon: Radio,
+    title: "IP Intercom ve Anons Sistemi (Anfi Cihazı)",
+    description: "Raylı sistemler için çok kanallı, yüksek verimlilikte IP tabanlı intercom ve seslendirme çözüm birimi. 6×15W, 8 Ω, 18–36V.",
+    specs: ["6×15W Kanal", "2 Kanallı Giriş", "8 Ω", "−40°C / +70°C", "112×51×200 mm"]
   },
   {
     icon: Radio,
