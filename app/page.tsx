@@ -115,7 +115,6 @@ export default function HomePage(props: PageProps) {
                 { src: "/images/products/IPanons.jpg", alt: "IP Anons" },
                 { src: "/images/products/amfi.jpeg", alt: "Anfi" },
                 { src: "/images/products/kabinanfi.jpeg", alt: "Kabin anfisi" },
-                { src: "/images/products/IPintercom.jpeg", alt: "IP Intercom" },
               ].map((img, i) => (
                 <div
                   key={i}

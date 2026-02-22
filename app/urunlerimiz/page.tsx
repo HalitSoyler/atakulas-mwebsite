@@ -228,42 +228,6 @@ const productCategories: { title: string; description: string; products: Product
         imageAlt: "Atak Ulaşım Kabin Anfisi - Raylı Sistem Ses Çözümleri"
       },
       {
-        title: "IP Intercom (Yolcu-Sürücü İletişim Ünitesi)",
-        description: "Raylı sistem araçlarında vatman ile görüşme ve acil durum çağrısı için IP tabanlı, güvenli yolcu-sürücü haberleşme çözümü.",
-        specs: ["IP Haberleşme", "PoE", "Dahili Mikrofon/Hoparlör", "Konuş/Bekle LED", "Ölçeklenebilir"],
-        fullDescription: "Atak Ulaşım IP Intercom, raylı sistem araçlarında yolcu ile sürücü (vatman) arasında güvenli ve kesintisiz sesli iletişim sağlayan IP tabanlı birimdir. İki yönlü sesli iletişim (full-duplex) ile aynı anda konuşma ve dinleme mümkündür; vatman ile görüşme ve acil durum çağrısı senaryoları için tasarlanmıştır. Gelişmiş IP haberleşme protokolü, PoE beslemesi, dahili mikrofon ve hoparlör, 'Konuş' ve 'Bekle' LED göstergeleri ile kullanıcı dostu arayüz sunar. Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir; endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme imkânı sağlar.",
-        features: [
-          "İki yönlü sesli iletişim (full-duplex) — aynı anda konuşma ve dinleme",
-          "Vatman ile görüşme ve acil durum çağrısı için güvenli haberleşme",
-          "Gelişmiş IP haberleşme protokolü, ethernet üzerinden kesintisiz dijital iletişim",
-          "PoE (Power over Ethernet) — tek kablo ile veri ve enerji iletimi",
-          "Dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör",
-          "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi",
-          "Bir sürücü ünitesi + istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı",
-          "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme"
-        ],
-        slogan: "Raylı Sistem Araçları İçin IP Tabanlı, Güvenli ve Kesintisiz Yolcu-Sürücü Haberleşme Çözümü.",
-        keyHighlights: [
-          { label: "Haberleşme Protokolü", value: "Gelişmiş IP haberleşme ile ethernet üzerinden kesintisiz dijital iletişim" },
-          { label: "Enerji Beslemesi", value: "PoE (Power over Ethernet) — tek kablo ile veri ve enerji iletimi" },
-          { label: "Ses Donanımı", value: "Dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör" },
-          { label: "Kullanıcı Arayüzü", value: "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi" },
-          { label: "Sistem Mimarisi", value: "Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı" },
-          { label: "Yönetim", value: "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme" }
-        ],
-        technicalSpecs: [
-          { label: "Haberleşme Protokolü", value: "Gelişmiş IP haberleşme protokolü, ethernet üzerinden kesintisiz dijital iletişim" },
-          { label: "Enerji Beslemesi", value: "PoE (Power over Ethernet) — tek kablo üzerinden veri ve enerji iletimi" },
-          { label: "Ses Donanımı", value: "Cihaz üzerinde dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör" },
-          { label: "Kullanıcı Arayüzü", value: "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi" },
-          { label: "Sistem Mimarisi", value: "Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı" },
-          { label: "Yönetim", value: "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme" }
-        ],
-        certifications: ["EN 50155 (Demiryolu – Elektronik Ekipman)", "EN 50121-4 (EMC Uyumluluğu)", "CE & RoHS Uyumluluğu"],
-        images: ["/images/products/IPintercom.jpeg"],
-        imageAlt: "Atak Ulaşım IP Intercom - Raylı Sistem Yolcu İletişim Ünitesi"
-      },
-      {
         title: "LED Güzergah Panelleri",
         description: "RGB ve tek renkli LED modülleri, dahili kontrol kartı ve RS-485 haberleşme özellikli güzergah paneli.",
         specs: ["RGB LED", "Dahili Kontrol", "Kayan Yazı", "Sabit Metin"],
@@ -312,18 +276,40 @@ const productCategories: { title: string; description: string; products: Product
     description: "Acil durum haberleşmesi için gelişmiş interkom çözümleri.",
     products: [
       {
-        title: "İnterkom Ünitesi",
-        description: "RJ45 port üzerinden PoE besleme ve IP haberleşme özellikli acil durum interkom sistemi.",
-        specs: ["PoE Besleme", "IP Haberleşme", "RJ45 Port", "Acil Durum"],
-        fullDescription: "İnterkom Ünitesi, yolcuların acil durumlarda sürücü ile iletişim kurmasını sağlayan güvenlik sisteminin temel bileşenidir. PoE teknolojisi sayesinde tek kablo ile hem güç hem data aktarımı yapılır.",
+        title: "IP Intercom (Yolcu-Sürücü İletişim Ünitesi)",
+        description: "Raylı sistem araçlarında vatman ile görüşme ve acil durum çağrısı için IP tabanlı, güvenli yolcu-sürücü haberleşme çözümü.",
+        specs: ["IP Haberleşme", "PoE", "Dahili Mikrofon/Hoparlör", "Konuş/Bekle LED", "Ölçeklenebilir"],
+        fullDescription: "Atak Ulaşım IP Intercom, raylı sistem araçlarında yolcu ile sürücü (vatman) arasında güvenli ve kesintisiz sesli iletişim sağlayan IP tabanlı birimdir. İki yönlü sesli iletişim (full-duplex) ile aynı anda konuşma ve dinleme mümkündür; vatman ile görüşme ve acil durum çağrısı senaryoları için tasarlanmıştır. Gelişmiş IP haberleşme protokolü, PoE beslemesi, dahili mikrofon ve hoparlör, 'Konuş' ve 'Bekle' LED göstergeleri ile kullanıcı dostu arayüz sunar. Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir; endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme imkânı sağlar.",
         features: [
-          "Tek tuşla acil çağrı",
-          "Çift yönlü ses iletişimi",
-          "Vandal-proof tasarım",
-          "Gürültü bastırma",
-          "LED durum göstergesi"
+          "İki yönlü sesli iletişim (full-duplex) — aynı anda konuşma ve dinleme",
+          "Vatman ile görüşme ve acil durum çağrısı için güvenli haberleşme",
+          "Gelişmiş IP haberleşme protokolü, ethernet üzerinden kesintisiz dijital iletişim",
+          "PoE (Power over Ethernet) — tek kablo ile veri ve enerji iletimi",
+          "Dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör",
+          "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi",
+          "Bir sürücü ünitesi + istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı",
+          "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme"
         ],
-        images: []
+        slogan: "Raylı Sistem Araçları İçin IP Tabanlı, Güvenli ve Kesintisiz Yolcu-Sürücü Haberleşme Çözümü.",
+        keyHighlights: [
+          { label: "Haberleşme Protokolü", value: "Gelişmiş IP haberleşme ile ethernet üzerinden kesintisiz dijital iletişim" },
+          { label: "Enerji Beslemesi", value: "PoE (Power over Ethernet) — tek kablo ile veri ve enerji iletimi" },
+          { label: "Ses Donanımı", value: "Dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör" },
+          { label: "Kullanıcı Arayüzü", value: "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi" },
+          { label: "Sistem Mimarisi", value: "Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı" },
+          { label: "Yönetim", value: "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme" }
+        ],
+        technicalSpecs: [
+          { label: "Haberleşme Protokolü", value: "Gelişmiş IP haberleşme protokolü, ethernet üzerinden kesintisiz dijital iletişim" },
+          { label: "Enerji Beslemesi", value: "PoE (Power over Ethernet) — tek kablo üzerinden veri ve enerji iletimi" },
+          { label: "Ses Donanımı", value: "Cihaz üzerinde dahili yüksek hassasiyetli mikrofon ve endüstriyel hoparlör" },
+          { label: "Kullanıcı Arayüzü", value: "'Konuş' ve 'Bekle' LED göstergeleri ile interaktif durum bildirimi" },
+          { label: "Sistem Mimarisi", value: "Bir sürücü ünitesi ve istenilen sayıda yolcu ünitesi ile ölçeklenebilir yapı" },
+          { label: "Yönetim", value: "Endüstriyel PC ve santral yazılımı ile tam entegre yönetim ve izleme" }
+        ],
+        certifications: ["EN 50155 (Demiryolu – Elektronik Ekipman)", "EN 50121-4 (EMC Uyumluluğu)", "CE & RoHS Uyumluluğu"],
+        images: ["/images/products/IPintercom.jpeg"],
+        imageAlt: "Atak Ulaşım IP Intercom - Raylı Sistem Yolcu İletişim Ünitesi"
       },
       {
         title: "Sürücü İnterkom Paneli",
