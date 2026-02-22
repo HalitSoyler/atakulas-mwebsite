@@ -107,7 +107,8 @@ const productCategories: { title: string; description: string; products: Product
           "GPS ve GLONASS desteği",
           "CAN, RS-485, Ethernet arayüzleri"
         ],
-        images: []
+        images: ["/images/Products/Surucukontrol.png"],
+        imageAlt: "Sürücü Kontrol Ünitesi - Atak Ulaşım Raylı Sistem Endüstriyel Bilgisayar"
       },
       {
         title: "IP Amfi Cihazı (Atak Ulaşım IP Anons Sistemi)",
@@ -239,7 +240,8 @@ const productCategories: { title: string; description: string; products: Product
           "Çoklu dil desteği",
           "Uzaktan içerik güncelleme"
         ],
-        images: []
+        images: ["/images/Products/LEdguzergahpanel.png"],
+        imageAlt: "LED Güzergah Panelleri - Atak Ulaşım Yolcu Bilgilendirme LED Panelleri"
       },
       {
         title: "Kapı Üstü LCD Ekranlar",
@@ -253,7 +255,8 @@ const productCategories: { title: string; description: string; products: Product
           "Geniş çalışma sıcaklığı (-20°C ~ +70°C)",
           "Titreşime dayanıklı montaj"
         ],
-        images: []
+        images: ["/images/Products/kapıustuLED.png"],
+        imageAlt: "Kapı Üstü LCD Ekranlar - Atak Ulaşım Stretch LCD Yolcu Bilgilendirme Ekranları"
       },
       {
         title: "Araç İçi Reklam Ekranları",
@@ -267,7 +270,8 @@ const productCategories: { title: string; description: string; products: Product
           "4G/WiFi bağlantı",
           "Planlı içerik yayını"
         ],
-        images: []
+        images: ["/images/Products/aracekran.png"],
+        imageAlt: "Araç İçi Reklam Ekranları - Atak Ulaşım Yolcu Bilgilendirme ve Reklam Ekranları"
       },
     ]
   },
@@ -323,7 +327,8 @@ const productCategories: { title: string; description: string; products: Product
           "PA sistemi entegrasyonu",
           "Acil durum önceliklendirme"
         ],
-        images: []
+        images: ["/images/Products/surucukontroluni.png"],
+        imageAlt: "Sürücü İnterkom Paneli - Atak Ulaşım Sürücü Kabini Kontrol Paneli"
       },
     ]
   },
@@ -343,21 +348,8 @@ const productCategories: { title: string; description: string; products: Product
           "Akıllı video analizi",
           "Uzaktan erişim"
         ],
-        images: []
-      },
-      {
-        title: "Video Yönetim Yazılımı",
-        description: "Merkezi video yönetim ve izleme yazılımı, çoklu kamera desteği.",
-        specs: ["Canlı İzleme", "Kayıt Oynatma", "Olay Yönetimi", "Merkezi Kontrol"],
-        fullDescription: "Video Yönetim Yazılımı, tüm araç filosundaki kameraları tek bir merkezden izleme ve yönetme imkanı sağlayan profesyonel bir yazılım çözümüdür.",
-        features: [
-          "Sınırsız kamera desteği",
-          "Çoklu monitör görüntüleme",
-          "Olay tabanlı arama",
-          "Harita entegrasyonu",
-          "Otomatik yedekleme"
-        ],
-        images: []
+        images: ["/images/Products/CCTVpanel.png"],
+        imageAlt: "CCTV Panel PC - Atak Ulaşım Araç İçi Güvenlik Kamera Kontrol Ünitesi"
       },
     ]
   },
