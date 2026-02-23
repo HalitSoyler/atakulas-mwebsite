@@ -8,7 +8,7 @@ const FALLBACK_SLIDE = { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşı
 
 const SLIDES = [
   { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım — Raylı sistem" },
-  { src: "/images/Gemini_Generated_Image_4olg7s4olg7s4olg.png", alt: "Atak Ulaşım — Gece yolu ve ulaşım" },
+  { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım — Gece yolu ve ulaşım" },
   { src: "/images/tramway-showcase.jpg", alt: "Atak Ulaşım — Elektronik çözümler" },
 ]
 

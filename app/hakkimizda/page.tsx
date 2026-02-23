@@ -121,30 +121,16 @@ export default function HakkimizdaPage(props: PageProps) {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-white dark:bg-[#0f172a]">
-      {/* ─── HERO: Full-width overlay (UNCHANGED) ─── */}
-      <section className="relative min-h-[90vh] flex flex-col justify-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/tramway-showcase.jpg"
-            alt="Atak Ulaşım — Raylı Sistem"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-[#0f172a]/20" />
-        </div>
-        <div className="relative z-10 pb-24 sm:pb-32 pt-32 mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <ScrollReveal staggerIndex={0}>
-            <p className="editorial-label text-[#38bdf8] mb-4">{t.about.pageTitle}</p>
-            <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-semibold text-white tracking-tight">
-              {t.about.heroSlogan}
-            </h1>
-            <p className="editorial-lead mt-8 text-white/90 max-w-2xl mx-auto">
-              {t.about.heroDesc}
-            </p>
-          </ScrollReveal>
-        </div>
+      {/* ═══ HERO — Full-width photo, whole image visible ═══ */}
+      <section className="relative w-full min-h-[50vh] aspect-[16/9] overflow-hidden bg-[#0f172a]">
+        <Image
+          src="/images/About us/hakkımızda.png"
+          alt="Hakkımızda — Atak Ulaşım"
+          fill
+          className="object-contain object-center"
+          sizes="100vw"
+          priority
+        />
       </section>
 
       {/* ═══ BÖLÜM 1 — EVRİM VE VİZYON ═══ */}

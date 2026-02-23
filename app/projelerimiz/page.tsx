@@ -1,185 +1,378 @@
 "use client"
 
-import React, { use } from "react"
-import Link from "next/link"
+import { use } from "react"
 import { Footer } from "@/components/footer"
-import { PageHeroIndustrial } from "@/components/page-hero-industrial"
-import { ScrollReveal } from "@/components/scroll-reveal"
-import { MapPin, Calendar, ArrowRight, ImageIcon } from "lucide-react"
+import { motion, useInView } from "framer-motion"
+import { useRef } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowUpRight, MapPin, Calendar, Building2, ImageIcon } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { cn } from "@/lib/utils"
 
-/** Slate-style placeholder for project photo 1, 2, or 3 */
-function SlatePhoto({ number }: { number: 1 | 2 | 3 }) {
+// ─────────────────────────────────────────────────────────────
+// PROJECT DATA — add new projects here. That's it.
+// ─────────────────────────────────────────────────────────────
+const projects = [
+  {
+    id: "istanbul-mobil",
+    href: "/projelerimiz/istanbul-mobil",
+    category:  { tr: "Mobil Ulaşım",    en: "Mobile Transport" },
+    title:     { tr: "İstanbul Mobil Otobüs Sistemleri", en: "Istanbul Mobile Bus Systems" },
+    client:    "IETT Genel Müdürlüğü",
+    location:  "İstanbul",
+    year:      "2020–2024",
+    summary: {
+      tr: "İstanbul'un 5.000'den fazla toplu taşıma aracı için CCTV, PIS/PAS ve LED güzergah panellerini kapsayan Türkiye'nin en büyük filo dönüşüm projelerinden biri.",
+      en: "One of Turkey's largest fleet transformation projects, covering CCTV, PIS/PAS and LED route panels for over 5,000 Istanbul public transport vehicles.",
+    },
+    metric:        { value: "30.000+", label: { tr: "IP Kamera",   en: "IP Cameras" } },
+    progress:      100,
+    progressLabel: { tr: "Tamamlandı", en: "Completed" },
+    image:         "/images/projects/istanbul.jpg",
+    tags: ["CCTV", "PIS/PAS", "LED Güzergah"],
+  },
+  {
+    id: "metro-tramvay",
+    href: "/projelerimiz/metro-tramvay",
+    category:  { tr: "Raylı Sistemler", en: "Rail Systems" },
+    title:     { tr: "Metro / Tramvay PIS Sistemleri", en: "Metro / Tram PIS Systems" },
+    client:    { tr: "Çeşitli Belediyeler", en: "Various Municipalities" },
+    location:  { tr: "Türkiye Geneli",   en: "Turkey-wide" },
+    year:      "2019–2024",
+    summary: {
+      tr: "Türkiye genelindeki metro ve tramvay hatları için EN 50155 uyumlu yolcu bilgilendirme sistemleri, sürücü kontrol üniteleri ve interkom altyapısı.",
+      en: "EN 50155 compliant passenger information systems, driver control units and intercom infrastructure for metro and tram lines across Turkey.",
+    },
+    metric:        { value: "15+",    label: { tr: "Hat",    en: "Lines" } },
+    progress:      85,
+    progressLabel: { tr: "Devam Ediyor", en: "Ongoing" },
+    image:         "/images/projects/metro.jpg",
+    tags: ["PIS/PAS", "İnterkom", "EN 50155"],
+  },
+  {
+    id: "van-mobil",
+    href: "/projelerimiz/van-mobil",
+    category:  { tr: "Mobil Ulaşım",    en: "Mobile Transport" },
+    title:     { tr: "Van Mobil Ulaşım Projesi", en: "Van Mobile Transport Project" },
+    client:    "Van Büyükşehir Belediyesi",
+    location:  "Van",
+    year:      "2022–2023",
+    summary: {
+      tr: "100'den fazla belediye otobüsü için entegre CCTV, GPS filo yönetimi ve yolcu bilgilendirme sistemlerinin tasarım, üretim ve kurulumu.",
+      en: "Design, production and installation of integrated CCTV, GPS fleet management and passenger information systems for 100+ municipal buses.",
+    },
+    metric:        { value: "100+",   label: { tr: "Araç",  en: "Vehicles" } },
+    progress:      100,
+    progressLabel: { tr: "Tamamlandı", en: "Completed" },
+    image:         "/images/projects/van.jpg",
+    tags: ["CCTV", "GPS", "PIS"],
+  },
+  // ── ADD NEW PROJECTS BELOW ──────────────────────────────────
+  // {
+  //   id: "yeni-proje",
+  //   href: "/projelerimiz/yeni-proje",
+  //   category:  { tr: "Kategori", en: "Category" },
+  //   title:     { tr: "Proje Adı", en: "Project Name" },
+  //   client:    "Müşteri Adı",
+  //   location:  "Şehir",
+  //   year:      "2025",
+  //   summary:   { tr: "Kısa açıklama.", en: "Short description." },
+  //   metric:    { value: "X+", label: { tr: "Birim", en: "Unit" } },
+  //   progress:  70,
+  //   progressLabel: { tr: "Devam Ediyor", en: "Ongoing" },
+  //   image:     "/images/projects/yeni.jpg",
+  //   tags: ["Tag1", "Tag2"],
+  // },
+]
+
+// ─────────────────────────────────────────────────────────────
+// SPRING CONFIG
+// ─────────────────────────────────────────────────────────────
+const spring = { type: "spring" as const, damping: 20, stiffness: 100 }
+const springFast = { type: "spring" as const, damping: 22, stiffness: 120 }
+
+// ─────────────────────────────────────────────────────────────
+// CORNER BORDERS (L-shapes, appear on hover via group-hover)
+// ─────────────────────────────────────────────────────────────
+function CornerBorders() {
+  const base = "absolute w-5 h-5 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out"
+  const line = "border-[#38bdf8]"
   return (
-    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-700 dark:bg-slate-800 border border-slate-600/50 dark:border-slate-600/30 shadow-xl">
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-400 dark:text-slate-500">
-        <ImageIcon className="h-12 w-12 sm:h-16 sm:w-16" />
-        <span className="text-sm font-medium tracking-widest">FOTOĞRAF {number}</span>
-      </div>
+    <>
+      {/* top-left */}
+      <span className={cn(base, "top-2 left-2 border-t border-l", line,
+        "group-hover:top-2.5 group-hover:left-2.5")} />
+      {/* top-right */}
+      <span className={cn(base, "top-2 right-2 border-t border-r", line,
+        "group-hover:top-2.5 group-hover:right-2.5")} />
+      {/* bottom-left */}
+      <span className={cn(base, "bottom-2 left-2 border-b border-l", line,
+        "group-hover:bottom-2.5 group-hover:left-2.5")} />
+      {/* bottom-right */}
+      <span className={cn(base, "bottom-2 right-2 border-b border-r", line,
+        "group-hover:bottom-2.5 group-hover:right-2.5")} />
+    </>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
+// PROJECT IMAGE
+// ─────────────────────────────────────────────────────────────
+function ProjectImage({ src, alt }: { src: string; alt: string }) {
+  const isPlaceholder = !src || !src.startsWith("/images")
+  return (
+    <div className="group relative w-full h-full overflow-hidden rounded-sm min-h-[280px] sm:min-h-[340px]">
+      {isPlaceholder ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
+          <ImageIcon className="h-10 w-10 text-muted-foreground/25" />
+        </div>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className={cn(
+            "object-cover transition-all duration-700 ease-out",
+            // grayscale by default → color on hover
+            "grayscale group-hover:grayscale-0",
+            // subtle scale
+            "scale-[1.02] group-hover:scale-100"
+          )}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      )}
+      {/* dark vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+      <CornerBorders />
     </div>
   )
 }
 
-const PROJECTS = [
-  {
-    id: "metro-tramvay",
-    slug: "metro-tramvay",
-    photo: 1 as const,
-    categoryTr: "Raylı Sistemler",
-    categoryEn: "Rail Systems",
-    titleTr: "Metro ve Tramvay Yolcu Bilgilendirme Sistemleri",
-    titleEn: "Metro and Tram Passenger Information Systems",
-    locationTr: "Türkiye Geneli",
-    locationEn: "Turkey-wide",
-    year: "2019–2024",
-    clientTr: "Çeşitli belediyeler ve raylı sistem operatörleri",
-    clientEn: "Various municipalities and rail system operators",
-    paragraphsTr: [
-      "Metro ve tramvay hatlarında yolcu bilgilendirme sistemleri (PIS), sadece durakları ve hat bilgisini göstermekle kalmaz; operatörün anonsları, acil durum mesajları ve reklam içeriklerini tek bir ağ üzerinden yönetebilmesini sağlar. Atak Ulaşım olarak, EN 50155 ve EN 50121 standartlarına uygun tasarladığımız sürücü kontrol üniteleri, amfi sistemleri ve LED panel çözümleri, Türkiye genelinde onlarca metro ve tramvay aracında kesintisiz çalışmaktadır.",
-      "Projeler fizibilite aşamasından sahada devreye almaya kadar tek elden yürütülür. Termal simülasyon, EMC analizi ve titreşim testleri, Kağıthane Ar-Ge merkezimizde ve akredite laboratuvarlarda gerçekleştirilir. Müşteri kabul kriterleri proje başında netleştirilir; teslimat sonrası eğitim ve teknik destek ile uzun ömürlü bir ortaklık hedeflenir.",
-      "Yerli tasarım ve üretim sayesinde yedek parça ve güncelleme süreçleri hızlı yönetilir. Raylı sistem araçlarının zorlu çalışma koşullarına dayanıklı, bakımı kolay ve ölçeklenebilir çözümler sunuyoruz.",
-    ],
-    paragraphsEn: [
-      "On metro and tram lines, passenger information systems (PIS) do more than display stops and line information; they allow the operator to manage announcements, emergency messages and advertising content over a single network. Atak Ulaşım’s driver control units, amplifier systems and LED panel solutions, designed in compliance with EN 50155 and EN 50121, operate without interruption on dozens of metro and tram vehicles across Turkey.",
-      "Projects are run single-handedly from the feasibility phase through to site commissioning. Thermal simulation, EMC analysis and vibration tests are carried out at our Kağıthane R&D center and in accredited laboratories. Customer acceptance criteria are defined at project start; post-delivery training and technical support aim at a long-term partnership.",
-      "Thanks to domestic design and production, spare parts and updates are managed quickly. We deliver solutions that are resilient to the harsh operating conditions of rail vehicles, easy to maintain and scalable.",
-    ],
-  },
-  {
-    id: "elektrikli-otobus",
-    slug: "elektrikli-otobus",
-    photo: 2 as const,
-    categoryTr: "Sürdürülebilir Ulaşım",
-    categoryEn: "Sustainable Transport",
-    titleTr: "Elektrikli Otobüs Dönüşüm Projesi",
-    titleEn: "Electric Bus Conversion Project",
-    locationTr: "Ankara",
-    locationEn: "Ankara",
-    year: "2024",
-    clientTr: "Ankara EGO ve belediyeler",
-    clientEn: "Ankara EGO and municipalities",
-    paragraphsTr: [
-      "Dizel otobüslerin elektrikli tahrik sistemine dönüştürülmesi, hem karbon ayak izini azaltan hem de operatör maliyetlerini uzun vadede düşüren stratejik bir adımdır. Atak Ulaşım, batarya yönetimi, güç elektroniği ve araç üstü entegrasyon konusundaki mühendislik birikimini bu alanda da devreye sokarak pilot dönüşüm projeleri yürütmektedir.",
-      "Dönüşüm süreci mevcut aracın teknik analizi, uygun batarya ve motor seçimi, güvenlik ve sertifikasyon adımlarını kapsar. EN 50155 ve ilgili standartlara uygun tasarım, araç ömrünü ve güvenilirliğini korur. Pilot uygulamalarla elde edilen veriler, filo genelinde ölçeklendirilebilir bir model sunar.",
-      "Belediyelerin mevcut filolarını ekonomik ve çevre dostu bir şekilde elektrikli ulaşıma geçirmesine destek vermek, sürdürülebilir ulaşım vizyonumuzun somut çıktısıdır.",
-    ],
-    paragraphsEn: [
-      "Converting diesel buses to electric propulsion is a strategic step that both reduces carbon footprint and lowers operator costs in the long term. Atak Ulaşım is running pilot conversion projects by deploying its engineering expertise in battery management, power electronics and on-board integration.",
-      "The conversion process covers technical analysis of the existing vehicle, selection of suitable battery and motor, and safety and certification steps. Design compliant with EN 50155 and related standards preserves vehicle life and reliability. Data from pilot applications provide a model that can be scaled across the fleet.",
-      "Supporting municipalities in transitioning their existing fleets to electric transport in an economical and environmentally friendly way is a concrete outcome of our sustainable transport vision.",
-    ],
-  },
-  {
-    id: "istanbul-van-mobil",
-    slug: "istanbul-mobil",
-    photo: 3 as const,
-    categoryTr: "Toplu Taşıma Sistemleri",
-    categoryEn: "Public Transport Systems",
-    titleTr: "İstanbul ve Van Mobil Otobüs Sistemleri",
-    titleEn: "Istanbul and Van Mobile Bus Systems",
-    locationTr: "İstanbul, Van",
-    locationEn: "Istanbul, Van",
-    year: "2020–2024",
-    clientTr: "IETT, Van Büyükşehir Belediyesi",
-    clientEn: "IETT, Van Metropolitan Municipality",
-    paragraphsTr: [
-      "İstanbul ve Van’daki şehir içi otobüs filoları için entegre yolcu bilgilendirme (PIS/PAS), CCTV ve anons sistemleri tasarlanmış, üretilmiş ve sahada devreye alınmıştır. Binlerce araçlık filoda tutarlı bilgilendirme ve güvenlik altyapısı, operatörün merkezi yönetimini kolaylaştırır.",
-      "Sistemler araç içi ve dışı LED paneller, sürücü birimleri, kamera ve kayıt altyapısı ile birlikte teslim edilir. Kurulum sonrası eğitim, dokümantasyon ve teknik destek ile operatörlerin sistemleri kendi bünyesinde yönetebilmesi hedeflenir. Proje kapsamında binlerce kamera ve yolcu bilgilendirme ünitesi devreye alınmıştır.",
-      "Bu projeler, Atak Ulaşım’ın büyük ölçekli şehir içi toplu taşıma projelerinde kanıtlanmış deneyimini yansıtır.",
-    ],
-    paragraphsEn: [
-      "Integrated passenger information (PIS/PAS), CCTV and announcement systems have been designed, manufactured and commissioned for the urban bus fleets in Istanbul and Van. A consistent information and security infrastructure across thousands of vehicles simplifies central management for the operator.",
-      "Systems are delivered together with in-vehicle and exterior LED panels, driver units, cameras and recording infrastructure. Post-installation training, documentation and technical support aim to enable operators to manage the systems in-house. Thousands of cameras and passenger information units have been commissioned under these projects.",
-      "These projects reflect Atak Ulaşım’s proven experience in large-scale urban public transport projects.",
-    ],
-  },
-]
+// ─────────────────────────────────────────────────────────────
+// BLUEPRINT TEXTURE (behind text columns)
+// ─────────────────────────────────────────────────────────────
+const blueprintStyle: React.CSSProperties = {
+  backgroundImage: `
+    linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px)
+  `,
+  backgroundSize: "32px 32px",
+}
 
-type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
+// ─────────────────────────────────────────────────────────────
+// SINGLE PROJECT ROW
+// ─────────────────────────────────────────────────────────────
+type Project = typeof projects[number]
+
+function ProjectRow({ project, index, lang }: { project: Project; index: number; lang: "tr" | "en" }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-100px" })
+
+  const isEven = index % 2 === 0   // even → image right; odd → image left
+  const clientStr = typeof project.client === "string" ? project.client : project.client[lang]
+  const locationStr = typeof project.location === "string" ? project.location : project.location[lang]
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ ...spring, delay: 0.05 }}
+      className="relative"
+    >
+      {/* Thin top divider */}
+      <div className="w-full h-px bg-border/40" />
+
+      <div className={cn(
+        "grid grid-cols-1 lg:grid-cols-2",
+        "min-h-[380px] sm:min-h-[440px]"
+      )}>
+
+        {/* ── TEXT COLUMN ── */}
+        <div
+          className={cn(
+            "relative flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-12",
+            isEven ? "lg:order-1" : "lg:order-2"
+          )}
+          style={blueprintStyle}
+        >
+          {/* Category tag */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ ...springFast, delay: 0.12 }}
+            className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#38bdf8]/70 mb-3"
+          >
+            {project.category[lang]}
+          </motion.p>
+
+          {/* Title */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ ...spring, delay: 0.18 }}
+            className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground leading-snug mb-4"
+          >
+            {project.title[lang]}
+          </motion.h2>
+
+          {/* Meta row */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.28 }}
+            className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-muted-foreground mb-5"
+          >
+            <span className="flex items-center gap-1.5">
+              <Building2 className="h-3.5 w-3.5 flex-shrink-0 opacity-60" />
+              {clientStr}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 flex-shrink-0 opacity-60" />
+              {locationStr}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5 flex-shrink-0 opacity-60" />
+              {project.year}
+            </span>
+          </motion.div>
+
+          {/* Summary */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ ...spring, delay: 0.24 }}
+            className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6"
+          >
+            {project.summary[lang]}
+          </motion.p>
+
+          {/* Tags */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.4, delay: 0.32 }}
+            className="flex flex-wrap gap-1.5 mb-5"
+          >
+            {project.tags.map(tag => (
+              <span
+                key={tag}
+                className="text-[10px] font-mono tracking-wide text-muted-foreground/70 border border-border/60 bg-muted/30 px-2 py-0.5 rounded-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* CTA link */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.4, delay: 0.45 }}
+            className="mt-7"
+          >
+            <Link
+              href={project.href}
+              className="group/link inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#38bdf8]/70 hover:text-[#38bdf8] transition-colors duration-200"
+            >
+              {lang === "tr" ? "Projeyi İncele" : "View Project"}
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* ── IMAGE COLUMN ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ ...spring, delay: 0.10 }}
+          className={cn(
+            "group relative",
+            "h-[280px] lg:h-auto",
+            isEven ? "lg:order-2" : "lg:order-1"
+          )}
+        >
+          <ProjectImage src={project.image} alt={project.title[lang]} />
+
+          {/* Metric badge — overlaid on image */}
+          <div className="absolute bottom-4 left-4 flex flex-col bg-[#0f172a]/80 backdrop-blur-sm border border-white/10 rounded-sm px-3 py-2.5 pointer-events-none">
+            <span className="text-xl font-semibold tabular-nums text-white leading-none">
+              {project.metric.value}
+            </span>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-white/40 mt-1">
+              {project.metric.label[lang]}
+            </span>
+          </div>
+        </motion.div>
+
+      </div>
+    </motion.div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────────────────────
+type PageProps = {
+  params?: Promise<Record<string, string | string[]>>
+  searchParams?: Promise<Record<string, string | string[]>>
+}
+
 export default function ProjelerimizPage(props: PageProps) {
   use(props.params ?? Promise.resolve({}))
   use(props.searchParams ?? Promise.resolve({}))
   const { language } = useLanguage()
-  const isTr = language === "tr"
+  const lang = language as "tr" | "en"
 
   return (
-    <main className="min-h-screen">
-      <PageHeroIndustrial
-        label={isTr ? "PROJELERIMIZ" : "OUR PROJECTS"}
-        title={isTr ? "Projelerimiz" : "Our Projects"}
-        description={
-          isTr
-            ? "Fizibiliteden sahaya kadar mühendislik odaklı projeler."
-            : "Engineering-focused projects from feasibility to the field."
-        }
-      />
+    <main className="min-h-screen bg-background">
 
-      {/* Intro */}
-      <section className="py-12 sm:py-16 border-b border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-[#0f172a]">
-        <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-          <ScrollReveal staggerIndex={0}>
-            <p className="text-stone-600 dark:text-white/80 leading-relaxed text-base sm:text-lg">
-              {isTr
-                ? "Raylı sistem, otobüs ve sürdürülebilir ulaşım projelerimizde müşteri ihtiyaçlarını fizibilite aşamasından teslimata kadar tek elden yönetiyoruz. Aşağıda öne çıkan proje alanlarımız ve bu alanlardaki yaklaşımımız özetlenmektedir."
-                : "In our rail, bus and sustainable transport projects we manage customer needs single-handedly from the feasibility phase through to delivery. Below we summarise our main project areas and our approach in each."}
-            </p>
-          </ScrollReveal>
+      {/* ── Header ── */}
+      <section className="pt-28 pb-14 bg-stone-100 dark:bg-[#0f172a] border-b border-border/40">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={springFast}
+            className="text-[10px] font-mono tracking-[0.22em] uppercase text-[#38bdf8]/60 mb-3"
+          >
+            {lang === "tr" ? "Referans Projeler" : "Reference Projects"}
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...spring, delay: 0.08 }}
+            className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground"
+          >
+            {lang === "tr" ? "Projelerimiz" : "Our Projects"}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-3 text-sm text-muted-foreground max-w-xl leading-relaxed"
+          >
+            {lang === "tr"
+              ? "Raylı sistemler ve mobil ulaşımda hayata geçirdiğimiz mühendislik projeleri."
+              : "Engineering projects we have realized in rail systems and mobile transport."}
+          </motion.p>
         </div>
       </section>
 
-      {/* Projects — 3 detailed blocks with slate photos */}
-      <section className="py-16 sm:py-24 bg-white dark:bg-[#0f172a]">
-        <div className="mx-auto max-w-5xl px-6 lg:px-8 space-y-20 sm:space-y-28">
-          {PROJECTS.map((project, index) => (
-            <ScrollReveal key={project.id} staggerIndex={index}>
-              <article className="flex flex-col gap-10 lg:gap-14">
-                {/* Slate photo placeholder */}
-                <SlatePhoto number={project.photo} />
-
-                <div className="space-y-6">
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-widest uppercase text-[#38bdf8]">
-                    <span>{isTr ? project.categoryTr : project.categoryEn}</span>
-                    <span className="text-stone-400 dark:text-white/40">·</span>
-                    <span className="flex items-center gap-1.5 text-stone-500 dark:text-white/60 font-normal">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {isTr ? project.locationTr : project.locationEn}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-stone-500 dark:text-white/60 font-normal">
-                      <Calendar className="h-3.5 w-3.5" />
-                      {project.year}
-                    </span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0f172a] dark:text-white tracking-tight">
-                    {isTr ? project.titleTr : project.titleEn}
-                  </h2>
-                  <p className="text-sm text-stone-500 dark:text-white/50">
-                    {isTr ? project.clientTr : project.clientEn}
-                  </p>
-
-                  <div className="space-y-6 pt-2">
-                    {(isTr ? project.paragraphsTr : project.paragraphsEn).map((para, i) => (
-                      <p
-                        key={i}
-                        className="text-stone-600 dark:text-white/80 text-base sm:text-lg leading-[1.85]"
-                      >
-                        {para}
-                      </p>
-                    ))}
-                  </div>
-
-                  <Link
-                    href={`/projelerimiz/${project.slug}`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#38bdf8] hover:text-[#0ea5e9] dark:hover:text-sky-400 transition-colors mt-4"
-                  >
-                    {isTr ? "Proje detayı" : "Project detail"}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </article>
-            </ScrollReveal>
-          ))}
-        </div>
-      </section>
+      {/* ── Projects ── */}
+      <div className="mx-auto max-w-7xl">
+        {projects.map((project, index) => (
+          <ProjectRow
+            key={project.id}
+            project={project}
+            index={index}
+            lang={lang}
+          />
+        ))}
+        {/* Final divider */}
+        <div className="w-full h-px bg-border/40" />
+      </div>
 
       <Footer />
     </main>

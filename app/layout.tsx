@@ -1,6 +1,6 @@
 import React from "react"
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono, Syne } from "next/font/google"
+import { Geist, Geist_Mono, Syne, Barlow, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LanguageProvider } from "@/lib/language-context"
 import { ScrollBackground } from "@/components/scroll-background"
@@ -14,6 +14,22 @@ import "lenis/dist/lenis.css"
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" })
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-barlow",
+})
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-barlow-condensed",
+})
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-ibm-plex-mono",
+})
 
 export const metadata: Metadata = {
   title: "Atak Ulaşım | Raylı Sistem Ekipmanları ve Elektronik Çözümler",
@@ -52,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="tr" className={syne.variable} suppressHydrationWarning>
+    <html lang="tr" className={`${syne.variable} ${barlow.variable} ${barlowCondensed.variable} ${ibmPlexMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased bg-white text-[#0a0a0a] dark:bg-[#0f172a] dark:text-white">
         <ThemeProvider>
           <LanguageProvider>

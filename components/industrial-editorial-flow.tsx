@@ -60,6 +60,7 @@ const STEPS: Step[] = [
     },
     imageTheme: "pcb",
     layout: "image-right",
+    image: { src: "/images/Faaliyet/faaliyetalanları2.png", alt: "Atak Ulaşım - Ar-Ge Merkezi ve Uçtan Uca Üretim" },
   },
   {
     id: "certification",

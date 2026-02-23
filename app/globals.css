@@ -3,11 +3,36 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Atak Ulaşım - Industrial high-tech theme */
-/* Koyu lacivert #0f172a, metalik gri, elektrik mavisi vurgu */
+/* Atak Ulaşım - Stratejik UX/UI Direktifi · Industrial Minimalism */
+/* Ana Palet + Gri Spektrum + Aksanlar (design tokens) */
 :root {
-  --navy: #0f172a;
+  /* ── Ana Palet ── */
+  --navy: #003366;
+  --navy-dark: #001F42;
+  --navy-deeper: #010D1C;
+  --navy-mid: #0a2a50;
   --navy-light: #1e293b;
+  /* ── Gri Spektrum ── */
+  --gray-900: #0D0D0D;
+  --gray-800: #1A1A1A;
+  --gray-700: #333333;
+  --gray-600: #4A4A4A;
+  --gray-500: #6B6B6B;
+  --gray-400: #8C8C8C;
+  --gray-200: #D9D9D9;
+  --gray-100: #F0F2F5;
+  --gray-50: #F7F8FA;
+  --white: #FFFFFF;
+  /* ── Aksanlar ── */
+  --tech-blue: #0080FF;
+  --tech-blue-dark: #005CBF;
+  --tech-blue-pale: rgba(0, 128, 255, 0.1);
+  --amber: #C68B2A;
+  --amber-pale: rgba(198, 139, 42, 0.1);
+  /* ── Saydamlıklar ── */
+  --line: rgba(255, 255, 255, 0.07);
+  --line-dark: rgba(0, 0, 0, 0.08);
+  /* Legacy / compatibility */
   --metallic: #64748b;
   --metallic-light: #94a3b8;
   --electric: #38bdf8;
@@ -91,10 +116,20 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-sans: var(--font-barlow), 'Barlow', system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), 'IBM Plex Mono', monospace;
+  --font-display: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
   --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
+  --color-navy-deeper: var(--navy-deeper);
+  --color-navy-mid: var(--navy-mid);
   --color-navy-light: var(--navy-light);
+  --color-tech-blue: var(--tech-blue);
+  --color-tech-blue-dark: var(--tech-blue-dark);
+  --color-amber: var(--amber);
+  --color-industrial-gray: var(--gray-700);
+  --color-gray-50: var(--gray-50);
+  --color-gray-500: var(--gray-500);
   --color-metallic: var(--metallic);
   --color-electric: var(--electric);
   --color-background: var(--background);
@@ -198,6 +233,27 @@ html {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Directive: .sr scroll reveal — opacity 0→1, translateY(24px)→0, 0.7s ease-out-expo */
+.sr {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--sr-delay, 0ms);
+}
+.sr[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+.sr.sr--left { transform: translateX(-32px); }
+.sr.sr--left[data-revealed="true"] { transform: translateX(0); }
+.sr.sr--right { transform: translateX(32px); }
+.sr.sr--right[data-revealed="true"] { transform: translateX(0); }
+.sr.d1 { --sr-delay: 0.08s; }
+.sr.d2 { --sr-delay: 0.16s; }
+.sr.d3 { --sr-delay: 0.24s; }
+.sr.d4 { --sr-delay: 0.32s; }
+.sr.d5 { --sr-delay: 0.4s; }
 
 /* Scroll reveal from sides (for intertwined layer sections) */
 .reveal-from-left.reveal-element {
@@ -412,6 +468,12 @@ html {
 
 /* Marquee: sonsuz kayan şerit */
 @keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Directive ticker: 30s linear infinite, -50% */
+@keyframes ticker {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }

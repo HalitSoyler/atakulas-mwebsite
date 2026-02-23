@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Globe } from "lucide-react"
+import { Menu, X, Globe, Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/language-context"
 import { useHeaderContext } from "@/hooks/use-header-context"
@@ -16,7 +16,7 @@ export function Header() {
   const sectionContext = useHeaderContext()
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24)
+    const handleScroll = () => setScrolled(window.scrollY > 80)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -31,82 +31,102 @@ export function Header() {
     { name: t.nav.contact, href: "/iletisim" },
   ]
 
+  /* Directive nav copy (TR): Çözümler | Projeler | Teknoloji | Hakkımızda | İletişim */
+  const directiveNav = [
+    { name: language === "tr" ? "Çözümler" : "Solutions", href: "/urunlerimiz" },
+    { name: language === "tr" ? "Projeler" : "Projects", href: "/projelerimiz" },
+    { name: language === "tr" ? "Teknoloji" : "Technology", href: "/faaliyet-alanlari" },
+    { name: language === "tr" ? "Hakkımızda" : "About", href: "/hakkimizda" },
+  ]
+
   const theme = sectionContext.theme
   const isDark = theme === "dark"
 
   const barClass = cn(
-    "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-    "backdrop-blur-xl",
-    scrolled && "shadow-lg shadow-black/5",
-    isDark && "bg-foreground/88 border-b border-white/10",
-    !isDark && "bg-white/90 border-b border-border/60"
+    "fixed inset-x-0 top-0 z-[100] h-16 transition-[background] duration-300 ease-out",
+    "backdrop-blur-[16px] border-b",
+    isDark && "border-[var(--line)]",
+    !isDark && "border-[var(--line-dark)]",
+    isDark && (scrolled ? "bg-[rgba(1,13,28,0.97)]" : "bg-[rgba(1,13,28,0.85)]"),
+    !isDark && "bg-white/90 border-border/60"
   )
 
   const linkClass = (active: boolean) =>
     cn(
-      "relative text-sm font-medium transition-colors py-2",
+      "relative text-sm font-medium transition-colors duration-200 py-2",
       isDark
-        ? active ? "text-white" : "text-white/70 hover:text-white"
-        : active ? "text-primary" : "text-foreground/70 hover:text-primary"
+        ? active ? "text-white" : "text-white/55 hover:text-white"
+        : active ? "text-[var(--tech-blue)]" : "text-foreground/70 hover:text-foreground"
     )
 
   return (
     <header className={barClass}>
-      {/* Asimetrik layout: sol boşluk fazla, nav orta-sağa kayık, dil sağda vurgulu */}
-      <div className="flex items-center justify-between gap-6 px-5 sm:px-8 md:pl-12 md:pr-10 lg:pl-16 lg:pr-14 py-3">
-        {/* Logo — sola yaslı, max-width yok */}
+      <div className="flex items-center justify-between gap-6 px-5 sm:px-8 md:pl-12 md:pr-10 lg:pl-16 lg:pr-14 h-16">
+        {/* Logo — directive: 36px blue square + activity icon + company name + subtitle */}
         <Link
           href="/"
           className={cn(
-            "relative z-10 flex items-center shrink-0 transition-opacity hover:opacity-90",
+            "relative z-10 flex items-center gap-3 shrink-0 transition-opacity hover:opacity-90",
             "ml-0 mr-auto"
           )}
         >
-          <picture className="block h-12 sm:h-14 md:h-16">
-            <source
-              srcSet="/images/no%20background.png"
-              media="(max-width: 767px)"
-              type="image/png"
-            />
-            <img
-              src="/images/no%20background.png"
-              alt="Atak Ulaşım"
-              width={250}
-              height={100}
-              className="h-full w-auto"
-            />
+          <span
+            className={cn(
+              "flex items-center justify-center w-9 h-9 shrink-0 rounded",
+              isDark ? "bg-[var(--tech-blue)]" : "bg-[var(--navy)]"
+            )}
+          >
+            <Activity className="h-5 w-5 text-white" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+          </span>
+          <span className="hidden sm:flex flex-col">
+            <span
+              className={cn(
+                "font-display font-bold uppercase tracking-tightest text-base",
+                isDark ? "text-white" : "text-[var(--navy)]"
+              )}
+              style={{ fontFamily: "var(--font-barlow-condensed), sans-serif" }}
+            >
+              Atak Ulaşım
+            </span>
+            <span
+              className="text-[0.55rem] tracking-[0.08em] text-white/40"
+              style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
+            >
+              {language === "tr" ? "Raylı Sistem Teknolojileri" : "Rail Systems Technologies"}
+            </span>
+          </span>
+          <picture className="block h-10 sm:hidden">
+            <img src="/images/no%20background.png" alt="Atak Ulaşım" width={120} height={40} className="h-full w-auto object-contain dark:invert" />
           </picture>
         </Link>
 
-        {/* Desktop nav — asimetrik: ortadan sağa doğru, eşit olmayan boşluklar */}
-        <nav className="hidden lg:flex items-center gap-1 pl-8 pr-6">
-          <Link href="/" className={cn(linkClass(pathname === "/"), "pl-2")}>
+        {/* Desktop nav — directive: IBM Plex Mono 0.65rem uppercase tracking-wide */}
+        <nav className="hidden md:flex items-center gap-6 pl-8 pr-4" style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}>
+          <Link href="/" className={cn(linkClass(pathname === "/"), "text-[0.65rem] uppercase tracking-[0.08em]")}>
             {t.nav.home}
           </Link>
-          <span className="w-px h-4 bg-current opacity-20" aria-hidden />
-          <Link href="/hakkimizda" className={cn(linkClass(pathname === "/hakkimizda"), "pl-3")}>
-            {t.nav.about}
-          </Link>
-          <Link href="/urunlerimiz" className={cn(linkClass(pathname === "/urunlerimiz"), "pl-4")}>
-            {t.nav.products}
-          </Link>
-          <Link href="/projelerimiz" className={cn(linkClass(pathname === "/projelerimiz"), "pl-2")}>
-            {t.nav.projects}
-          </Link>
-          <Link href="/faaliyet-alanlari" className={cn(linkClass(pathname === "/faaliyet-alanlari"), "pl-4")}>
-            {t.nav.activityAreas}
-          </Link>
-          <Link href="/hizmetler/elektrikli-otobus" className={cn(linkClass(pathname === "/hizmetler/elektrikli-otobus"), "pl-4")}>
-            {t.nav.electricBus}
-          </Link>
-          <span className="w-px h-4 bg-current opacity-20 ml-1" aria-hidden />
-          <Link href="/iletisim" className={cn(linkClass(pathname === "/iletisim"), "pl-3")}>
+          {directiveNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(linkClass(pathname === item.href), "text-[0.65rem] uppercase tracking-[0.08em]")}
+            >
+              {item.name}
+            </Link>
+          ))}
+          <Link
+            href="/iletisim"
+            className={cn(
+              "text-[0.65rem] uppercase tracking-[0.08em] font-medium px-4 py-2 rounded transition-all duration-250",
+              "bg-[var(--tech-blue)] text-white hover:bg-[var(--tech-blue-dark)] hover:-translate-y-0.5"
+            )}
+          >
             {t.nav.contact}
           </Link>
         </nav>
 
         {/* Dil seçici — sağda, hafif vurgulu kutu */}
-        <div className="hidden lg:flex items-center shrink-0">
+        <div className="hidden md:flex items-center shrink-0">
           <div
             className={cn(
               "flex items-center gap-1 rounded-full px-2.5 py-1.5 border",
@@ -142,7 +162,7 @@ export function Header() {
         {/* Mobil menü butonu */}
         <button
           type="button"
-          className="lg:hidden -m-2 p-2 text-foreground"
+          className="md:hidden -m-2 p-2 text-foreground"
           onClick={() => setMobileMenuOpen(true)}
           aria-label="Menüyü aç"
         >
@@ -152,7 +172,7 @@ export function Header() {
 
       {/* Mobil menü — tam ekran, asimetrik içerik */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50">
+        <div className="md:hidden fixed inset-0 z-50">
           <div
             className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}

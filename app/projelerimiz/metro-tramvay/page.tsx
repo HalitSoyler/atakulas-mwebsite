@@ -1,151 +1,31 @@
 "use client"
+import { makeProjectPage } from "@/components/project-detail-page"
 
-import { use } from "react"
-import { Footer } from "@/components/footer"
-import { ArrowLeft, MapPin, Calendar, Building2 } from "lucide-react"
-import Link from "next/link"
-import { useLanguage } from "@/lib/language-context"
-
-type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
-export default function MetroTramvayPage(props: PageProps) {
-  use(props.params ?? Promise.resolve({}))
-  use(props.searchParams ?? Promise.resolve({}))
-  const { language } = useLanguage()
-
-  const projectInfo = {
-    title: language === "tr" ? "Metro/Tramvay PIS Sistemleri" : "Metro/Tram PIS Systems",
-    client: language === "tr" ? "Cesitli Belediyeler" : "Various Municipalities",
-    location: language === "tr" ? "Turkiye Geneli" : "Turkey-wide",
-    year: "2019-2024",
-  }
-
-  const scope = language === "tr" ? [
-    "Kapi ustu LCD ekranlar",
-    "Otomatik anons sistemleri",
-    "Surucu kontrol uniteleri",
-    "LED guzergah panelleri",
-    "Interkom sistemleri",
-    "Merkezi kontrol yazilimi",
-    "Kurulum ve devreye alma",
-    "Bakim ve teknik destek",
-  ] : [
-    "Above-door LCD screens",
-    "Automatic announcement systems",
-    "Driver control units",
-    "LED route panels",
-    "Intercom systems",
-    "Central control software",
-    "Installation and commissioning",
-    "Maintenance and technical support",
-  ]
-
-  const technicalDetails = language === "tr" ? [
-    "Ekran Boyutu: 15\" - 29\" LCD",
-    "Cozunurluk: Full HD (1920x1080)",
-    "Parlaklik: 500-1000 nits",
-    "Calisma Sicakligi: -25C ile +70C",
-    "Standartlar: EN 50155, EN 45545",
-    "Koruma Sinifi: IP54 / IP65",
-  ] : [
-    "Screen Size: 15\" - 29\" LCD",
-    "Resolution: Full HD (1920x1080)",
-    "Brightness: 500-1000 nits",
-    "Operating Temperature: -25C to +70C",
-    "Standards: EN 50155, EN 45545",
-    "Protection Class: IP54 / IP65",
-  ]
-
-  return (
-    <main className="bg-background min-h-screen">
-      <section className="pt-28 pb-16 bg-stone-100 dark:bg-[#0f172a]">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <Link
-            href="/projelerimiz"
-            className="inline-flex items-center gap-2 text-stone-600 dark:text-white/70 hover:text-[#38bdf8] text-sm mb-6 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {language === "tr" ? "Tum Projeler" : "All Projects"}
-          </Link>
-          <h1 className="text-3xl font-semibold text-[#0f172a] dark:text-white sm:text-4xl">
-            {projectInfo.title}
-          </h1>
-          <div className="flex flex-wrap gap-6 mt-4 text-stone-600 dark:text-white/70 text-sm">
-            <span className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              {projectInfo.client}
-            </span>
-            <span className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              {projectInfo.location}
-            </span>
-            <span className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              {projectInfo.year}
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border border-border">
-            <p className="text-muted-foreground text-sm">
-              {language === "tr" ? "Proje gorseli buraya eklenecek" : "Project image will be added here"}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {language === "tr" ? "Proje Kapsami" : "Project Scope"}
-              </h2>
-              <ul className="space-y-3">
-                {scope.map((item, index) => (
-                  <li key={index} className="text-muted-foreground text-sm flex items-start gap-2">
-                    <span className="text-primary mt-1">-</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {language === "tr" ? "Teknik Detaylar" : "Technical Details"}
-              </h2>
-              <ul className="space-y-3">
-                {technicalDetails.map((item, index) => (
-                  <li key={index} className="text-muted-foreground text-sm flex items-start gap-2">
-                    <span className="text-primary mt-1">-</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-xl font-semibold text-foreground mb-4">
-            {language === "tr" ? "Proje Hakkinda" : "About the Project"}
-          </h2>
-          <div className="prose prose-sm max-w-none text-muted-foreground">
-            <p>
-              {language === "tr"
-                ? "Turkiye genelindeki cesitli metro ve tramvay hatlarinda kullanilmak uzere yolcu bilgilendirme sistemleri (PIS) tasarimi, uretimi ve kurulumu yapilmaktadir. Sistemler, EN 50155 ve EN 45545 standartlarina uygun olarak uretilmekte olup, rayli sistem araclarinin zorlu calisma kosullarina dayanikli sekilde tasarlanmistir."
-                : "Passenger information systems (PIS) are designed, manufactured and installed for use on various metro and tram lines across Turkey. The systems are manufactured in accordance with EN 50155 and EN 45545 standards and are designed to withstand the harsh operating conditions of rail vehicles."}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
-  )
-}
+export default makeProjectPage({
+  title:    { tr: "Metro/Tramvay PIS Sistemleri", en: "Metro/Tram PIS Systems" },
+  client:   { tr: "Çeşitli Belediyeler", en: "Various Municipalities" },
+  location: { tr: "Türkiye Geneli", en: "Turkey-wide" },
+  year:     "2019–2024",
+  summary: {
+    tr: "Türkiye genelindeki metro ve tramvay hatları için EN 50155 uyumlu yolcu bilgilendirme sistemleri, sürücü kontrol üniteleri ve interkom altyapısı.",
+    en: "EN 50155 compliant passenger information systems, driver control units and intercom infrastructure for metro and tram lines across Turkey.",
+  },
+  scope: {
+    tr: ["Kapı üstü LCD ekranlar","Otomatik anons sistemleri","Sürücü kontrol üniteleri","LED güzergah panelleri","İnterkom sistemleri","Merkezi kontrol yazılımı","Kurulum ve devreye alma","Bakım ve teknik destek"],
+    en: ["Above-door LCD screens","Automatic announcement systems","Driver control units","LED route panels","Intercom systems","Central control software","Installation and commissioning","Maintenance and technical support"],
+  },
+  technical: {
+    tr: ["Ekran Boyutu: 15\" - 29\" LCD","Çözünürlük: Full HD (1920x1080)","Parlaklık: 500-1000 nits","Çalışma Sıcaklığı: -25°C ile +70°C","Standartlar: EN 50155, EN 45545","Koruma Sınıfı: IP54 / IP65"],
+    en: ["Screen Size: 15\" - 29\" LCD","Resolution: Full HD (1920x1080)","Brightness: 500-1000 nits","Operating Temperature: -25°C to +70°C","Standards: EN 50155, EN 45545","Protection Class: IP54 / IP65"],
+  },
+  about: {
+    tr: "Türkiye genelindeki çeşitli metro ve tramvay hatlarında kullanılmak üzere yolcu bilgilendirme sistemleri (PIS) tasarımı, üretimi ve kurulumu yapılmaktadır.",
+    en: "Passenger information systems (PIS) are designed, manufactured and installed for use on various metro and tram lines across Turkey.",
+  },
+  images:        ["/images/projects/metro.jpg"],
+  metric:        { value: "15+", label: { tr: "Hat", en: "Lines" } },
+  progress:      85,
+  progressLabel: { tr: "Devam Ediyor", en: "Ongoing" },
+  tags:          ["PIS/PAS", "İnterkom", "LED"],
+  certifications: ["EN 50155", "EN 45545"],
+})
