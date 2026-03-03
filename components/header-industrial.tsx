@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
-import { Menu, X, Globe, Sun, Moon } from "lucide-react"
+import { Menu, X, Globe, Sun, Moon, ChevronDown } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/language-context"
@@ -42,7 +42,14 @@ export function HeaderIndustrial() {
     { name: t.nav.projects, href: "/projelerimiz" },
     { name: t.nav.activityAreas, href: "/faaliyet-alanlari" },
     { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+    { name: t.nav.sunTracking, href: "/hizmetler/gunes-takip-sistemi" },
     { name: t.nav.contact, href: "/iletisim" },
+  ]
+
+  const solutionsItems = [
+    { name: t.nav.projects, href: "/projelerimiz" },
+    { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+    { name: t.nav.sunTracking, href: "/hizmetler/gunes-takip-sistemi" },
   ]
 
   const showLogo = pathname !== "/" || isMorphed
@@ -105,8 +112,16 @@ export function HeaderIndustrial() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href
+              {/* Ana sayfa / kurumsal linkler */}
+              {[
+                { label: t.nav.home, href: "/" },
+                { label: t.nav.about, href: "/hakkimizda" },
+                { label: t.nav.products, href: "/urunlerimiz" },
+                { label: t.nav.activityAreas, href: "/faaliyet-alanlari" },
+              ].map((item) => {
+                const isActive = item.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.href)
                 return (
                   <Link
                     key={item.href}
@@ -120,7 +135,7 @@ export function HeaderIndustrial() {
                         : "text-stone-700 dark:text-white/80 hover:text-[var(--tech-blue)] dark:hover:text-white"
                     )}
                   >
-                    <span className="relative z-10">{item.name}</span>
+                    <span className="relative z-10">{item.label}</span>
                     {isActive && (
                       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-[var(--tech-blue)] rounded-full" />
                     )}
@@ -133,6 +148,100 @@ export function HeaderIndustrial() {
                   </Link>
                 )
               })}
+
+              {/* Çözümlerimiz dropdown */}
+              <div className="relative group">
+                {(() => {
+                  const isSolutionsActive =
+                    pathname.startsWith("/projelerimiz") ||
+                    pathname.startsWith("/hizmetler/elektrikli-otobus") ||
+                    pathname.startsWith("/hizmetler/gunes-takip-sistemi")
+
+                  return (
+                    <>
+                      <Link
+                        href="/projelerimiz"
+                        className={cn(
+                          "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg group flex items-center gap-1",
+                          isSolutionsActive
+                            ? "text-[var(--tech-blue)]"
+                            : transparent
+                            ? "text-white/80 hover:text-white"
+                            : "text-stone-700 dark:text-white/80 hover:text-[var(--tech-blue)] dark:hover:text-white"
+                        )}
+                      >
+                        <span className="relative z-10">
+                          {language === "tr" ? "Çözümlerimiz" : "Solutions"}
+                        </span>
+                        <ChevronDown className="h-3 w-3 mt-[1px]" />
+                        {isSolutionsActive && (
+                          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-[var(--tech-blue)] rounded-full" />
+                        )}
+                      </Link>
+
+                      <div
+                        className={cn(
+                          "invisible opacity-0 group-hover:visible group-hover:opacity-100",
+                          "absolute left-0 mt-2 min-w-[220px] rounded-md border shadow-lg z-50",
+                          "bg-white text-stone-800 border-stone-200",
+                          "dark:bg-[#020817] dark:text-white/90 dark:border-white/10",
+                          "transition-opacity duration-150"
+                        )}
+                      >
+                        <ul className="py-2 text-xs">
+                          {solutionsItems.map((item) => {
+                            const active = pathname.startsWith(item.href)
+                            return (
+                              <li key={item.href}>
+                                <Link
+                                  href={item.href}
+                                  className={cn(
+                                    "block px-4 py-2.5 uppercase tracking-[0.09em]",
+                                    active
+                                      ? "bg-[var(--tech-blue)]/10 text-[var(--tech-blue)]"
+                                      : "text-stone-700 dark:text-white/80 hover:bg-stone-100 dark:hover:bg-white/10"
+                                  )}
+                                >
+                                  {item.name}
+                                </Link>
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    </>
+                  )
+                })()}
+              </div>
+
+              {/* İletişim */}
+              {(() => {
+                const isActive = pathname.startsWith("/iletisim")
+                return (
+                  <Link
+                    href="/iletisim"
+                    className={cn(
+                      "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg group",
+                      isActive
+                        ? "text-[var(--tech-blue)]"
+                        : transparent
+                        ? "text-white/80 hover:text-white"
+                        : "text-stone-700 dark:text-white/80 hover:text-[var(--tech-blue)] dark:hover:text-white"
+                    )}
+                  >
+                    <span className="relative z-10">{t.nav.contact}</span>
+                    {isActive && (
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-[var(--tech-blue)] rounded-full" />
+                    )}
+                    {!transparent && !isActive && (
+                      <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[var(--tech-blue)]/5" />
+                    )}
+                    {transparent && !isActive && (
+                      <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/10" />
+                    )}
+                  </Link>
+                )
+              })()}
             </div>
 
             <div className="flex items-center gap-3">

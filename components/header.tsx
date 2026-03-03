@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Globe } from "lucide-react"
+import { Menu, X, Globe, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LOGO } from "@/lib/logo"
 import { useLanguage } from "@/lib/language-context"
@@ -40,14 +40,14 @@ export function Header() {
     { name: t.nav.projects, href: "/projelerimiz" },
     { name: t.nav.activityAreas, href: "/faaliyet-alanlari" },
     { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+    { name: t.nav.sunTracking, href: "/hizmetler/gunes-takip-sistemi" },
     { name: t.nav.contact, href: "/iletisim" },
   ]
 
-  const directiveNav = [
-    { name: language === "tr" ? "Çözümler" : "Solutions", href: "/urunlerimiz" },
-    { name: language === "tr" ? "Projeler" : "Projects", href: "/projelerimiz" },
-    { name: language === "tr" ? "Teknoloji" : "Technology", href: "/faaliyet-alanlari" },
-    { name: language === "tr" ? "Hakkımızda" : "About", href: "/hakkimizda" },
+  const solutionsItems = [
+    { name: t.nav.projects, href: "/projelerimiz" },
+    { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+    { name: t.nav.sunTracking, href: "/hizmetler/gunes-takip-sistemi" },
   ]
 
   const theme = sectionContext.theme
@@ -113,15 +113,69 @@ export function Header() {
           <Link href="/" className={linkClass(pathname === "/")}>
             {t.nav.home}
           </Link>
-          {directiveNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={linkClass(pathname.startsWith(item.href))}
+          <Link
+            href="/hakkimizda"
+            className={linkClass(pathname.startsWith("/hakkimizda"))}
+          >
+            {t.nav.about}
+          </Link>
+          <Link
+            href="/urunlerimiz"
+            className={linkClass(pathname.startsWith("/urunlerimiz"))}
+          >
+            {t.nav.products}
+          </Link>
+          <Link
+            href="/faaliyet-alanlari"
+            className={linkClass(pathname.startsWith("/faaliyet-alanlari"))}
+          >
+            {t.nav.activityAreas}
+          </Link>
+
+          {/* Çözümlerimiz dropdown */}
+          <div className="relative group">
+            <button
+              className={cn(
+                linkClass(
+                  pathname.startsWith("/projelerimiz") ||
+                    pathname.startsWith("/hizmetler/elektrikli-otobus") ||
+                    pathname.startsWith("/hizmetler/gunes-takip-sistemi")
+                ),
+                "flex items-center gap-1"
+              )}
+              type="button"
             >
-              {item.name}
-            </Link>
-          ))}
+              {language === "tr" ? "Çözümlerimiz" : "Solutions"}
+              <ChevronDown className="h-3 w-3 mt-[1px]" />
+            </button>
+            <div
+              className={cn(
+                "invisible opacity-0 group-hover:visible group-hover:opacity-100",
+                "absolute left-0 mt-2 min-w-[200px] rounded-md border shadow-lg z-50",
+                "bg-white text-foreground",
+                "dark:bg-[#020817] dark:text-white/90 dark:border-white/10",
+                "transition-opacity duration-150"
+              )}
+            >
+              <ul className="py-2 text-[0.7rem]">
+                {solutionsItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "block px-4 py-2.5 uppercase tracking-[0.09em]",
+                        pathname.startsWith(item.href)
+                          ? "bg-[var(--tech-blue)]/10 text-[var(--tech-blue)]"
+                          : "text-foreground/70 dark:text-white/70 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] hover:text-foreground dark:hover:text-white"
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
           {/* CTA — İletişim */}
           <Link

@@ -291,9 +291,9 @@ export function Hero() {
           isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
-        <div className="flex flex-col items-center gap-2 text-white/40">
+        <div className="flex flex-col items-center gap-2 text-white/70">
           <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-white/40 to-transparent animate-pulse" />
+          <div className="w-px h-12 bg-gradient-to-b from-white/70 to-transparent animate-pulse" />
         </div>
       </div>
     </section>

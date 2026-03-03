@@ -75,7 +75,7 @@ export function TrustBar() {
               <div className="text-sm font-semibold text-white/80 mt-2">
                 {metric.label}
               </div>
-              <div className="text-xs text-white/40 mt-1 font-mono tracking-wider">
+              <div className="text-xs text-white/60 mt-1 font-mono tracking-wider">
                 {metric.description}
               </div>
             </div>

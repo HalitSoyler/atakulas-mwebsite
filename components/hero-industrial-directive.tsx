@@ -15,9 +15,9 @@ import { ArrowRight, ChevronDown, Train, Wifi, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const HERO_SLIDES = [
+  { src: "/images/Main page/slide-1.png", alt: "Ana sayfa slayt 1" },
+  { src: "/images/Main page/slide-2.png", alt: "Ana sayfa slayt 2" },
   { src: "/images/projects/metro.png", alt: "Metro ve raylı sistem projeleri" },
-  { src: "/images/projects/istanbul.png", alt: "İstanbul Metro projesi" },
-  { src: "/images/projects/van.png", alt: "Van Mobil Projesi" },
 ]
 
 const SLIDE_DURATION_MS = 6000
@@ -296,7 +296,7 @@ export function HeroIndustrialDirective() {
             >
               <MagneticLink
                 href="/projelerimiz"
-                className="group inline-flex items-center gap-2.5 rounded-md bg-[var(--color-rail-red)] px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[var(--color-rail-red-hover)] active:scale-[0.98]"
+                className="group inline-flex items-center gap-2.5 rounded-md bg-[#0056b3] px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#00408a] active:scale-[0.98]"
               >
                 Projelerimizi İnceleyin
                 <motion.span
@@ -355,7 +355,7 @@ export function HeroIndustrialDirective() {
                   >
                     {value}
                   </p>
-                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
+                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
                     {label}
                   </p>
                 </motion.div>
@@ -387,14 +387,14 @@ export function HeroIndustrialDirective() {
         transition={{ delay: 2 }}
         className="absolute bottom-10 right-8 z-20 hidden flex-col items-center gap-1.5 lg:flex"
       >
-        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/30">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/60">
           Kaydır
         </span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
         >
-          <ChevronDown className="h-4 w-4 text-white/30" />
+          <ChevronDown className="h-4 w-4 text-white/60" />
         </motion.div>
       </motion.div>
     </section>

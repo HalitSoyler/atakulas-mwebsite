@@ -589,6 +589,11 @@ html {
   aspect-ratio: 16/9;
 }
 
+/* Night-friendly muted text helper for dark hero/sections */
+.text-night-muted {
+  color: rgba(241, 245, 249, 0.7);
+}
+
 /* Glass morphism (glassy cards) */
 .glass {
   background: oklch(1 0 0 / 0.65);

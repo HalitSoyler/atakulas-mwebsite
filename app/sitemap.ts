@@ -13,6 +13,7 @@ const staticRoutes: { path: string; priority?: number; changeFrequency?: "weekly
   { path: "/projelerimiz/van-mobil", priority: 0.8, changeFrequency: "monthly" },
   { path: "/faaliyet-alanlari", priority: 0.8, changeFrequency: "monthly" },
   { path: "/hizmetler/elektrikli-otobus", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/hizmetler/gunes-takip-sistemi", priority: 0.8, changeFrequency: "monthly" },
   { path: "/iletisim", priority: 0.9, changeFrequency: "monthly" },
 ]
 

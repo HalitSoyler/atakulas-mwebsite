@@ -8,6 +8,7 @@ export const translations = {
       contact: "İletişim",
       activityAreas: "Faaliyet Alanlarımız",
       electricBus: "Elektrikli Otobüs Dönüşümü",
+      sunTracking: "Güneş Takip Sistemi",
       railEquipment: "Raylı Sistem Ekipmanları",
       new: "YENİ",
     },
@@ -174,8 +175,14 @@ export const translations = {
       sending: "Gönderiliyor...",
       officeTitle: "Ofislerimiz",
     },
-    electricBus: {
-      pageTitle: "Elektrikli Otobüs Dönüşümü",
+      sunTracking: {
+        pageTitle: "Güneş Takip Sistemleri",
+        benefits: { title: "Neden Güneş Takip?" },
+        processTitle: "Sistem Özellikleri",
+        specsTitle: "Teknik Özellikler",
+      },
+      electricBus: {
+        pageTitle: "Elektrikli Otobüs Dönüşümü",
       pageSubtitle: "Sürdürülebilir ulaşım için yenilikçi çözümler",
       benefits: {
         title: "Neden Elektrikli Dönüşüm?",
@@ -198,6 +205,7 @@ export const translations = {
       contact: "Contact",
       activityAreas: "Activity Areas",
       electricBus: "Electric Bus Conversion",
+      sunTracking: "Solar Tracking System",
       railEquipment: "Rail System Equipment",
       new: "NEW",
     },
@@ -364,8 +372,14 @@ export const translations = {
       sending: "Sending...",
       officeTitle: "Our Offices",
     },
-    electricBus: {
-      pageTitle: "Electric Bus Conversion",
+      sunTracking: {
+        pageTitle: "Solar Tracking Systems",
+        benefits: { title: "Why Solar Tracking?" },
+        processTitle: "System Features",
+        specsTitle: "Technical Specifications",
+      },
+      electricBus: {
+        pageTitle: "Electric Bus Conversion",
       pageSubtitle: "Innovative solutions for sustainable transportation",
       benefits: {
         title: "Why Electric Conversion?",

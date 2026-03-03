@@ -70,10 +70,10 @@ export function InterfaceSection() {
   const cursorRef = useRef<HTMLDivElement>(null)
 
   const features = language === "tr" ? [
-    { title: "TASARIM", description: "Elektronik ve mekanik tasarim" },
-    { title: "URETIM", description: "EN50155 standartlarinda uretim" },
-    { title: "YAZILIM", description: "Gomulu ve PC yazilim gelistirme" },
-    { title: "SERVIS", description: "Kurulum ve teknik destek" },
+    { title: "TASARIM", description: "Elektronik ve mekanik tasarım" },
+    { title: "ÜRETİM", description: "EN50155 standartlarında üretim" },
+    { title: "YAZILIM", description: "Gömülü ve PC yazılım geliştirme" },
+    { title: "SERVİS", description: "Kurulum ve teknik destek" },
   ] : [
     { title: "DESIGN", description: "Electronic and mechanical design" },
     { title: "PRODUCTION", description: "Manufacturing at EN50155 standards" },
@@ -118,7 +118,7 @@ export function InterfaceSection() {
   }, [])
 
   const headline = language === "tr" 
-    ? "TEKNOLOJI ORTAGINIZ" 
+    ? "TEKNOLOJİ ORTAĞINIZ" 
     : "YOUR TECHNOLOGY PARTNER"
 
   return (
@@ -180,7 +180,7 @@ export function InterfaceSection() {
             </div>
           </div>
           <p className={cn(
-            "mt-8 text-lg text-white/40 max-w-2xl mx-auto",
+            "mt-8 text-lg text-white/60 max-w-2xl mx-auto",
             "transition-all duration-700 delay-1000",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
@@ -228,7 +228,7 @@ export function InterfaceSection() {
                 <h3 className="text-xl font-bold text-white mb-3 tracking-wide group-hover:text-primary transition-colors duration-300">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-white/40 leading-relaxed">
+                <p className="text-sm text-white/60 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export function InterfaceSection() {
               <div className="text-4xl lg:text-5xl font-bold text-white font-mono tracking-tight group-hover:text-primary transition-colors duration-300">
                 {stat.value}
               </div>
-              <div className="mt-2 text-xs text-white/30 tracking-[0.3em] font-mono">
+              <div className="mt-2 text-xs text-white/50 tracking-[0.3em] font-mono">
                 {stat.label}
               </div>
             </div>

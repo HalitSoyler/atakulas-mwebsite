@@ -13,19 +13,22 @@ export default function ElektrikliOtobusPage(props: PageProps) {
   const { language } = useLanguage()
 
   const projectInfo = {
-    title: language === "tr" ? "Elektrikli Otobus Donusum Projesi" : "Electric Bus Conversion Project",
+    title:
+      language === "tr"
+        ? "Elektrikli Otobüs Dönüşüm Projesi"
+        : "Electric Bus Conversion Project",
     client: "Ankara EGO",
     location: "Ankara",
     year: "2024",
   }
 
   const scope = language === "tr" ? [
-    "Dizel motorlu otobuslerin elektrikli sisteme donusumu",
-    "Batarya yonetim sistemi (BMS) tasarimi",
+    "Dizel motorlu otobüslerin elektrikli sisteme dönüşümü",
+    "Batarya yönetim sistemi (BMS) tasarımı",
     "Elektrik motoru entegrasyonu",
-    "Sarj altyapisi planlama",
-    "Performans izleme yazilimi",
-    "Test ve sertifikasyon islemleri",
+    "Şarj altyapısı planlama",
+    "Performans izleme yazılımı",
+    "Test ve sertifikasyon işlemleri",
   ] : [
     "Conversion of diesel buses to electric system",
     "Battery management system (BMS) design",
@@ -36,11 +39,11 @@ export default function ElektrikliOtobusPage(props: PageProps) {
   ]
 
   const technicalDetails = language === "tr" ? [
-    "Batarya Kapasitesi: Proje bazli belirlenir",
+    "Batarya Kapasitesi: Proje bazlı belirlenir",
     "Motor Tipi: AC asenkron / PMSM",
-    "Menzil: 200-300 km (kosullara bagli)",
-    "Sarj Suresi: 2-4 saat (tip-2 sarj)",
-    "Omur: 10+ yil / 500.000+ km",
+    "Menzil: 200-300 km (koşullara bağlı)",
+    "Şarj Süresi: 2-4 saat (Tip-2 şarj)",
+    "Ömür: 10+ yıl / 500.000+ km",
   ] : [
     "Battery Capacity: Determined per project",
     "Motor Type: AC asynchronous / PMSM",
@@ -58,7 +61,7 @@ export default function ElektrikliOtobusPage(props: PageProps) {
             className="inline-flex items-center gap-2 text-stone-600 dark:text-white/70 hover:text-[#38bdf8] text-sm mb-6 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            {language === "tr" ? "Tum Projeler" : "All Projects"}
+            {language === "tr" ? "Tüm Projeler" : "All Projects"}
           </Link>
           <h1 className="text-3xl font-semibold text-[#0f172a] dark:text-white sm:text-4xl">
             {projectInfo.title}
@@ -95,7 +98,7 @@ export default function ElektrikliOtobusPage(props: PageProps) {
           <div className="grid lg:grid-cols-2 gap-12">
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {language === "tr" ? "Proje Kapsami" : "Project Scope"}
+                {language === "tr" ? "Proje Kapsamı" : "Project Scope"}
               </h2>
               <ul className="space-y-3">
                 {scope.map((item, index) => (
@@ -127,12 +130,12 @@ export default function ElektrikliOtobusPage(props: PageProps) {
       <section className="py-12 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <h2 className="text-xl font-semibold text-foreground mb-4">
-            {language === "tr" ? "Proje Hakkinda" : "About the Project"}
+            {language === "tr" ? "Proje Hakkında" : "About the Project"}
           </h2>
           <div className="prose prose-sm max-w-none text-muted-foreground">
             <p>
               {language === "tr"
-                ? "Mevcut dizel motorlu otobuslerin elektrikli sisteme donusturulmesine yonelik pilot proje. Bu proje ile belediyelerin mevcut filolarini ekonomik sekilde elektrikli ulasima gecirmesi hedeflenmektedir. Donusum sureci, batarya sistemi entegrasyonu, motor degisimi ve gerekli elektronik kontrol sistemlerinin kurulumunu icermektedir."
+                ? "Mevcut dizel motorlu otobüslerin elektrikli sisteme dönüştürülmesine yönelik pilot proje. Bu proje ile belediyelerin mevcut filolarını ekonomik şekilde elektrikli ulaşıma geçirmesi hedeflenmektedir. Dönüşüm süreci, batarya sistemi entegrasyonu, motor değişimi ve gerekli elektronik kontrol sistemlerinin kurulumunu içermektedir."
                 : "A pilot project for converting existing diesel buses to electric systems. This project aims to enable municipalities to economically transition their existing fleets to electric transportation. The conversion process includes battery system integration, motor replacement and installation of necessary electronic control systems."}
             </p>
           </div>

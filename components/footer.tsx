@@ -17,6 +17,7 @@ export function Footer() {
       { name: t.nav.projects, href: "/projelerimiz" },
       { name: t.nav.activityAreas, href: "/faaliyet-alanlari" },
       { name: t.nav.electricBus, href: "/hizmetler/elektrikli-otobus" },
+      { name: t.nav.sunTracking, href: "/hizmetler/gunes-takip-sistemi" },
       { name: t.nav.contact, href: "/iletisim" },
     ],
     legal: [

@@ -10,34 +10,63 @@ import {
   useSpring,
 } from "framer-motion"
 import { LayoutGrid, Shield, Phone, ArrowUpRight } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
-const FEATURED = {
-  title: "Yolcu Bilgilendirme",
-  description:
-    "Hat, durak ve sefer bilgisini gerçek zamanlı yöneten entegre platform. Metro ve tramvay araçları için anons sistemleri, bilgilendirme ekranları ve sürücü konsolu çözümleri. Yüksek titreşim ve geniş sıcaklık aralığında kesintisiz çalışım.",
-  icon: LayoutGrid,
-  href: "/urunlerimiz",
-  tag: "PIS / PAS Çözümleri",
-}
+const FEATURED_CONTENT = {
+  tr: {
+    title: "Yolcu Bilgilendirme",
+    description:
+      "Hat, durak ve sefer bilgisini gerçek zamanlı yöneten entegre platform. Metro ve tramvay araçları için anons sistemleri, bilgilendirme ekranları ve sürücü konsolu çözümleri. Yüksek titreşim ve geniş sıcaklık aralığında kesintisiz çalışım.",
+    href: "/urunlerimiz",
+    tag: "PIS / PAS Çözümleri",
+  },
+  en: {
+    title: "Passenger Information",
+    description:
+      "Integrated platform that manages line, station and trip information in real time. Announcement systems, information displays and driver console solutions for metro and tram vehicles. Designed for high vibration and wide temperature ranges.",
+    href: "/urunlerimiz",
+    tag: "PIS / PAS Solutions",
+  },
+} as const
 
-const CARDS = [
-  {
-    title: "Güvenlik ve Gözetim",
-    description:
-      "Endüstriyel CCTV sistemleri. Araç içi ve dışı güvenlik kamerası tasarım, üretim ve bakımı. Titreşim ve geniş sıcaklık aralığına dayanıklı.",
-    icon: Shield,
-    href: "/urunlerimiz",
-    tag: "CCTV & Monitoring",
-  },
-  {
-    title: "İletişim Altyapısı",
-    description:
-      "IP Anons ve IP İnterkom sistemleri. Sürücü, yolcu ve kontrol merkezi arasında kesintisiz iletişim ve acil haberleşme çözümleri.",
-    icon: Phone,
-    href: "/urunlerimiz",
-    tag: "IP Anons & İnterkom",
-  },
-]
+const CARDS_CONTENT = {
+  tr: [
+    {
+      title: "Güvenlik ve Gözetim",
+      description:
+        "Endüstriyel CCTV sistemleri. Araç içi ve dışı güvenlik kamerası tasarım, üretim ve bakımı. Titreşim ve geniş sıcaklık aralığına dayanıklı.",
+      href: "/urunlerimiz",
+      tag: "CCTV & Monitoring",
+      icon: Shield,
+    },
+    {
+      title: "İletişim Altyapısı",
+      description:
+        "IP Anons ve IP İnterkom sistemleri. Sürücü, yolcu ve kontrol merkezi arasında kesintisiz iletişim ve acil haberleşme çözümleri.",
+      href: "/urunlerimiz",
+      tag: "IP Anons & İnterkom",
+      icon: Phone,
+    },
+  ],
+  en: [
+    {
+      title: "Security and Surveillance",
+      description:
+        "Industrial CCTV systems. Design, production and maintenance of interior and exterior vehicle cameras. Resistant to vibration and wide temperature ranges.",
+      href: "/urunlerimiz",
+      tag: "CCTV & Monitoring",
+      icon: Shield,
+    },
+    {
+      title: "Communication Infrastructure",
+      description:
+        "IP announcement and IP intercom systems. Continuous communication and emergency call solutions between driver, passengers and control center.",
+      href: "/urunlerimiz",
+      tag: "IP Announcement & Intercom",
+      icon: Phone,
+    },
+  ],
+} as const
 
 /* ── 3-D tilt card wrapper ── */
 function TiltCard({
@@ -102,6 +131,11 @@ function TiltCard({
 export function SolutionMatrixDirective() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { language } = useLanguage()
+  const isEn = language === "en"
+
+  const FEATURED = isEn ? FEATURED_CONTENT.en : FEATURED_CONTENT.tr
+  const CARDS = isEn ? CARDS_CONTENT.en : CARDS_CONTENT.tr
 
   return (
     <section
@@ -120,7 +154,7 @@ export function SolutionMatrixDirective() {
               transition={{ duration: 0.5 }}
               className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--tech-blue)]"
             >
-              Çözümlerimiz
+              {isEn ? "Our Solutions" : "Çözümlerimiz"}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 22 }}
@@ -135,7 +169,7 @@ export function SolutionMatrixDirective() {
                 lineHeight: 1.2,
               }}
             >
-              Metro ve Tramvay için Kapsamlı Sistemler
+              {isEn ? "Comprehensive Systems for Metro & Tram" : "Metro ve Tramvay için Kapsamlı Sistemler"}
             </motion.h2>
           </div>
           <motion.p
@@ -144,13 +178,14 @@ export function SolutionMatrixDirective() {
             transition={{ duration: 0.55, delay: 0.18 }}
             className="max-w-sm text-[0.875rem] leading-relaxed text-[var(--color-text-body)] md:text-right"
           >
-            TSE ve ISO standartlarına uygun; EN 50155 endüstriyel demiryolu ortamı gereksinimlerini karşılar.
+            {isEn
+              ? "Compliant with TSE and ISO standards; meets EN 50155 requirements for harsh railway environments."
+              : "TSE ve ISO standartlarına uygun; EN 50155 endüstriyel demiryolu ortamı gereksinimlerini karşılar."}
           </motion.p>
         </div>
 
         {/* Bento grid */}
         <div className="grid gap-4 lg:grid-cols-3 lg:grid-rows-2">
-
           {/* Featured card — col-span-2 row-span-2 */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
@@ -207,7 +242,7 @@ export function SolutionMatrixDirective() {
                     border: "1px solid rgba(91,168,245,0.25)",
                   }}
                 >
-                  <FEATURED.icon className="h-7 w-7 text-[#5ba8f5]" strokeWidth={1.5} />
+                  <LayoutGrid className="h-7 w-7 text-[#5ba8f5]" strokeWidth={1.5} />
                 </div>
                 <h3
                   className="mb-4 text-2xl font-bold text-white"
@@ -219,7 +254,7 @@ export function SolutionMatrixDirective() {
                   {FEATURED.description}
                 </p>
                 <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[#5ba8f5] transition-all duration-200 group-hover:gap-3">
-                  Ürünleri İncele
+                  {isEn ? "View Products" : "Ürünleri İncele"}
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </div>
@@ -256,7 +291,7 @@ export function SolutionMatrixDirective() {
                     {description}
                   </p>
                   <div className="mt-5 flex items-center gap-1.5 text-[0.8125rem] font-semibold text-[var(--navy)] transition-all duration-200 group-hover:gap-2.5">
-                    Detaylı Bilgi
+                    {isEn ? "More Details" : "Detaylı Bilgi"}
                     <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
                 </Link>
