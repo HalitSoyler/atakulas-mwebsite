@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useLanguage } from "@/lib/language-context"
+import { sanitizeInput } from "@/lib/sanitize"
 
 type PageProps = { params?: Promise<Record<string, string | string[]>>; searchParams?: Promise<Record<string, string | string[]>> }
 export default function IletisimPage(props: PageProps) {
@@ -67,16 +68,81 @@ export default function IletisimPage(props: PageProps) {
     },
   ]
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (isSubmitting) return
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const firstName = sanitizeInput(formData.get("firstName"), 100)
+    const lastName = sanitizeInput(formData.get("lastName"), 100)
+    const email = sanitizeInput(formData.get("email"), 254)
+    const phone = sanitizeInput(formData.get("phone"), 32)
+    const company = sanitizeInput(formData.get("company"), 200)
+    const service = sanitizeInput(formData.get("service"), 100)
+    const message = sanitizeInput(formData.get("message"), 2000)
+    const honeypot = sanitizeInput(formData.get("website"), 200)
+
+    if (!firstName || !lastName || !email || !message) {
+      window.alert(
+        language === "tr"
+          ? "Lütfen zorunlu alanları eksiksiz doldurun."
+          : "Please fill in all required fields.",
+      )
+      return
+    }
+
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
-    alert(
-      language === "tr"
-        ? "Mesajınız alındı. En kısa sürede size dönüş yapacağız!"
-        : "Your message has been received. We will get back to you shortly!"
-    )
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          company,
+          service,
+          message,
+          honeypot,
+        }),
+      })
+
+      const data = await res.json().catch(() => null)
+
+      if (!res.ok || !data?.success) {
+        window.alert(
+          language === "tr"
+            ? data?.error ??
+                "Form gönderilirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+            : data?.error ??
+                "There was a problem submitting the form. Please try again later.",
+        )
+        return
+      }
+
+      window.alert(
+        language === "tr"
+          ? "Mesajınız alındı. En kısa sürede size dönüş yapacağız!"
+          : "Your message has been received. We will get back to you shortly!",
+      )
+
+      form.reset()
+    } catch (error) {
+      console.error("Contact form submit error", error)
+      window.alert(
+        language === "tr"
+          ? "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+          : "An unexpected error occurred. Please try again later.",
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -175,6 +241,7 @@ export default function IletisimPage(props: PageProps) {
                       </Label>
                       <Input
                         id="firstName"
+                        name="firstName"
                         placeholder={language === "tr" ? "Adınız" : "Your name"}
                         required
                         className="bg-muted/50 border-border/50"
@@ -186,6 +253,7 @@ export default function IletisimPage(props: PageProps) {
                       </Label>
                       <Input
                         id="lastName"
+                        name="lastName"
                         placeholder={language === "tr" ? "Soyadınız" : "Your surname"}
                         required
                         className="bg-muted/50 border-border/50"
@@ -195,6 +263,7 @@ export default function IletisimPage(props: PageProps) {
                       <Label htmlFor="email">{t.contact.email}</Label>
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         placeholder="ornek@sirket.com"
                         required
@@ -205,6 +274,7 @@ export default function IletisimPage(props: PageProps) {
                       <Label htmlFor="phone">{t.contact.phone}</Label>
                       <Input
                         id="phone"
+                        name="phone"
                         type="tel"
                         placeholder="+90 (5XX) XXX XX XX"
                         className="bg-muted/50 border-border/50"
@@ -216,6 +286,7 @@ export default function IletisimPage(props: PageProps) {
                       </Label>
                       <Input
                         id="company"
+                        name="company"
                         placeholder={
                           language === "tr"
                             ? "Şirket veya Kurum Adı"
@@ -228,7 +299,7 @@ export default function IletisimPage(props: PageProps) {
                       <Label htmlFor="service">
                         {language === "tr" ? "İlgilendiğiniz Hizmet" : "Service of Interest"}
                       </Label>
-                      <Select>
+                      <Select name="service">
                         <SelectTrigger id="service" className="bg-muted/50 border-border/50">
                           <SelectValue
                             placeholder={
@@ -275,6 +346,7 @@ export default function IletisimPage(props: PageProps) {
                       <Label htmlFor="message">{t.contact.message}</Label>
                       <Textarea
                         id="message"
+                        name="message"
                         placeholder={
                           language === "tr"
                             ? "Projeniz veya ihtiyaçlarınız hakkında detaylı bilgi verin..."
@@ -282,6 +354,17 @@ export default function IletisimPage(props: PageProps) {
                         }
                         className="min-h-32 bg-muted/50 border-border/50"
                         required
+                      />
+                    </div>
+                    <div className="space-y-2 sm:col-span-2 sr-only" aria-hidden="true">
+                      <Label htmlFor="website">
+                        {language === "tr" ? "Web Sitesi" : "Website"}
+                      </Label>
+                      <Input
+                        id="website"
+                        name="website"
+                        autoComplete="off"
+                        tabIndex={-1}
                       />
                     </div>
                   </div>

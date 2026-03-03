@@ -102,6 +102,7 @@ export function LinearCards({ items, title, subtitle }: LinearCardsProps) {
                     src={item.image || "/placeholder.svg"}
                     alt={item.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className={cn(
                       "object-cover transition-all duration-700 ease-out",
                       activeIndex === index ? "scale-110 opacity-80" : "scale-100 opacity-60"

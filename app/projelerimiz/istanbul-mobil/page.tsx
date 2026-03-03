@@ -12,7 +12,7 @@ export default makeProjectPage({
   },
   scope: {
     tr: [
-      "30.000 adet araç için CCTV kamera sistemi tasarımı ve üretimi",
+      "5.000'den fazla araç için CCTV kamera sistemi tasarımı ve üretimi",
       "PIS/PAS yolcu bilgilendirme sistemi donanımları",
       "LED güzergah panelleri",
       "Sürücü kontrol ünitelerinin tasarımı ve üretimi",
@@ -21,7 +21,7 @@ export default makeProjectPage({
       "Teknik destek ve bakım hizmetleri",
     ],
     en: [
-      "CCTV camera system design and production for 30,000 vehicles",
+      "CCTV camera system design and production for 5,000+ vehicles",
       "PIS/PAS passenger information system hardware",
       "LED route panels",
       "Driver control unit design and production",
@@ -32,7 +32,6 @@ export default makeProjectPage({
   },
   technical: {
     tr: [
-      "Kamera Sayısı: 30.000+ adet",
       "Araç Sayısı: 5.000+ otobüs",
       "Veri Depolama: Merkezi sunucu sistemi",
       "Bağlantı: 4G/LTE kablosuz iletişim",
@@ -40,7 +39,6 @@ export default makeProjectPage({
       "Standartlar: EN 50155, EN 45545 uyumlu",
     ],
     en: [
-      "Camera Count: 30,000+ units",
       "Vehicle Count: 5,000+ buses",
       "Data Storage: Central server system",
       "Connectivity: 4G/LTE wireless communication",
@@ -56,8 +54,7 @@ export default makeProjectPage({
     tr: "Sistem, merkezi yönetim yazılımı ile entegre çalışarak gerçek zamanlı izleme, kayıt ve raporlama imkânı sunmaktadır. Tüm donanımlar EN 50155 ve EN 45545 standartlarına uygun olarak üretilmiş olup araç içi zorlu koşullara dayanıklıdır.",
     en: "The system works integrated with central management software, offering real-time monitoring, recording and reporting capabilities. All hardware is manufactured in accordance with EN 50155 and EN 45545 standards and is resistant to harsh in-vehicle conditions.",
   },
-  images:        ["/images/projects/istanbul.jpg"],
-  metric:        { value: "30.000+", label: { tr: "IP Kamera", en: "IP Cameras" } },
+  images:        ["/images/projects/istanbul.png"],
   progress:      100,
   progressLabel: { tr: "Tamamlandı", en: "Completed" },
   tags:          ["CCTV", "PIS/PAS", "LED Güzergah", "GPS"],

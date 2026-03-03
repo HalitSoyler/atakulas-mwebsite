@@ -1,8 +1,6 @@
 "use client"
 
-import React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Input } from "@/components/ui/input"
@@ -15,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { sanitizeInput } from "@/lib/sanitize"
 
 const contactInfo = [
   {
@@ -52,13 +51,70 @@ const contactInfo = [
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (isSubmitting) return
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const firstName = sanitizeInput(formData.get("firstName"), 100)
+    const lastName = sanitizeInput(formData.get("lastName"), 100)
+    const email = sanitizeInput(formData.get("email"), 254)
+    const phone = sanitizeInput(formData.get("phone"), 32)
+    const company = sanitizeInput(formData.get("company"), 200)
+    const service = sanitizeInput(formData.get("service"), 100)
+    const message = sanitizeInput(formData.get("message"), 2000)
+    const honeypot = sanitizeInput(formData.get("website"), 200)
+
+    if (!firstName || !lastName || !email || !message) {
+      window.alert("Lütfen zorunlu alanları eksiksiz doldurun.")
+      return
+    }
+
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
-    alert("Mesajınız alındı. En kısa sürede size dönüş yapacağız!")
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          company,
+          service,
+          message,
+          honeypot,
+        }),
+      })
+
+      const data = await res.json().catch(() => null)
+
+      if (!res.ok || !data?.success) {
+        window.alert(
+          data?.error ??
+            "Form gönderilirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.",
+        )
+        return
+      }
+
+      window.alert(
+        "Mesajınız alındı. En kısa sürede size dönüş yapacağız!",
+      )
+
+      form.reset()
+    } catch (error) {
+      console.error("Contact form submit error", error)
+      window.alert(
+        "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -114,27 +170,52 @@ export function Contact() {
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">Ad</Label>
-                  <Input id="firstName" placeholder="Adınız" required />
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    placeholder="Adınız"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Soyad</Label>
-                  <Input id="lastName" placeholder="Soyadınız" required />
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Soyadınız"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">E-posta</Label>
-                  <Input id="email" type="email" placeholder="ornek@sirket.com" required />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="ornek@sirket.com"
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Telefon</Label>
-                  <Input id="phone" type="tel" placeholder="+90 (5XX) XXX XX XX" />
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="+90 (5XX) XXX XX XX"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="company">Şirket</Label>
-                  <Input id="company" placeholder="Şirket Adı" />
+                  <Input
+                    id="company"
+                    name="company"
+                    placeholder="Şirket Adı"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="service">İlgilendiğiniz Hizmet</Label>
-                  <Select>
+                  <Select name="service">
                     <SelectTrigger id="service">
                       <SelectValue placeholder="Hizmet seçin" />
                     </SelectTrigger>
@@ -151,9 +232,19 @@ export function Contact() {
                   <Label htmlFor="message">Mesajınız</Label>
                   <Textarea 
                     id="message" 
+                    name="message"
                     placeholder="Projeniz veya ihtiyaçlarınız hakkında bilgi verin..."
                     className="min-h-32"
                     required
+                  />
+                </div>
+                <div className="space-y-2 sm:col-span-2 sr-only" aria-hidden="true">
+                  <Label htmlFor="website">Web Sitesi</Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    autoComplete="off"
+                    tabIndex={-1}
                   />
                 </div>
               </div>

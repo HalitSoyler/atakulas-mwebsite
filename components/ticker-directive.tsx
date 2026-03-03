@@ -7,31 +7,39 @@ const TICKER_ITEMS = [
   "IP İnterkom Sistemleri",
   "PIS / PAS Çözümleri",
   "EN 50155 Sertifikalı Üretim",
-  "Kayseri Teknopark Ar-Ge",
-  "Gömülü Yazılım Geliştirme",
   "Metro ve Hafif Raylı Sistemler",
-  "Uçtan Uca Ekosistem",
+  "TSE & ISO Uyumlu Ürünler",
 ]
 
 export function TickerDirective() {
-  const duplicated = [...TICKER_ITEMS, ...TICKER_ITEMS]
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS]
 
   return (
     <section
-      aria-label="Teknoloji alanları"
-      className="border-t border-b border-white/[0.06] bg-[var(--navy-dark)] py-3 overflow-hidden"
+      aria-label="Faaliyet alanları"
+      className="relative overflow-hidden border-y border-[var(--color-border)] bg-[var(--navy-deeper)] py-4"
     >
-      <div className="flex w-max" style={{ animation: "ticker 30s linear infinite" }}>
-        {duplicated.map((item, i) => (
-          <div
-            key={`${i}-${item}`}
-            className="flex shrink-0 items-center gap-2 px-6"
-            style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-          >
-            <span className="h-1 w-1 rounded-full bg-[var(--tech-blue)]" />
-            <span className="text-[0.65rem] font-medium uppercase tracking-[0.08em] text-white/30">{item}</span>
-            <span className="text-white/20">|</span>
-          </div>
+      {/* Fade masks */}
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24"
+        style={{ background: "linear-gradient(to right, var(--navy-deeper), transparent)" }}
+      />
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24"
+        style={{ background: "linear-gradient(to left, var(--navy-deeper), transparent)" }}
+      />
+
+      <div className="flex w-max ticker-animate">
+        {items.map((item, i) => (
+          <span key={`${i}-${item}`} className="flex shrink-0 items-center gap-3.5 px-4">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--tech-blue)] opacity-70" />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.16em] text-white/55"
+              style={{ fontFamily: "var(--font-barlow)" }}
+            >
+              {item}
+            </span>
+          </span>
         ))}
       </div>
     </section>

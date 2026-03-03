@@ -36,9 +36,9 @@ export function Footer() {
               <img
                 src={LOGO.main}
                 alt="Atak Ulaşım"
-                width={215}
-                height={48}
-                className="h-10 w-auto object-contain invert"
+                width={250}
+                height={100}
+                className="h-10 w-auto object-contain"
               />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-white/60">{t.footer.description}</p>

@@ -2,6 +2,7 @@
 
 import { use } from "react"
 import { HeroIndustrialDirective } from "@/components/hero-industrial-directive"
+import { IntroSection } from "@/components/intro-section"
 import { TickerDirective } from "@/components/ticker-directive"
 import { SolutionMatrixDirective } from "@/components/solution-matrix-directive"
 import { ProjectPortfolioDirective } from "@/components/project-portfolio-directive"
@@ -19,6 +20,7 @@ export default function HomePage(props: PageProps) {
     <main className="min-h-screen relative overflow-x-hidden">
       <ScrollRevealObserver />
       <HeroIndustrialDirective />
+      <IntroSection />
       <TickerDirective />
       <SolutionMatrixDirective />
       <ProjectPortfolioDirective />

@@ -100,6 +100,7 @@ export function Hero() {
             alt="Metro systems"
             fill
             className="object-cover opacity-30"
+            sizes="100vw"
             priority
           />
         </div>
@@ -241,9 +242,10 @@ export function Hero() {
               <div className="relative aspect-video bg-white/5 rounded-2xl mb-8 overflow-hidden group cursor-pointer">
                 <Image
                   src="/images/tramway-showcase.jpg"
-                  alt="Video thumbnail"
+                  alt="Tramvay ve raylı sistem tanıtımı — Atak Ulaşım"
                   fill
                   className="object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+                  sizes="(max-width: 1024px) 0px, 50vw"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">

@@ -2,11 +2,10 @@
 
 import { useEffect } from "react"
 
-/** Sets data-revealed="true" on .sr elements when they enter view (IntersectionObserver). */
 export function ScrollRevealObserver() {
   useEffect(() => {
     const hero = document.querySelector("[data-section='hero']")
-    const els = document.querySelectorAll(".sr")
+    const els = document.querySelectorAll(".sr, .home-reveal")
     const toObserve = hero ? Array.from(els).filter((el) => !hero.contains(el)) : Array.from(els)
     if (toObserve.length === 0) return
     const observer = new IntersectionObserver(

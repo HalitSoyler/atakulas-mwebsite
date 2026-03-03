@@ -1,191 +1,246 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useRef } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { cn } from "@/lib/utils"
+import Image from "next/image"
+import { motion, useInView } from "framer-motion"
+import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react"
 
-const PORTFOLIO_ITEMS = [
+const PROJECTS = [
   {
-    badge: "Metro Projesi · İstanbul",
-    metric: "48",
-    metricSuffix: "km",
-    title: "Tam Hat PIS/PAS Entegrasyonu",
-    meta: "IP Anons + CCTV + Yolcu Bilgilendirme",
-    description:
-      "İstanbul metrosu için uçtan uca yolcu bilgilendirme, anons ve güvenlik kamera sistemleri. Merkezi yazılım omurgası ile tek operatör panelinden yönetim.",
-    gradient: "linear-gradient(135deg, rgba(1,31,66,0.92) 0%, rgba(1,13,28,0.98) 50%, rgba(10,42,80,0.9) 100%)",
-    large: true,
+    title: "İstanbul Metro",
+    meta: "PIS/PAS · IP Anons · CCTV",
+    location: "İstanbul",
+    image: "/images/projects/istanbul.png",
+    href: "/projelerimiz/istanbul-mobil",
+    featured: true,
+    tag: "Referans Proje",
   },
   {
-    badge: "İnterkom",
-    metric: "200+",
-    metricSuffix: "",
-    title: "İnterkom Sistemi Kurulumu",
-    meta: "IP İnterkom · Acil Haberleşme",
-    description: "",
-    gradient: "linear-gradient(135deg, rgba(26,26,26,0.95) 0%, rgba(10,42,80,0.9) 100%)",
-    large: false,
+    title: "Metro ve Tramvay Projeleri",
+    meta: "Yolcu bilgilendirme · Anons",
+    location: "Türkiye Geneli",
+    image: "/images/projects/metro.png",
+    href: "/projelerimiz/metro-tramvay",
+    featured: false,
+    tag: "Devam Eden",
   },
   {
-    badge: "CCTV",
-    metric: "30K+",
-    metricSuffix: "",
-    title: "IP Kamera Ağı Entegrasyonu",
-    meta: "CCTV · Merkezi Kayıt",
-    description: "",
-    gradient: "linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(26,26,26,0.92) 100%)",
-    large: false,
+    title: "Van Mobil",
+    meta: "Raylı sistem ekipmanları",
+    location: "Van",
+    image: "/images/projects/van.png",
+    href: "/projelerimiz/van-mobil",
+    featured: false,
+    tag: "Tamamlandı",
   },
 ]
 
+const STATS = [
+  { value: "25+", label: "Yıllık Tecrübe" },
+  { value: "48 km", label: "Metro Hat" },
+  { value: "200+", label: "Kurulum" },
+]
+
+/* ── Clip-path wipe reveal card ── */
+function ProjectCard({
+  title,
+  meta,
+  location,
+  image,
+  href,
+  featured,
+  tag,
+  delay,
+  inView,
+}: (typeof PROJECTS)[0] & { delay: number; inView: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay }}
+      className={featured ? "md:col-span-2" : ""}
+    >
+      <Link
+        href={href}
+        className="group relative flex overflow-hidden rounded-2xl bg-[var(--color-bg-tertiary)]"
+        style={{ aspectRatio: featured ? "16/9" : "4/3" }}
+      >
+        {/* Image wipe: clips from right to left on entry, then reveals */}
+        <motion.div
+          initial={{ clipPath: "inset(0 100% 0 0)" }}
+          animate={inView ? { clipPath: "inset(0 0% 0 0)" } : {}}
+          transition={{
+            duration: 1.05,
+            delay: delay + 0.05,
+            ease: [0.76, 0, 0.24, 1],
+          }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+          />
+          {/* Dark gradient overlay */}
+          <div
+            className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-90"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15,23,42,0.08) 0%, rgba(15,23,42,0.42) 50%, rgba(15,23,42,0.88) 100%)",
+            }}
+          />
+        </motion.div>
+
+        {/* Tag badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4, delay: delay + 0.55 }}
+          className="absolute left-4 top-4 z-10"
+        >
+          <span className="inline-flex items-center rounded-full border border-white/25 bg-white/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-md">
+            {tag}
+          </span>
+        </motion.div>
+
+        {/* Hover arrow */}
+        <div className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
+          <ArrowUpRight className="h-4 w-4 text-white" />
+        </div>
+
+        {/* Content bottom overlay */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: delay + 0.65 }}
+          className="absolute bottom-0 left-0 right-0 z-10 p-5 md:p-6"
+        >
+          <div className="mb-1.5 flex items-center gap-1.5">
+            <MapPin className="h-3 w-3 text-white/55" strokeWidth={2} />
+            <span className="text-xs text-white/55">{location}</span>
+          </div>
+          <h3
+            className="font-bold text-white"
+            style={{
+              fontSize: featured ? "clamp(1.125rem, 2vw, 1.5rem)" : "1.0625rem",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.25,
+            }}
+          >
+            {title}
+          </h3>
+          <p className="mt-1 text-[0.8125rem] text-white/65">{meta}</p>
+        </motion.div>
+      </Link>
+    </motion.div>
+  )
+}
+
 export function ProjectPortfolioDirective() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-80px" })
+
   return (
     <section
+      ref={ref}
       data-section="portfolio"
       data-header-theme="light"
-      className="bg-white py-[clamp(5rem,9vw,9rem)]"
+      className="bg-white py-20 md:py-28"
     >
       <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-        {/* Header: space-between */}
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+
+        {/* Header row */}
+        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p
-              className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-[var(--tech-blue)]"
-              style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--tech-blue)]"
             >
-              Saha Kanıtı
-            </p>
-            <h2
-              className="font-display text-[var(--navy-dark)] uppercase"
+              Portföy
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 22 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.65, delay: 0.08 }}
+              className="text-[var(--color-text-primary)]"
               style={{
-                fontFamily: "var(--font-barlow-condensed), sans-serif",
+                fontFamily: "var(--font-sans)",
                 fontWeight: 700,
-                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.625rem, 2.8vw, 2.25rem)",
+                letterSpacing: "-0.022em",
+                lineHeight: 1.2,
               }}
             >
               Proje Portföyü
-            </h2>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: 0.16 }}
+              className="mt-2.5 max-w-md text-[0.9375rem] leading-relaxed text-[var(--color-text-body)]"
+            >
+              Teslim ettiğimiz projeler, teknik belgelerin ötesinde referans niteliğindedir.
+            </motion.p>
           </div>
-          <div className="max-w-xl">
-            <p className="mb-4 text-sm leading-[1.8] text-[var(--gray-500)]" style={{ fontFamily: "var(--font-barlow), sans-serif", fontWeight: 300 }}>
-              Teslim ettiğimiz her proje, teknik belgelerin ötesinde bir referanstır. Rakamlar, saha gerçeğinden geliyor.
-            </p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.24 }}
+          >
             <Link
               href="/projelerimiz"
-              className="inline-flex items-center gap-2 rounded border border-[var(--gray-200)] px-4 py-2.5 text-sm font-medium text-[var(--navy)] transition-colors hover:border-[var(--tech-blue)] hover:text-[var(--tech-blue)]"
+              className="group inline-flex items-center gap-2 rounded-md border-2 border-[var(--color-rail-red)] px-5 py-2.5 text-sm font-semibold text-[var(--color-rail-red)] transition-all duration-200 hover:bg-[var(--color-rail-red)] hover:text-white"
             >
               Tüm Projeler
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Grid: 1.5fr 1fr, 2 rows; large card span 2 rows */}
-        <div className="grid gap-px overflow-hidden rounded bg-[var(--gray-100)] grid-cols-1 md:grid-cols-[1.5fr_1fr]">
-          {PORTFOLIO_ITEMS.map((item) => (
-            <PortfolioCard key={item.title} {...item} />
+        {/* Stats strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-10 grid grid-cols-3 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)]"
+        >
+          {STATS.map(({ value, label }, i) => (
+            <div
+              key={label}
+              className={`px-6 py-6 text-center ${i < STATS.length - 1 ? "border-r border-[var(--color-border)]" : ""}`}
+            >
+              <motion.p
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 + i * 0.1, ease: [0.33, 1, 0.68, 1] }}
+                className="text-2xl font-black text-[var(--navy)] md:text-3xl"
+                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "-0.03em" }}
+              >
+                {value}
+              </motion.p>
+              <p className="mt-1 text-xs font-medium text-[var(--color-text-secondary)]">{label}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Project grid: featured (2 cols) + 2 smaller */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {PROJECTS.map((project, i) => (
+            <ProjectCard
+              key={project.title}
+              {...project}
+              delay={0.28 + i * 0.14}
+              inView={inView}
+            />
           ))}
         </div>
       </div>
     </section>
-  )
-}
-
-function PortfolioCard({
-  badge,
-  metric,
-  metricSuffix,
-  title,
-  meta,
-  description,
-  gradient,
-  large,
-}: {
-  badge: string
-  metric: string
-  metricSuffix: string
-  title: string
-  meta: string
-  description: string
-  gradient: string
-  large: boolean
-}) {
-  const [hover, setHover] = useState(false)
-  const descRef = useRef<HTMLDivElement>(null)
-
-  return (
-    <Link
-      href="/projelerimiz"
-      className={cn(
-        "group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-none",
-        large && "md:row-span-2 md:min-h-[520px]"
-      )}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {/* BG with scale on hover */}
-      <div
-        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-        style={{ background: gradient }}
-      />
-      {/* Blueprint grid overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(0,128,255,1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,128,255,1) 1px, transparent 1px)
-          `,
-          backgroundSize: "24px 24px",
-        }}
-      />
-      {/* Bottom gradient overlay */}
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-        aria-hidden
-      />
-
-      <div className="relative z-10 p-6 md:p-8">
-        <p
-          className="mb-2 text-[0.62rem] font-medium uppercase tracking-wider text-[var(--tech-blue)] border border-[var(--tech-blue)]/50 inline-block px-2 py-1 rounded"
-          style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-        >
-          {badge}
-        </p>
-        <p className="mb-1 flex items-baseline gap-1">
-          <span
-            className="font-display font-bold text-white"
-            style={{ fontFamily: "var(--font-barlow-condensed), sans-serif", fontSize: "clamp(1.75rem, 3vw, 3rem)" }}
-          >
-            {metric}
-          </span>
-          {metricSuffix && <span className="text-[var(--tech-blue)] text-lg">{metricSuffix}</span>}
-        </p>
-        <h3
-          className="font-display text-lg font-semibold uppercase leading-tight text-white/90 md:text-xl"
-          style={{ fontFamily: "var(--font-barlow-condensed), sans-serif" }}
-        >
-          {title}
-        </h3>
-        <p
-          className="mt-1 text-[0.62rem] uppercase tracking-wider text-white/35"
-          style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-        >
-          {meta}
-        </p>
-        {/* Description: max-height 0 → 120px on hover */}
-        <div
-          ref={descRef}
-          className="overflow-hidden transition-all duration-500 ease-out"
-          style={{ maxHeight: hover && description ? 120 : 0, opacity: hover && description ? 1 : 0 }}
-        >
-          <p className="mt-3 text-sm leading-relaxed text-white/70" style={{ fontFamily: "var(--font-barlow), sans-serif", fontWeight: 300 }}>
-            {description}
-          </p>
-        </div>
-      </div>
-    </Link>
   )
 }

@@ -26,10 +26,9 @@ const projects = [
       tr: "İstanbul'un 5.000'den fazla toplu taşıma aracı için CCTV, PIS/PAS ve LED güzergah panellerini kapsayan Türkiye'nin en büyük filo dönüşüm projelerinden biri.",
       en: "One of Turkey's largest fleet transformation projects, covering CCTV, PIS/PAS and LED route panels for over 5,000 Istanbul public transport vehicles.",
     },
-    metric:        { value: "30.000+", label: { tr: "IP Kamera",   en: "IP Cameras" } },
     progress:      100,
     progressLabel: { tr: "Tamamlandı", en: "Completed" },
-    image:         "/images/projects/istanbul.jpg",
+    image:         "/images/projects/istanbul.png",
     tags: ["CCTV", "PIS/PAS", "LED Güzergah"],
   },
   {
@@ -44,10 +43,9 @@ const projects = [
       tr: "Türkiye genelindeki metro ve tramvay hatları için EN 50155 uyumlu yolcu bilgilendirme sistemleri, sürücü kontrol üniteleri ve interkom altyapısı.",
       en: "EN 50155 compliant passenger information systems, driver control units and intercom infrastructure for metro and tram lines across Turkey.",
     },
-    metric:        { value: "15+",    label: { tr: "Hat",    en: "Lines" } },
     progress:      85,
     progressLabel: { tr: "Devam Ediyor", en: "Ongoing" },
-    image:         "/images/projects/metro.jpg",
+    image:         "/images/projects/metro.png",
     tags: ["PIS/PAS", "İnterkom", "EN 50155"],
   },
   {
@@ -62,10 +60,9 @@ const projects = [
       tr: "100'den fazla belediye otobüsü için entegre CCTV, GPS filo yönetimi ve yolcu bilgilendirme sistemlerinin tasarım, üretim ve kurulumu.",
       en: "Design, production and installation of integrated CCTV, GPS fleet management and passenger information systems for 100+ municipal buses.",
     },
-    metric:        { value: "100+",   label: { tr: "Araç",  en: "Vehicles" } },
     progress:      100,
     progressLabel: { tr: "Tamamlandı", en: "Completed" },
-    image:         "/images/projects/van.jpg",
+    image:         "/images/projects/van.png",
     tags: ["CCTV", "GPS", "PIS"],
   },
   // ── ADD NEW PROJECTS BELOW ──────────────────────────────────
@@ -122,7 +119,7 @@ function CornerBorders() {
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
   const isPlaceholder = !src || !src.startsWith("/images")
   return (
-    <div className="group relative w-full h-full overflow-hidden rounded-sm min-h-[280px] sm:min-h-[340px]">
+    <div className="group relative w-full overflow-hidden rounded-sm aspect-[16/10] min-h-[200px]">
       {isPlaceholder ? (
         <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
           <ImageIcon className="h-10 w-10 text-muted-foreground/25" />
@@ -134,9 +131,6 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
           fill
           className={cn(
             "object-cover transition-all duration-700 ease-out",
-            // grayscale by default → color on hover
-            "grayscale group-hover:grayscale-0",
-            // subtle scale
             "scale-[1.02] group-hover:scale-100"
           )}
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -288,22 +282,22 @@ function ProjectRow({ project, index, lang }: { project: Project; index: number;
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.10 }}
           className={cn(
-            "group relative",
-            "h-[280px] lg:h-auto",
+            "group relative w-full",
             isEven ? "lg:order-2" : "lg:order-1"
           )}
         >
           <ProjectImage src={project.image} alt={project.title[lang]} />
 
-          {/* Metric badge — overlaid on image */}
-          <div className="absolute bottom-4 left-4 flex flex-col bg-[#0f172a]/80 backdrop-blur-sm border border-white/10 rounded-sm px-3 py-2.5 pointer-events-none">
-            <span className="text-xl font-semibold tabular-nums text-white leading-none">
-              {project.metric.value}
-            </span>
-            <span className="text-[10px] font-mono tracking-widest uppercase text-white/40 mt-1">
-              {project.metric.label[lang]}
-            </span>
-          </div>
+          {project.metric && (
+            <div className="absolute bottom-4 left-4 flex flex-col bg-[#0f172a]/80 backdrop-blur-sm border border-white/10 rounded-sm px-3 py-2.5 pointer-events-none">
+              <span className="text-xl font-semibold tabular-nums text-white leading-none">
+                {project.metric.value}
+              </span>
+              <span className="text-[10px] font-mono tracking-widest uppercase text-white/40 mt-1">
+                {project.metric.label[lang]}
+              </span>
+            </div>
+          )}
         </motion.div>
 
       </div>

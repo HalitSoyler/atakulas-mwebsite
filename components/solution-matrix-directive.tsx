@@ -1,183 +1,270 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
-import { Sun, Home, Shield, Phone } from "lucide-react"
-import { cn } from "@/lib/utils"
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+  useSpring,
+} from "framer-motion"
+import { LayoutGrid, Shield, Phone, ArrowUpRight } from "lucide-react"
 
-const FEATURED_SPECS = [
-  "Merkezi yazılım omurgası",
-  "Üçüncü taraf bağımlılığı yok",
-  "Gerçek zamanlı sistem yönetimi",
-  "Hızlı güncelleme ve özelleştirme",
-]
+const FEATURED = {
+  title: "Yolcu Bilgilendirme",
+  description:
+    "Hat, durak ve sefer bilgisini gerçek zamanlı yöneten entegre platform. Metro ve tramvay araçları için anons sistemleri, bilgilendirme ekranları ve sürücü konsolu çözümleri. Yüksek titreşim ve geniş sıcaklık aralığında kesintisiz çalışım.",
+  icon: LayoutGrid,
+  href: "/urunlerimiz",
+  tag: "PIS / PAS Çözümleri",
+}
 
 const CARDS = [
   {
-    category: "Kat 01",
-    title: "Yolcu Bilgilendirme",
-    description: "Hat, durak ve sefer bilgisini gerçek zamanlı yöneten platform. Çok dilli, görsel ve işitsel entegrasyon.",
-    icon: Home,
-    href: "/urunlerimiz",
-  },
-  {
-    category: "Kat 02",
     title: "Güvenlik ve Gözetim",
-    description: "Endüstriyel CCTV sistemleri. Titreşim, nem ve geniş sıcaklık aralıklarına dayanıklı araç içi/dışı izleme.",
+    description:
+      "Endüstriyel CCTV sistemleri. Araç içi ve dışı güvenlik kamerası tasarım, üretim ve bakımı. Titreşim ve geniş sıcaklık aralığına dayanıklı.",
     icon: Shield,
     href: "/urunlerimiz",
+    tag: "CCTV & Monitoring",
   },
   {
-    category: "Kat 03",
     title: "İletişim Altyapısı",
-    description: "IP Anons ve IP İnterkom sistemleri. Sürücü-yolcu-kontrol merkezi üçgeninde kesintisiz iletişim.",
+    description:
+      "IP Anons ve IP İnterkom sistemleri. Sürücü, yolcu ve kontrol merkezi arasında kesintisiz iletişim ve acil haberleşme çözümleri.",
     icon: Phone,
     href: "/urunlerimiz",
+    tag: "IP Anons & İnterkom",
   },
 ]
 
+/* ── 3-D tilt card wrapper ── */
+function TiltCard({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  /* Normalize mouse position → −0.5 to 0.5, then map to rotation degrees */
+  const rotateX = useTransform(y, [-0.5, 0.5], [7, -7])
+  const rotateY = useTransform(x, [-0.5, 0.5], [-7, 7])
+  const glareX = useTransform(x, [-0.5, 0.5], ["0%", "100%"])
+  const glareY = useTransform(y, [-0.5, 0.5], ["0%", "100%"])
+
+  const springRX = useSpring(rotateX, { stiffness: 200, damping: 22 })
+  const springRY = useSpring(rotateY, { stiffness: 200, damping: 22 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    x.set((e.clientX - rect.left) / rect.width - 0.5)
+    y.set((e.clientY - rect.top) / rect.height - 0.5)
+  }
+
+  const handleMouseLeave = () => {
+    x.set(0)
+    y.set(0)
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX: springRX,
+        rotateY: springRY,
+        transformPerspective: 900,
+        transformStyle: "preserve-3d",
+      }}
+      className={className}
+    >
+      {children}
+      {/* Glare overlay */}
+      <motion.div
+        style={{
+          background: `radial-gradient(circle at ${glareX} ${glareY}, rgba(255,255,255,0.09) 0%, transparent 60%)`,
+          pointerEvents: "none",
+        }}
+        className="absolute inset-0 rounded-2xl"
+        aria-hidden
+      />
+    </motion.div>
+  )
+}
+
 export function SolutionMatrixDirective() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-80px" })
+
   return (
     <section
+      ref={ref}
       data-section="solutions"
       data-header-theme="light"
-      className="bg-[var(--gray-50)] py-[clamp(5rem,9vw,9rem)]"
+      className="bg-[var(--color-bg-secondary)] py-20 md:py-28"
     >
       <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
-        {/* Header: 2-col */}
-        <div className="mb-12 grid gap-8 md:grid-cols-2 md:gap-12">
-          <div className="sr d1">
-            <p
-              className="mb-3 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-[var(--tech-blue)]"
-              style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
+        {/* Header */}
+        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+              className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--tech-blue)]"
             >
-              Çözüm Mimarisi
-            </p>
-            <h2
-              className="font-display text-[var(--navy-dark)] uppercase leading-tight"
+              Çözümlerimiz
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 22 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.65, delay: 0.08 }}
+              className="max-w-lg text-[var(--color-text-primary)]"
               style={{
-                fontFamily: "var(--font-barlow-condensed), sans-serif",
+                fontFamily: "var(--font-sans)",
                 fontWeight: 700,
-                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.625rem, 2.8vw, 2.25rem)",
+                letterSpacing: "-0.022em",
+                lineHeight: 1.2,
               }}
             >
-              Bütünleşik Sistem Matrisi
-            </h2>
+              Metro ve Tramvay için Kapsamlı Sistemler
+            </motion.h2>
           </div>
-          <p
-            className="sr d2 text-base leading-[1.8] text-[var(--gray-500)]"
-            style={{ fontFamily: "var(--font-barlow), sans-serif", fontWeight: 300 }}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.18 }}
+            className="max-w-sm text-[0.875rem] leading-relaxed text-[var(--color-text-body)] md:text-right"
           >
-            Atak Ulaşım&apos;ın geliştirdiği çözümler, bağımsız ürünler olarak değil, birbirine entegre bir ekosistem
-            olarak tasarlanır. <strong>Her bileşen, bir sonrakinin güvenilirliğini pekiştirir.</strong> Sonuç: yolcunun
-            farkında bile olmadığı, kesintisiz bir ulaşım deneyimi.
-          </p>
+            TSE ve ISO standartlarına uygun; EN 50155 endüstriyel demiryolu ortamı gereksinimlerini karşılar.
+          </motion.p>
         </div>
 
-        {/* Matrix grid: 3 cols on md+, single col below 900px */}
-        <div className="grid gap-px rounded overflow-hidden bg-[var(--gray-200)] grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr]">
-          {/* Featured card — span 2 rows on md+ */}
-          <div
-            className="relative flex flex-col bg-[var(--navy-dark)] p-8 md:row-span-2"
-            style={{ borderLeft: "3px solid var(--tech-blue)" }}
-          >
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded border border-white/15">
-              <Sun className="h-6 w-6 text-[var(--tech-blue)]" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-            </div>
-            <p
-              className="mb-2 text-[0.65rem] font-medium uppercase tracking-wider text-white/35"
-              style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-            >
-              Merkez Platform
-            </p>
-            <h3
-              className="mb-4 font-display text-lg font-bold uppercase leading-snug text-white"
-              style={{ fontFamily: "var(--font-barlow-condensed), sans-serif" }}
-            >
-              Uçtan Uca Yazılım Ekosistemi
-            </h3>
-            <p className="mb-6 text-sm leading-relaxed text-white/65" style={{ fontFamily: "var(--font-barlow), sans-serif", fontWeight: 300 }}>
-              Tüm sistemlerin paylaştığı merkezi yazılım omurgası. Üçüncü taraf bağımlılığı olmadan tasarlanan bu platform; hızlı
-              güncelleme, özelleştirme ve gerçek zamanlı sistem yönetimini tek bir mimariden sağlar.
-            </p>
-            <ul className="mb-6 space-y-2" style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}>
-              {FEATURED_SPECS.map((s) => (
-                <li key={s} className="flex items-center gap-2 text-xs text-white/30">
-                  <span className="h-1 w-1 shrink-0 rounded-full bg-[var(--tech-blue)]" />
-                  {s}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/urunlerimiz"
-              className="mt-auto text-[0.65rem] font-medium uppercase tracking-wider text-[var(--tech-blue)] transition-colors hover:underline"
-              style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-            >
-              Teknik Detaylar →
-            </Link>
-          </div>
+        {/* Bento grid */}
+        <div className="grid gap-4 lg:grid-cols-3 lg:grid-rows-2">
 
-          {/* Light cards — cards 2 & 3 row 1, card 4 spans row 2 */}
-          {CARDS.map((card, i) => (
-            <SolutionCard key={card.title} {...card} spanBottom={i === 2} />
+          {/* Featured card — col-span-2 row-span-2 */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.65, delay: 0.22 }}
+            className="lg:col-span-2 lg:row-span-2"
+          >
+            <Link
+              href={FEATURED.href}
+              className="group relative flex h-full min-h-[300px] flex-col overflow-hidden rounded-2xl bg-[var(--navy-deeper)] p-8 transition-transform duration-300 hover:scale-[1.012] lg:min-h-0"
+            >
+              {/* Background glows */}
+              <div
+                className="absolute inset-0 opacity-40"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 65% 55% at 15% 75%, rgba(0,86,179,0.55) 0%, transparent 65%)",
+                }}
+              />
+              <div
+                className="absolute inset-0 opacity-20"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 50% 40% at 90% 10%, rgba(91,168,245,0.4) 0%, transparent 60%)",
+                }}
+              />
+              {/* Animated floating orb inside the card */}
+              <motion.div
+                animate={{ x: [0, 20, -15, 10, 0], y: [0, -25, 15, -10, 0], scale: [1, 1.08, 0.96, 1.04, 1] }}
+                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute right-8 top-8 h-48 w-48 rounded-full blur-[60px]"
+                style={{ background: "radial-gradient(circle, rgba(91,168,245,0.25) 0%, transparent 70%)" }}
+                aria-hidden
+              />
+              {/* Grid lines */}
+              <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+                  backgroundSize: "48px 48px",
+                }}
+                aria-hidden
+              />
+
+              <div className="relative z-10 flex flex-1 flex-col">
+                <span className="mb-5 inline-flex w-fit items-center rounded-full border border-[#0056b3]/40 bg-[#0056b3]/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5ba8f5]">
+                  {FEATURED.tag}
+                </span>
+                <div
+                  className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl"
+                  style={{
+                    background: "rgba(0,86,179,0.22)",
+                    border: "1px solid rgba(91,168,245,0.25)",
+                  }}
+                >
+                  <FEATURED.icon className="h-7 w-7 text-[#5ba8f5]" strokeWidth={1.5} />
+                </div>
+                <h3
+                  className="mb-4 text-2xl font-bold text-white"
+                  style={{ letterSpacing: "-0.025em" }}
+                >
+                  {FEATURED.title}
+                </h3>
+                <p className="flex-1 text-[0.9375rem] leading-[1.75] text-white/60">
+                  {FEATURED.description}
+                </p>
+                <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[#5ba8f5] transition-all duration-200 group-hover:gap-3">
+                  Ürünleri İncele
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Small cards with 3D tilt */}
+          {CARDS.map(({ title, description, icon: Icon, href, tag }, i) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.32 + i * 0.12 }}
+              className="relative"
+            >
+              <TiltCard className="relative h-full">
+                <Link
+                  href={href}
+                  className="group flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--navy)] hover:shadow-[0_8px_32px_rgba(30,58,138,0.1)]"
+                >
+                  <span className="mb-4 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
+                    {tag}
+                  </span>
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] transition-colors duration-200 group-hover:border-[var(--navy)]/30 group-hover:bg-[var(--navy)]/5">
+                    <Icon
+                      className="h-5 w-5 text-[var(--color-text-body)] transition-colors duration-200 group-hover:text-[var(--navy)]"
+                      strokeWidth={1.75}
+                    />
+                  </div>
+                  <h3 className="mb-2.5 text-[1.0625rem] font-bold text-[var(--color-text-primary)]">
+                    {title}
+                  </h3>
+                  <p className="flex-1 text-[0.875rem] leading-relaxed text-[var(--color-text-body)]">
+                    {description}
+                  </p>
+                  <div className="mt-5 flex items-center gap-1.5 text-[0.8125rem] font-semibold text-[var(--navy)] transition-all duration-200 group-hover:gap-2.5">
+                    Detaylı Bilgi
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                </Link>
+              </TiltCard>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
-}
-
-function SolutionCard({
-  category,
-  title,
-  description,
-  icon: Icon,
-  href,
-  spanBottom,
-}: {
-  category: string
-  title: string
-  description: string
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number; strokeLinecap?: string; strokeLinejoin?: string }>
-  href: string
-  spanBottom?: boolean
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "group relative flex flex-col bg-white p-6 transition-all duration-350 hover:bg-[#FAFBFD]",
-        spanBottom && "md:col-span-2"
-      )}
-    >
-      <span
-        className="absolute left-0 top-0 h-full w-[3px] origin-center scale-y-0 bg-[var(--tech-blue)] transition-transform duration-400 ease-out group-hover:scale-y-100"
-        style={{ transformOrigin: "center" }}
-      />
-      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded border border-[var(--gray-200)] bg-[var(--gray-50)] transition-all duration-300 group-hover:border-[var(--tech-blue)] group-hover:bg-[var(--tech-blue-pale)]">
-        <Icon className="h-6 w-6 text-[var(--gray-500)] transition-colors group-hover:text-[var(--tech-blue)]" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-      </div>
-      <p
-        className="mb-1 text-[0.65rem] font-medium uppercase tracking-wider text-[var(--gray-500)]"
-        style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-      >
-        {category}
-      </p>
-      <h3
-        className="mb-2 font-display text-[1.35rem] font-bold uppercase text-[var(--navy-dark)]"
-        style={{ fontFamily: "var(--font-barlow-condensed), sans-serif" }}
-      >
-        {title}
-      </h3>
-      <p className="mb-4 text-sm leading-relaxed text-[var(--gray-600)]" style={{ fontFamily: "var(--font-barlow), sans-serif", fontWeight: 300 }}>
-        {description}
-      </p>
-      <span
-        className="mt-auto text-[0.65rem] font-medium uppercase tracking-wider text-[var(--tech-blue)] transition-colors group-hover:underline"
-        style={{ fontFamily: "var(--font-ibm-plex-mono), monospace" }}
-      >
-        İncele →
-      </span>
-    </Link>
   )
 }

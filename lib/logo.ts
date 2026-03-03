@@ -1,11 +1,8 @@
-/**
- * Logo paths — all logos live in public/images/hubele/
- * Replace logo.svg and icon.svg there with your own files (keep same names).
- */
-
 export const LOGO = {
-  /** Main logo for header and footer (horizontal) */
-  main: "/images/hubele/logo.svg",
-  /** Favicon / browser tab icon (square) */
-  icon: "/images/hubele/icon.svg",
+  main: "/images/Logos/header_250x100.svg",
+  mainLight: "/images/Logos/header_250x100.svg",
+  icon: "/images/Logos/favicon_32x32.png",
+  icon64: "/images/Logos/favicon_64x64.png",
+  appleTouch: "/images/Logos/icon_256x256.png",
+  social: "/images/Logos/social_1200x630.png",
 } as const

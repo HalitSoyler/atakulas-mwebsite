@@ -72,9 +72,8 @@ export function HeroMorph() {
               opacity: { delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
               layout: { type: "spring", damping: 20, stiffness: 100 },
             }}
-            style={{ backfaceVisibility: "hidden" }}
+            style={{ backfaceVisibility: "hidden", width: 160, height: 160 }}
             className="relative flex flex-shrink-0 overflow-hidden rounded-full border-2 border-[#38bdf8]/40 bg-[#1e293b] shadow-xl shadow-black/20 ring-4 ring-[#38bdf8]/20"
-            style={{ width: 160, height: 160 }}
           >
             <Image
               src={HERO_PROFILE_IMAGE}

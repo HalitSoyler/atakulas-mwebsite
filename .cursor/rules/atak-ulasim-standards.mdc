@@ -1,0 +1,24 @@
+---
+description: Atak Ulaşım logo, renk ve kodlama standartları
+alwaysApply: true
+---
+
+# Atak Ulaşım Proje Kuralları
+
+## Logo ve Renk (Kritik)
+
+- Logolar (SVG/PNG) üzerinde `invert`, `brightness-0`, `grayscale` veya benzeri CSS filtreleri asla kullanma.
+- Atak Ulaşım logosunun orijinal mavisi (#0056b3 ve türevleri) ile açık mavi tonları her zaman korunmalı.
+- Karanlık modda logoyu filtreyle beyaza çevirme. Gerekirse ayrı bir logo dosyası (örn. logo-white.svg) kullan veya arka planı logoya göre ayarla.
+- Logolar her zaman `object-contain` ile aspect ratio korunarak render edilmeli.
+
+Tailwind kullanırken gereksiz filtre sınıflarından kaçın.
+
+## Kodlama
+
+- Kod okunabilir olsun; gereksiz yorum satırı ekleme.
+- Temiz kod ve performans öncelikli (proje sahibi bilgisayar mühendisliği öğrencisi, bu beklentilere sahip).
+
+## İletişim
+
+Kullanıcıya cevap verirken liste veya bullet point kullanma; doğal, akıcı paragraflar tercih et. "Umarım iyisinizdir" gibi resmi kalıpları kullanma; samimi ama profesyonel bir dil kullan.

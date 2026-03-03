@@ -39,7 +39,7 @@ export interface ProjectDetailData {
   images?:   string[]
   progress:  number
   progressLabel: { tr: string; en: string }
-  metric:    { value: string; label: { tr: string; en: string } }
+  metric?:   { value: string; label: { tr: string; en: string } }
   tags?:     string[]
   certifications?: string[]
 }
@@ -146,20 +146,21 @@ export function ProjectDetailPage(data: ProjectDetailData) {
               </motion.div>
             </div>
 
-            {/* Metric */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...spring, delay: 0.2 }}
-              className="border border-border/50 bg-background/50 backdrop-blur-sm rounded-sm px-5 py-4 text-right"
-            >
-              <span className="text-3xl font-semibold text-foreground tabular-nums block leading-none">
-                {data.metric.value}
-              </span>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground/50 mt-1.5 block">
-                {data.metric.label[lang]}
-              </span>
-            </motion.div>
+            {data.metric && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...spring, delay: 0.2 }}
+                className="border border-border/50 bg-background/50 backdrop-blur-sm rounded-sm px-5 py-4 text-right"
+              >
+                <span className="text-3xl font-semibold text-foreground tabular-nums block leading-none">
+                  {data.metric.value}
+                </span>
+                <span className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground/50 mt-1.5 block">
+                  {data.metric.label[lang]}
+                </span>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>
@@ -180,7 +181,8 @@ export function ProjectDetailPage(data: ProjectDetailData) {
                 src={firstImage}
                 alt={data.title[lang]}
                 fill
-                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                className="object-cover transition-all duration-700 ease-out"
+                sizes="(max-width: 768px) 100vw, 60vw"
                 priority
               />
             ) : (
